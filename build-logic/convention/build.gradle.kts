@@ -37,6 +37,22 @@ gradlePlugin {
             id = "gongcha.android.feature.ui"
             implementationClass = "AndroidFeatureUiConventionPlugin"
         }
+
+        register("androidRoom") {
+            id = "gongcha.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+
+        register("jvmLibrary") {
+            id = "gongcha.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
+        }
+
+        register("jvmKtor") {
+            id = "gongcha.jvm.ktor"
+            implementationClass = "JvmKtorConventionPlugin"
+        }
+
     }
 
 }
