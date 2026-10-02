@@ -1,13 +1,29 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    `kotlin-dsl`
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+
+group = "com.lihan.gongcha.buildlogic"
+
+
+dependencies {
+    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.tools.common)
+    compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
 }
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+
+
+gradlePlugin {
+    plugins {
+        register("androidApplication"){
+            id = "gongcha.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidApplicationCompose"){
+            id = "gongcha.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
     }
+
 }

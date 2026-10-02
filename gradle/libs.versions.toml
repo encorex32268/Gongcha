@@ -22,6 +22,7 @@ ksp = "2.3.12"
 room = "2.8.5"
 coreSplashscreen = "1.2.0"
 kotlinx-serialization = "1.11.0"
+materialIconsExtended = "1.7.8"
 
 #App Versions
 projectCompileSdk = "37"
@@ -49,6 +50,9 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+
 
 # Splash
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -103,3 +107,7 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
+
+
+gongcha-android-application = { id = "gongcha.android.application" }
+gongcha-android-application-compose = { id = "gongcha.android.application.compose" }
