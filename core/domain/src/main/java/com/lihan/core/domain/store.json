@@ -1,0 +1,106 @@
+{
+  "stores": [
+    {
+      "id": "taipei_songshan_qingcheng",
+      "region": "北區",
+      "name": "台北松山慶城店",
+      "address": "台北市松山區慶城街1之2號 戶外空間",
+      "phone": "02-2545-0008",
+      "displayHours": "週一至週日 11:00~21:00",
+      "businessHours": [
+        { "day": 1, "open": "11:00", "close": "21:00" },
+        { "day": 2, "open": "11:00", "close": "21:00" },
+        { "day": 3, "open": "11:00", "close": "21:00" },
+        { "day": 4, "open": "11:00", "close": "21:00" },
+        { "day": 5, "open": "11:00", "close": "21:00" },
+        { "day": 6, "open": "11:00", "close": "21:00" },
+        { "day": 0, "open": "11:00", "close": "21:00" }
+      ]
+    },
+    {
+      "id": "taipei_daan_guangxin",
+      "region": "北區",
+      "name": "台北大安光信店",
+      "address": "106台北市大安區仁愛路四段300巷19弄2號",
+      "phone": "02-2703-5851",
+      "displayHours": "週一至週日 10:30~20:00",
+      "businessHours": [
+        { "day": 1, "open": "10:30", "close": "20:00" },
+        { "day": 2, "open": "10:30", "close": "20:00" },
+        { "day": 3, "open": "10:30", "close": "20:00" },
+        { "day": 4, "open": "10:30", "close": "20:00" },
+        { "day": 5, "open": "10:30", "close": "20:00" },
+        { "day": 6, "open": "10:30", "close": "20:00" },
+        { "day": 0, "open": "10:30", "close": "20:00" }
+      ]
+    },
+    {
+      "id": "miaoli_houlong",
+      "region": "中區",
+      "name": "苗栗後龍店",
+      "address": "苗栗縣後龍鎮中華路151號",
+      "phone": "037-725-662",
+      "displayHours": "週一至週日 09:30~21:00",
+      "businessHours": [
+        { "day": 1, "open": "09:30", "close": "21:00" },
+        { "day": 2, "open": "09:30", "close": "21:00" },
+        { "day": 3, "open": "09:30", "close": "21:00" },
+        { "day": 4, "open": "09:30", "close": "21:00" },
+        { "day": 5, "open": "09:30", "close": "21:00" },
+        { "day": 6, "open": "09:30", "close": "21:00" },
+        { "day": 0, "open": "09:30", "close": "21:00" }
+      ]
+    },
+    {
+      "id": "pingtung_fuxing",
+      "region": "南區",
+      "name": "屏東復興店",
+      "address": "屏東縣屏東市復興路46號",
+      "phone": "08-766-2185",
+      "displayHours": "週一至週日 10:00~24:00",
+      "businessHours": [
+        { "day": 1, "open": "10:00", "close": "24:00" },
+        { "day": 2, "open": "10:00", "close": "24:00" },
+        { "day": 3, "open": "10:00", "close": "24:00" },
+        { "day": 4, "open": "10:00", "close": "24:00" },
+        { "day": 5, "open": "10:00", "close": "24:00" },
+        { "day": 6, "open": "10:00", "close": "24:00" },
+        { "day": 0, "open": "10:00", "close": "24:00" }
+      ]
+    },
+    {
+      "id": "kaohsiung_zhongzheng_minsheng",
+      "region": "南區",
+      "name": "中正民生店",
+      "address": "高雄市苓雅區光華一路230號",
+      "phone": "07-223-0193",
+      "displayHours": "平日 09:00-19:00、假日 10:00-17:30",
+      "businessHours": [
+        { "day": 1, "open": "09:00", "close": "19:00" },
+        { "day": 2, "open": "09:00", "close": "19:00" },
+        { "day": 3, "open": "09:00", "close": "19:00" },
+        { "day": 4, "open": "09:00", "close": "19:00" },
+        { "day": 5, "open": "09:00", "close": "19:00" },
+        { "day": 6, "open": "10:00", "close": "17:30" },
+        { "day": 0, "open": "10:00", "close": "17:30" }
+      ]
+    },
+    {
+      "id": "pingtung_chaozhou_changxing",
+      "region": "南區",
+      "name": "潮州長興店",
+      "address": "屏東縣潮州鎮長興路54-3號",
+      "phone": "08-789-9932",
+      "displayHours": "每日 10:00~23:00",
+      "businessHours": [
+        { "day": 1, "open": "10:00", "close": "23:00" },
+        { "day": 2, "open": "10:00", "close": "23:00" },
+        { "day": 3, "open": "10:00", "close": "23:00" },
+        { "day": 4, "open": "10:00", "close": "23:00" },
+        { "day": 5, "open": "10:00", "close": "23:00" },
+        { "day": 6, "open": "10:00", "close": "23:00" },
+        { "day": 0, "open": "10:00", "close": "23:00" }
+      ]
+    }
+  ]
+}
