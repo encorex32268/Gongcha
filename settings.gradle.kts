@@ -23,7 +23,10 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Gongcha"
+
 include(":app")
 include(":auth:presentation")
 include(":auth:data")
