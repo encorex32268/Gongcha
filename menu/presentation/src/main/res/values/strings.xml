@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="change_store">更換門市</string>
+    <string name="user_greeting">嗨!</string>
+    <string name="user">User</string>
+    <string name="select_store">請選擇門市</string>
+    <string name="notice">各門市飲品品項與定價依所在門市為準，點餐前請先確認取餐門市。</string>
+
+</resources>
