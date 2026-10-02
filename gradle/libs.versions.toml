@@ -116,6 +116,7 @@ gongcha-android-application = { id = "gongcha.android.application" }
 gongcha-android-application-compose = { id = "gongcha.android.application.compose" }
 gongcha-android-library= { id = "gongcha.android.library" }
 gongcha-android-library-compose= { id = "gongcha.android.library.compose" }
+gongcha-android-feature-ui = { id = "gongcha.android.feature.ui" }
 
 
 [bundles]
