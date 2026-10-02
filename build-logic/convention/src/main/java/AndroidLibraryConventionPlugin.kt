@@ -24,6 +24,9 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
                 )
                 defaultConfig {
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                    if (target.file("consumer-rules.pro").exists()) {
+                        consumerProguardFiles("consumer-rules.pro")
+                    }
                 }
             }
             dependencies {

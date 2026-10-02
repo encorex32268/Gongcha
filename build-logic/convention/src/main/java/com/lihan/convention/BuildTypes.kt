@@ -25,6 +25,7 @@ internal fun Project.configureBuildTypes(
                     }
                     release {
                         configureReleaseBuildType(
+                            extensionType = extensionType,
                             defaultProguardFile = getDefaultProguardFile("proguard-android-optimize.txt")
                         )
                     }
@@ -39,6 +40,7 @@ internal fun Project.configureBuildTypes(
                     }
                     release {
                         configureReleaseBuildType(
+                            extensionType = extensionType,
                             defaultProguardFile = getDefaultProguardFile("proguard-android-optimize.txt")
                         )
                     }
@@ -50,10 +52,13 @@ internal fun Project.configureBuildTypes(
 
 
 private fun BuildType.configureReleaseBuildType(
+    extensionType: ExtensionType,
     defaultProguardFile: File
 ) {
-    isShrinkResources =true
     isMinifyEnabled = true
+    if (extensionType == ExtensionType.APPLICATION) {
+        isShrinkResources = true
+    }
     proguardFiles(
         defaultProguardFile,
         "proguard-rules.pro"
