@@ -1,5 +1,8 @@
 plugins {
     alias(libs.plugins.gongcha.android.application.compose)
+    //push
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -12,19 +15,40 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    testImplementation(libs.junit)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    //push用
+    implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(projects.core.data)
+    implementation(projects.core.database)
+    implementation(projects.core.domain)
+    implementation(projects.core.presentation.designsystem)
+    implementation(projects.core.presentation.ui)
+
+    implementation(projects.auth.data)
+    implementation(projects.auth.domain)
+    implementation(projects.auth.presentation)
+
+    implementation(projects.cart.data)
+    implementation(projects.cart.domain)
+    implementation(projects.cart.presentation)
+
+    implementation(projects.menu.data)
+    implementation(projects.menu.domain)
+    implementation(projects.menu.presentation)
+
+    implementation(projects.history.data)
+    implementation(projects.history.domain)
+    implementation(projects.history.presentation)
+
 }

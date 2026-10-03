@@ -1,5 +1,7 @@
 package com.lihan.core.presentation.designsystem.ui.theme
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -26,6 +28,10 @@ object GongchaIcons {
     val Info: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.info)
+
+    val Add: ImageVector
+        @Composable
+        get() = Icons.Rounded.Add
 
 
 }

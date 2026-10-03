@@ -1,7 +1,7 @@
 package com.lihan.menu.presentation.menu.preview
 
-import com.lihan.menu.domain.BusinessHour
-import com.lihan.menu.domain.Store
+import com.lihan.core.domain.BusinessHour
+import com.lihan.core.domain.Store
 
 object StorePreview {
     val store = Store(
