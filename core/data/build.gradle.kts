@@ -9,7 +9,11 @@ android {
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.database)
-    implementation(libs.kotlinx.coroutines.core)
+    implementation(projects.core.network)
 
-    implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.bundles.koin)
+
+    testImplementation(libs.junit)
 }
