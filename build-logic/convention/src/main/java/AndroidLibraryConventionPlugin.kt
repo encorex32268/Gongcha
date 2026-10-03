@@ -2,6 +2,7 @@ import com.android.build.api.dsl.LibraryExtension
 import com.lihan.convention.ExtensionType
 import com.lihan.convention.configureBuildTypes
 import com.lihan.convention.configureKotlinAndroid
+import com.lihan.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -31,6 +32,7 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
             }
             dependencies {
                 "testImplementation"(kotlin("test"))
+                "testImplementation"(libs.findLibrary("junit").get())
             }
         }
     }

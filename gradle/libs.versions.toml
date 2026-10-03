@@ -20,12 +20,14 @@ ktor = "3.6.0"
 timber = "5.0.1"
 ksp = "2.3.12"
 room = "2.8.5"
+dataStore = "1.1.3"
 coreSplashscreen = "1.2.0"
 kotlinx-serialization = "1.11.0"
 materialIconsExtended = "1.7.8"
 coroutines = "1.11.0"
 firebaseFirestore = "26.6.0"
 googleServices = "4.5.0"
+navigation = "2.10.2"
 
 #App Versions
 projectCompileSdk = "37"
@@ -35,6 +37,7 @@ projectTargetSdk = "37"
 projectVersionCode = "1"
 projectVersionName = "1.0"
 activityKtx = "1.13.0"
+
 
 
 [libraries]
@@ -60,6 +63,9 @@ androidx-material-icons-extended = { module = "androidx.compose.material:materia
 
 # Splash
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+
+# DataStore
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 
 # Koin
 koin-android-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin" }
@@ -87,6 +93,8 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 # Coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
+# Navigation
+androidx-navigation = { module = "androidx.navigation:navigation-compose" , version.ref = "navigation"}
 
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization"}
