@@ -43,11 +43,12 @@ import com.lihan.menu.presentation.menu.components.TeaType
 import com.lihan.menu.presentation.menu.components.TeaTypeChips
 import com.lihan.menu.presentation.menu.preview.StorePreview
 import com.lihan.menu.presentation.menu.preview.TeaPreview
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun MenuRoot(
-    viewModel: MenuViewModel = viewModel()
+    viewModel: MenuViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -100,7 +101,8 @@ fun MenuScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(12.dp)
+                .padding(horizontal = 12.dp)
+                .padding(bottom = 12.dp)
         ) {
             item {
                 if (state.store != null){
