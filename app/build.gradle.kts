@@ -25,12 +25,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    implementation(libs.bundles.koin.compose)
+
+    implementation(libs.androidx.navigation)
+
     //push用
     implementation(libs.firebase.firestore)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(projects.core.data)
     implementation(projects.core.database)
+    implementation(projects.core.network)
     implementation(projects.core.domain)
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
@@ -51,4 +56,5 @@ dependencies {
     implementation(projects.history.domain)
     implementation(projects.history.presentation)
 
+    testImplementation(libs.junit)
 }
