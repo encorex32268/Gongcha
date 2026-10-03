@@ -1,4 +1,4 @@
-package com.lihan.core.domain
+package com.lihan.core.domain.model
 
 data class Store(
     val id: String,

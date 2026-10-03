@@ -14,7 +14,9 @@ sealed interface DataError : Error {
         SERVER_ERROR,
         SERVICE_UNAVAILABLE,
         SERIALIZATION,
-        UNKNOWN
+        UNKNOWN,
+        CANCELED,
+        FIREBASE_GET_DATA_FAILED
     }
 
     enum class Local : DataError {

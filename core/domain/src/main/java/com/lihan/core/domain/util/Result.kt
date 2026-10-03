@@ -28,18 +28,6 @@ inline fun <T, E : Error> Result<T, E>.onSuccess(
     }
 }
 
-inline fun <T, E : Error> Result<T, E>.onFailure(
-    action: (E) -> Unit
-): Result<T, E> {
-    return when (this) {
-        is Result.Error -> {
-            action(error)
-            this
-        }
-        is Result.Success -> this
-    }
-}
-
 // Alias for onFailure to support legacy naming conventions
 inline fun <T, E : Error> Result<T, E>.onError(
     action: (e: com.lihan.core.domain.util.Error) -> Unit
