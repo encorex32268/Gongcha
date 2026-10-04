@@ -2,6 +2,10 @@
 
 package com.lihan.menu.presentation.menu
 
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,14 +21,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -35,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.ObserveAsEvents
 import com.lihan.menu.presentation.menu.components.StoreCard
 import com.lihan.menu.presentation.R
 import com.lihan.menu.presentation.menu.components.NoticeCard
@@ -43,18 +53,47 @@ import com.lihan.menu.presentation.menu.components.TeaType
 import com.lihan.menu.presentation.menu.components.TeaTypeChips
 import com.lihan.menu.presentation.menu.preview.StorePreview
 import com.lihan.menu.presentation.menu.preview.TeaPreview
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun MenuRoot(
+    navigateToSelectStore: () -> Unit,
+    navigateToMember: () -> Unit,
     viewModel: MenuViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val message = stringResource(R.string.please_pick_store)
+
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            MenuEvent.OnSendStorePickWarning -> {
+                //if showing , don't send message again
+                if (snackbarHostState.currentSnackbarData == null) {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = message
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     MenuScreen(
         state = state,
-        onAction = viewModel::onAction
+        snackbarHostState = snackbarHostState,
+        onAction = { action ->
+            when(action){
+                MenuAction.OnSelectStore -> navigateToSelectStore()
+                MenuAction.OnNavigateToMember -> navigateToMember()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
@@ -62,8 +101,10 @@ fun MenuRoot(
 fun MenuScreen(
     state: MenuState,
     onAction: (MenuAction) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
@@ -86,7 +127,9 @@ fun MenuScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            onAction(MenuAction.OnNavigateToMember)
+                        }
                     ) {
                         Icon(
                             imageVector = GongchaIcons.User,
@@ -118,11 +161,26 @@ fun MenuScreen(
                         NoticeCard()
                     }
                 }else{
+                    val isShowingWarning = snackbarHostState.currentSnackbarData != null
+                    val buttonScale by animateFloatAsState(
+                        targetValue = if (isShowingWarning) 1.5f else 1f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        label = "store_button_scale"
+                    )
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ){
                         PrimaryButton(
+                            modifier = Modifier.graphicsLayer{
+                                scaleX = buttonScale
+                                scaleY = buttonScale
+                            },
                             onClick = {
                                 onAction(MenuAction.OnSelectStore)
                             },
@@ -131,7 +189,9 @@ fun MenuScreen(
                     }
                 }
             }
-            item{
+            item(
+                key = "tea_type_chips"
+            ){
                 TeaTypeChips(
                     selectedTeaType = state.type,
                     onTypeSelect = {
@@ -140,10 +200,11 @@ fun MenuScreen(
                 )
             }
             items(
-                items = TeaPreview.teas,
+                items = state.teas,
                 key = { it.id }
             ){
                 TeaCard(
+                    modifier = Modifier.animateItem(),
                     tea = it,
                     onClick = {
                         onAction(MenuAction.OnTeaClick(it))
@@ -166,7 +227,8 @@ private fun Preview() {
             state = MenuState(
                 store = StorePreview.store
             ),
-            onAction = {}
+            onAction = {},
+            snackbarHostState = remember { SnackbarHostState() }
         )
     }
 }
