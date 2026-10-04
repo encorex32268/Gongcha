@@ -1,7 +1,5 @@
-package com.lihan.menu.presentation.menu.components
+package com.lihan.menu.menu.components
 
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -1,4 +1,4 @@
-package com.lihan.menu.presentation.store
+package com.lihan.menu.store
 
 sealed interface StoreAction {
     data object OnNavigateBack: StoreAction

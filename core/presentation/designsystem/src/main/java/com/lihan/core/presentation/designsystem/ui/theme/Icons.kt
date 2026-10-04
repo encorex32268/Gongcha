@@ -17,7 +17,6 @@ object GongchaIcons {
         @Composable
         get() = ImageVector.vectorResource(R.drawable.location)
 
-
     val Phone: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.phone)
@@ -49,4 +48,8 @@ object GongchaIcons {
     val ArrowBack: ImageVector
         @Composable
         get() = Icons.AutoMirrored.Filled.ArrowBack
+
+    val ShoppingCart: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.shopping_cart)
 }

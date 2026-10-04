@@ -1,4 +1,4 @@
-package com.lihan.menu.presentation.menu.components
+package com.lihan.menu.menu.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.lihan.menu.presentation.menu.components
+package com.lihan.menu.menu.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.lihan.core.domain.model.Tea
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.menu.presentation.menu.preview.TeaPreview
+import com.lihan.menu.menu.preview.TeaPreview
 
 @Composable
 fun TeaCard(

@@ -1,11 +1,11 @@
-package com.lihan.menu.presentation.menu
+package com.lihan.menu.menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lihan.core.domain.GongchaRepository
 import com.lihan.core.domain.util.onError
 import com.lihan.core.domain.util.onSuccess
-import com.lihan.menu.presentation.menu.components.TeaType
+import com.lihan.menu.menu.components.TeaType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,8 +32,14 @@ class MenuViewModel(
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
+                _state.update { it.copy(
+                    isLoading = true
+                ) }
                 observeTeas()
                 observeSelectedStore()
+                _state.update { it.copy(
+                    isLoading = false
+                ) }
                 hasLoadedInitialData = true
             }
         }

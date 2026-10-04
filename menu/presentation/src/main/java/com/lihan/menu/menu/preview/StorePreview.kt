@@ -1,4 +1,4 @@
-package com.lihan.menu.presentation.menu.preview
+package com.lihan.menu.menu.preview
 
 import com.lihan.core.domain.model.BusinessHour
 import com.lihan.core.domain.model.Store

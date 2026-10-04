@@ -1,12 +1,13 @@
-package com.lihan.menu.presentation.menu
+package com.lihan.menu.menu
 
 import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.model.Tea
 import com.lihan.core.presentation.ui.UiText
-import com.lihan.menu.presentation.menu.components.TeaType
+import com.lihan.menu.menu.components.TeaType
 
 
 data class MenuState(
+    val isLoading: Boolean = true,
     val userName: String?=null,
     val store: Store?=null,
     val teas: List<Tea> = emptyList(),

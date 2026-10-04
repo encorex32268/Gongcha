@@ -1,4 +1,4 @@
-package com.lihan.menu.presentation.menu.components
+package com.lihan.menu.menu.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import com.lihan.core.presentation.designsystem.SecondaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.menu.presentation.R
-import com.lihan.menu.presentation.menu.preview.StorePreview
+import com.lihan.menu.menu.preview.StorePreview
 
 @Composable
 fun StoreCard(

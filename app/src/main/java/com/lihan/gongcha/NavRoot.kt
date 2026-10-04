@@ -24,6 +24,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.R as DesignR
 import com.lihan.gongcha.navigation.AppBottomBar
 import com.lihan.gongcha.navigation.AppState
@@ -31,10 +32,11 @@ import com.lihan.gongcha.navigation.HistoryRoute
 import com.lihan.gongcha.navigation.MemberRoute
 import com.lihan.gongcha.navigation.MenuRoute
 import com.lihan.gongcha.navigation.SelectStoreRoute
+import com.lihan.gongcha.navigation.ShoppingCartRoute
 import com.lihan.gongcha.navigation.TopLevelDestination
 import com.lihan.gongcha.navigation.rememberAppState
-import com.lihan.menu.presentation.menu.MenuRoot
-import com.lihan.menu.presentation.store.StoreRoot
+import com.lihan.menu.menu.MenuRoot
+import com.lihan.menu.store.StoreRoot
 
 @Composable
 fun NavRoot(
@@ -57,6 +59,9 @@ fun NavRoot(
                         appState.navigateToTopLevelDestination(TopLevelDestination.MEMBER)
                     }
                 )
+            }
+            composable<ShoppingCartRoute> {
+                ShoppingCartPlaceholderScreen()
             }
 
             composable<HistoryRoute> {
@@ -96,6 +101,31 @@ fun NavRoot(
 }
 
 @Composable
+private fun ShoppingCartPlaceholderScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = GongchaIcons.ShoppingCart,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "購物車",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
 private fun HistoryPlaceholderScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -105,7 +135,7 @@ private fun HistoryPlaceholderScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(DesignR.drawable.list_clock),
+                imageVector = GongchaIcons.ListClock,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(48.dp)
@@ -130,7 +160,7 @@ private fun MemberPlaceholderScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(DesignR.drawable.member),
+                imageVector = GongchaIcons.Member,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(48.dp)

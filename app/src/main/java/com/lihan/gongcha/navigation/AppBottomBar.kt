@@ -92,7 +92,7 @@ fun AppBottomBar(
                             imageVector = ImageVector.vectorResource(destination.iconRes),
                             contentDescription = destination.title.asString(),
                             tint = itemColor,
-                            modifier = Modifier.size(28.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }

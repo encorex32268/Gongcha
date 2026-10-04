@@ -17,6 +17,12 @@ enum class TopLevelDestination(
         iconRes = DesignR.drawable.drink_menu,
         title = UiText.StringResource(DesignR.string.nav_menu)
     ),
+    SHOPPING_CART(
+        route = ShoppingCartRoute::class,
+        startRoute = ShoppingCartRoute,
+        iconRes = DesignR.drawable.shopping_cart,
+        title = UiText.StringResource(DesignR.string.nav_shopping_cart)
+    ),
     HISTORY(
         route = HistoryRoute::class,
         startRoute = HistoryRoute,
@@ -26,7 +32,7 @@ enum class TopLevelDestination(
     MEMBER(
         route = MemberRoute::class,
         startRoute = MemberRoute,
-        iconRes = DesignR.drawable.member,
+        iconRes = DesignR.drawable.user,
         title = UiText.StringResource(DesignR.string.nav_member)
     )
 }

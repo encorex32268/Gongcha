@@ -1,8 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.lihan.menu.presentation.menu
+package com.lihan.menu.menu
 
-import androidx.compose.animation.animateBounds
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -14,9 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,25 +35,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
-import com.lihan.menu.presentation.menu.components.StoreCard
+import com.lihan.menu.menu.components.StoreCard
 import com.lihan.menu.presentation.R
-import com.lihan.menu.presentation.menu.components.NoticeCard
-import com.lihan.menu.presentation.menu.components.TeaCard
-import com.lihan.menu.presentation.menu.components.TeaType
-import com.lihan.menu.presentation.menu.components.TeaTypeChips
-import com.lihan.menu.presentation.menu.preview.StorePreview
-import com.lihan.menu.presentation.menu.preview.TeaPreview
+import com.lihan.menu.menu.components.NoticeCard
+import com.lihan.menu.menu.components.TeaCard
+import com.lihan.menu.menu.components.TeaTypeChips
+import com.lihan.menu.menu.preview.StorePreview
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -116,15 +111,16 @@ fun MenuScreen(
                     containerColor = Color.Transparent
                 ),
                 title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-
-                        if (state.userName == null){
-                            Text(text = stringResource(R.string.user_greeting))
-                        } else {
-                            Text(text = state.userName)
+                    if (!state.isLoading){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            if (state.userName == null){
+                                Text(text = stringResource(R.string.user_greeting))
+                            } else {
+                                Text(text = stringResource(R.string.member_greeting,state.userName))
+                            }
                         }
                     }
                 },
@@ -135,7 +131,7 @@ fun MenuScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = GongchaIcons.User,
+                            imageVector = GongchaIcons.Member,
                             contentDescription = stringResource(R.string.user)
                         )
                     }
@@ -143,82 +139,94 @@ fun MenuScreen(
             )
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp)
-        ) {
-            item {
-                Box(
+        when{
+            state.isLoading ->{
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                ){
-                    if (state.store != null){
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            StoreCard(
-                                storeButtonText = stringResource(R.string.change_store),
-                                store = state.store,
-                                onChangeStoreClick = {
-                                    onAction(MenuAction.OnSelectStore)
-                                }
-                            )
-                            NoticeCard()
-                        }
-                    }else{
-                        val isShowingWarning = snackbarHostState.currentSnackbarData != null
-                        val buttonScale by animateFloatAsState(
-                            targetValue = if (isShowingWarning) 1.5f else 1f,
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            ),
-                            label = "store_button_scale"
-                        )
-                        PrimaryButton(
+                        .fillMaxSize()
+                        .wrapContentSize()
+                )
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    item {
+                        Box(
                             modifier = Modifier
-                                .align(Alignment.Center)
-                                .graphicsLayer{
-                                scaleX = buttonScale
-                                scaleY = buttonScale
-                            },
-                            onClick = {
-                                onAction(MenuAction.OnSelectStore)
-                            },
-                            text = stringResource(R.string.select_store)
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                        ){
+                            if (state.store != null){
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    StoreCard(
+                                        storeButtonText = stringResource(R.string.change_store),
+                                        store = state.store,
+                                        onChangeStoreClick = {
+                                            onAction(MenuAction.OnSelectStore)
+                                        }
+                                    )
+                                    NoticeCard()
+                                }
+                            }else{
+                                val isShowingWarning = snackbarHostState.currentSnackbarData != null
+                                val buttonScale by animateFloatAsState(
+                                    targetValue = if (isShowingWarning) 1.5f else 1f,
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    ),
+                                    label = "store_button_scale"
+                                )
+                                PrimaryButton(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .graphicsLayer{
+                                            scaleX = buttonScale
+                                            scaleY = buttonScale
+                                        },
+                                    onClick = {
+                                        onAction(MenuAction.OnSelectStore)
+                                    },
+                                    text = stringResource(R.string.select_store)
+                                )
+                            }
+
+                        }
+                    }
+                    item(
+                        key = "tea_type_chips"
+                    ){
+                        TeaTypeChips(
+                            selectedTeaType = state.type,
+                            onTypeSelect = {
+                                onAction(MenuAction.OnTeaTypeSelect(it))
+                            }
                         )
                     }
+                    items(
+                        items = state.teas,
+                        key = { it.id }
+                    ){
+                        TeaCard(
+                            modifier = Modifier.animateItem(),
+                            tea = it,
+                            onClick = {
+                                onAction(MenuAction.OnTeaClick(it))
+                            }
+                        )
+                    }
+
 
                 }
-            }
-            item(
-                key = "tea_type_chips"
-            ){
-                TeaTypeChips(
-                    selectedTeaType = state.type,
-                    onTypeSelect = {
-                        onAction(MenuAction.OnTeaTypeSelect(it))
-                    }
-                )
-            }
-            items(
-                items = state.teas,
-                key = { it.id }
-            ){
-                TeaCard(
-                    modifier = Modifier.animateItem(),
-                    tea = it,
-                    onClick = {
-                        onAction(MenuAction.OnTeaClick(it))
-                    }
-                )
-            }
 
-
+            }
         }
     }
 

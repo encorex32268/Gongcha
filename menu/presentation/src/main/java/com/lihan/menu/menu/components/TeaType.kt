@@ -1,13 +1,13 @@
-package com.lihan.menu.presentation.menu.components
+package com.lihan.menu.menu.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.lihan.menu.presentation.R
-import com.lihan.menu.presentation.menu.components.TeaType.ALL
-import com.lihan.menu.presentation.menu.components.TeaType.CREATIVE
-import com.lihan.menu.presentation.menu.components.TeaType.MILK
-import com.lihan.menu.presentation.menu.components.TeaType.ORIGINAL
-import com.lihan.menu.presentation.menu.components.TeaType.SMOOTHIE
+import com.lihan.menu.menu.components.TeaType.ALL
+import com.lihan.menu.menu.components.TeaType.CREATIVE
+import com.lihan.menu.menu.components.TeaType.MILK
+import com.lihan.menu.menu.components.TeaType.ORIGINAL
+import com.lihan.menu.menu.components.TeaType.SMOOTHIE
 
 enum class TeaType {
     ALL,ORIGINAL,MILK,CREATIVE,SMOOTHIE;

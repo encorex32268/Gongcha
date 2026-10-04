@@ -1,7 +1,7 @@
-package com.lihan.menu.presentation.menu
+package com.lihan.menu.menu
 
 import com.lihan.core.domain.model.Tea
-import com.lihan.menu.presentation.menu.components.TeaType
+import com.lihan.menu.menu.components.TeaType
 
 sealed interface MenuAction {
     data object OnSelectStore: MenuAction

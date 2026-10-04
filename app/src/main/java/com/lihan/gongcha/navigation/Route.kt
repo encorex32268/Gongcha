@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 data object MenuRoute
 
 @Serializable
+data object ShoppingCartRoute
+
+@Serializable
 data object HistoryRoute
 
 @Serializable
