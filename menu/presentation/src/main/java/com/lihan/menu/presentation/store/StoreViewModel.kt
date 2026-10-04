@@ -1,0 +1,71 @@
+package com.lihan.menu.presentation.store
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lihan.core.domain.GongchaRepository
+import com.lihan.core.domain.util.onError
+import com.lihan.core.domain.util.onSuccess
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class StoreViewModel(
+    private val repository: GongchaRepository
+) : ViewModel() {
+
+    private var hasLoadedInitialData = false
+
+    private val _uiEvent = Channel<StoreEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    private val _state = MutableStateFlow(StoreState())
+    val state = _state.onStart {
+        if (!hasLoadedInitialData) {
+            observeStores()
+            hasLoadedInitialData = true
+        }
+    }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = StoreState()
+        )
+
+    fun onAction(action: StoreAction) {
+        when (action) {
+            StoreAction.OnNavigateBack -> Unit
+            is StoreAction.OnStoreSelected -> {
+                viewModelScope.launch {
+                    repository.setLatestSelectedStore(action.id)
+
+                    _uiEvent.send(StoreEvent.OnSavedSelectedStore)
+                }
+            }
+        }
+    }
+
+    private fun observeStores(){
+        repository
+            .getStores()
+            .onEach {  result ->
+
+                result
+                    .onError {
+
+                    }
+                    .onSuccess { stores ->
+                        _state.update { it.copy(
+                            stores = stores
+                        ) }
+                    }
+            }
+            .launchIn(viewModelScope)
+    }
+}

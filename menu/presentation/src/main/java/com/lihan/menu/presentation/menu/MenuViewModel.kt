@@ -33,6 +33,7 @@ class MenuViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 observeTeas()
+                observeSelectedStore()
                 hasLoadedInitialData = true
             }
         }
@@ -58,6 +59,7 @@ class MenuViewModel(
                     type = action.type
                 ) }
             }
+            MenuAction.OnNavigateToMember -> {}
         }
     }
 
@@ -79,5 +81,15 @@ class MenuViewModel(
             }
 
         }.launchIn(viewModelScope)
+    }
+
+    private fun observeSelectedStore(){
+        repository
+            .getLatestSelectedStore()
+            .onEach { store ->
+                _state.update { it.copy(
+                    store = store
+                ) }
+            }.launchIn(viewModelScope)
     }
 }

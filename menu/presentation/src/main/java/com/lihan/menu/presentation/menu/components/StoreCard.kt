@@ -27,6 +27,7 @@ import com.lihan.menu.presentation.menu.preview.StorePreview
 @Composable
 fun StoreCard(
     store: Store,
+    storeButtonText: String,
     onChangeStoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +54,7 @@ fun StoreCard(
                 )
 
                 SecondaryButton(
-                    text = stringResource(R.string.change_store),
+                    text = storeButtonText,
                     onClick = onChangeStoreClick,
                     leadingIcon = {
                         Icon(
@@ -124,6 +125,7 @@ fun StoreCard(
 private fun StoreCardPreview() {
     GongchaTheme {
         StoreCard(
+            storeButtonText = stringResource(R.string.change_store),
             store = StorePreview.store,
             onChangeStoreClick = {}
         )

@@ -3,7 +3,7 @@
     <string name="change_store">更換門市</string>
     <string name="user_greeting">嗨! 今天想喝什麼呢？</string>
     <string name="user">User</string>
-    <string name="select_store">請選擇門市</string>
+    <string name="select_store">選擇門市</string>
     <string name="notice">各門市飲品品項與定價依所在門市為準，點餐前請先確認取餐門市。</string>
     <string name="all">全部</string>
     <string name="original">嚴選原茶</string>
@@ -11,5 +11,6 @@
     <string name="creative">創意特調</string>
     <string name="smoothie">沁涼冰沙</string>
     <string name="please_pick_store">請先選擇門市，再進行點餐。</string>
+    <string name="select">選擇</string>
 
 </resources>

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -104,7 +105,9 @@ fun MenuScreen(
     snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(
+            modifier = Modifier.navigationBarsPadding().padding(bottom = 56.dp),
+            hostState = snackbarHostState) },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
@@ -148,36 +151,38 @@ fun MenuScreen(
                 .padding(bottom = 12.dp)
         ) {
             item {
-                if (state.store != null){
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        StoreCard(
-                            store = state.store,
-                            onChangeStoreClick = {
-                                onAction(MenuAction.OnSelectStore)
-                            }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ){
+                    if (state.store != null){
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            StoreCard(
+                                storeButtonText = stringResource(R.string.change_store),
+                                store = state.store,
+                                onChangeStoreClick = {
+                                    onAction(MenuAction.OnSelectStore)
+                                }
+                            )
+                            NoticeCard()
+                        }
+                    }else{
+                        val isShowingWarning = snackbarHostState.currentSnackbarData != null
+                        val buttonScale by animateFloatAsState(
+                            targetValue = if (isShowingWarning) 1.5f else 1f,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow
+                            ),
+                            label = "store_button_scale"
                         )
-                        NoticeCard()
-                    }
-                }else{
-                    val isShowingWarning = snackbarHostState.currentSnackbarData != null
-                    val buttonScale by animateFloatAsState(
-                        targetValue = if (isShowingWarning) 1.5f else 1f,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        ),
-                        label = "store_button_scale"
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ){
                         PrimaryButton(
-                            modifier = Modifier.graphicsLayer{
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .graphicsLayer{
                                 scaleX = buttonScale
                                 scaleY = buttonScale
                             },
@@ -187,6 +192,7 @@ fun MenuScreen(
                             text = stringResource(R.string.select_store)
                         )
                     }
+
                 }
             }
             item(
