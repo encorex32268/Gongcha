@@ -1,54 +1,146 @@
 package com.lihan.gongcha
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.lihan.core.presentation.designsystem.R as DesignR
+import com.lihan.gongcha.navigation.AppBottomBar
+import com.lihan.gongcha.navigation.AppState
+import com.lihan.gongcha.navigation.HistoryRoute
+import com.lihan.gongcha.navigation.MemberRoute
+import com.lihan.gongcha.navigation.MenuRoute
+import com.lihan.gongcha.navigation.SelectStoreRoute
+import com.lihan.gongcha.navigation.TopLevelDestination
+import com.lihan.gongcha.navigation.rememberAppState
 import com.lihan.menu.presentation.menu.MenuRoot
-import com.lihan.menu.presentation.menu.MenuScreen
+import com.lihan.menu.presentation.store.StoreRoot
 
 @Composable
 fun NavRoot(
-    navHostController: NavHostController = rememberNavController()
+    appState: AppState = rememberAppState()
 ) {
-    NavHost(
-        navController = navHostController,
-        startDestination = "feature_menu"
-    ){
-        navigation(
-            startDestination = "Menu",
-            route = "feature_menu"
-        ){
-            composable(route = "Menu"){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        NavHost(
+            navController = appState.navController,
+            startDestination = MenuRoute
+        ) {
+            // Top Level Destinations
+            composable<MenuRoute> {
                 MenuRoot(
-                    navigateToSelectStore = {},
-                    navigateToMember = {}
+                    navigateToSelectStore = {
+                        appState.navController.navigate(SelectStoreRoute)
+                    },
+                    navigateToMember = {
+                        appState.navigateToTopLevelDestination(TopLevelDestination.MEMBER)
+                    }
+                )
+            }
+
+            composable<HistoryRoute> {
+                HistoryPlaceholderScreen()
+            }
+
+            composable<MemberRoute> {
+                MemberPlaceholderScreen()
+            }
+
+            // Other Screens (BottomBar will automatically hide)
+            composable<SelectStoreRoute> {
+                StoreRoot(
+                    onBack = {
+                        appState.navController.navigateUp()
+                    }
                 )
             }
         }
 
-        navigation(
-            startDestination = "Member",
-            route = "feature_member"
-        ){
-            composable(route = "Member"){
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        text = "Member"
-                    )
-                }
-            }
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(8.dp),
+            visible = appState.shouldShowBottomBar,
+            enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+        ) {
+            AppBottomBar(
+                destinations = appState.topLevelDestinations,
+                onNavigateToDestination = appState::navigateToTopLevelDestination,
+                currentDestination = appState.currentDestination
+            )
+        }
+    }
+}
+
+@Composable
+private fun HistoryPlaceholderScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(DesignR.drawable.list_clock),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "歷史紀錄",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun MemberPlaceholderScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(DesignR.drawable.member),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "會員中心",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
