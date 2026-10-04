@@ -10,5 +10,5 @@ import kotlinx.coroutines.flow.Flow
 interface RemoteDataSource {
     fun getTeas(): Flow<Result<List<Tea>, DataError>>
     fun getStores(): Flow<Result<List<Store>, DataError>>
-    fun getVersionCode(): Flow<Result<Int, DataError>>
+    fun getVersionCode(versionKey: String): Flow<Result<Int, DataError>>
 }

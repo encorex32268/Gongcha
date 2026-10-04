@@ -49,7 +49,8 @@ class GongchaRepositoryImpl(
 
     private suspend fun syncTeasData(){
         val localVersionCode = appDataStore.versionCode.first()
-        val remoteVersionResult = remoteDataSource.getVersionCode().first()
+        val remoteVersionResult = remoteDataSource.getVersionCode("version_teas").first()
+
         remoteVersionResult.onSuccess { remoteVersionCode ->
             if (localVersionCode < remoteVersionCode){
                 val remoteTeasResult = remoteDataSource.getTeas().first()
@@ -64,7 +65,7 @@ class GongchaRepositoryImpl(
     }
     private suspend fun syncStoresData(){
         val localVersionCode = appDataStore.versionCode.first()
-        val remoteVersionResult = remoteDataSource.getVersionCode().first()
+        val remoteVersionResult = remoteDataSource.getVersionCode("version_stores").first()
         remoteVersionResult.onSuccess { remoteVersionCode ->
             if (localVersionCode < remoteVersionCode){
                 val remoteStoresResult = remoteDataSource.getStores().first()
