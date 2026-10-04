@@ -13,25 +13,25 @@ enum class TopLevelDestination(
 ) {
     MENU(
         route = MenuRoute::class,
-        startRoute = MenuRoute,
+        startRoute = MenuGraph,
         iconRes = DesignR.drawable.drink_menu,
         title = UiText.StringResource(DesignR.string.nav_menu)
     ),
     SHOPPING_CART(
         route = ShoppingCartRoute::class,
-        startRoute = ShoppingCartRoute,
+        startRoute = ShoppingCartGraph,
         iconRes = DesignR.drawable.shopping_cart,
         title = UiText.StringResource(DesignR.string.nav_shopping_cart)
     ),
     HISTORY(
         route = HistoryRoute::class,
-        startRoute = HistoryRoute,
+        startRoute = HistoryGraph,
         iconRes = DesignR.drawable.list_clock,
         title = UiText.StringResource(DesignR.string.nav_history)
     ),
     MEMBER(
         route = MemberRoute::class,
-        startRoute = MemberRoute,
+        startRoute = MemberGraph,
         iconRes = DesignR.drawable.user,
         title = UiText.StringResource(DesignR.string.nav_member)
     )

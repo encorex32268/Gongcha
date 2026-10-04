@@ -1,5 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.lihan.menu.menu.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +33,9 @@ import com.lihan.menu.menu.preview.TeaPreview
 fun TeaCard(
     tea: Tea,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope?=null,
+    animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
     Surface(
         modifier = modifier
@@ -40,14 +49,25 @@ fun TeaCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (tea.imageUrl != null){
+            if (tea.imageUrl != null) {
                 AsyncImage(
                     model = tea.imageUrl,
-                    modifier = Modifier.size(120.dp),
-                    contentDescription = null,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .then(
+                            if (sharedTransitionScope != null && animatedVisibilityScope != null){
+                                with(sharedTransitionScope){
+                                    Modifier
+                                        .sharedElement(
+                                            sharedContentState = rememberSharedContentState(key = "tea_image_${tea.id}"),
+                                            animatedVisibilityScope = animatedVisibilityScope
+                                        )
+                                }
+                            }else Modifier
+                        ),
+                    contentDescription = tea.nameZh,
                     contentScale = ContentScale.Fit
                 )
-
             }
             Column(
                 modifier = Modifier
@@ -74,9 +94,15 @@ fun TeaCard(
 @Composable
 private fun TeaCardPreview() {
     GongchaTheme {
-        TeaCard(
-            tea = TeaPreview.teas.first(),
-            onClick = {}
-        )
+        SharedTransitionLayout {
+            AnimatedVisibility(visible = true) {
+                TeaCard(
+                    tea = TeaPreview.teas.first(),
+                    onClick = {},
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this
+                )
+            }
+        }
     }
 }

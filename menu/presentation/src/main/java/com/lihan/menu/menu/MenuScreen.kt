@@ -1,7 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 
 package com.lihan.menu.menu
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -43,21 +48,23 @@ import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
-import com.lihan.menu.menu.components.StoreCard
-import com.lihan.menu.presentation.R
 import com.lihan.menu.menu.components.NoticeCard
+import com.lihan.menu.menu.components.StoreCard
 import com.lihan.menu.menu.components.TeaCard
 import com.lihan.menu.menu.components.TeaTypeChips
 import com.lihan.menu.menu.preview.StorePreview
+import com.lihan.menu.presentation.R
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
-
 
 @Composable
 fun MenuRoot(
     navigateToSelectStore: () -> Unit,
     navigateToMember: () -> Unit,
-    viewModel: MenuViewModel = koinViewModel()
+    navigateToTeaOrder: (teaId: String) -> Unit,
+    viewModel: MenuViewModel = koinViewModel(),
+    sharedTransitionScope: SharedTransitionScope?=null,
+    animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -76,12 +83,17 @@ fun MenuRoot(
                     }
                 }
             }
+            is MenuEvent.OnNavigateToTeaOrder -> {
+                navigateToTeaOrder(uiEvent.teaId)
+            }
         }
     }
 
     MenuScreen(
         state = state,
         snackbarHostState = snackbarHostState,
+        sharedTransitionScope = sharedTransitionScope,
+        animatedVisibilityScope = animatedVisibilityScope,
         onAction = { action ->
             when(action){
                 MenuAction.OnSelectStore -> navigateToSelectStore()
@@ -97,7 +109,9 @@ fun MenuRoot(
 fun MenuScreen(
     state: MenuState,
     onAction: (MenuAction) -> Unit,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    sharedTransitionScope: SharedTransitionScope?=null,
+    animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(
@@ -219,7 +233,9 @@ fun MenuScreen(
                             tea = it,
                             onClick = {
                                 onAction(MenuAction.OnTeaClick(it))
-                            }
+                            },
+                            sharedTransitionScope = sharedTransitionScope,
+                            animatedVisibilityScope = animatedVisibilityScope
                         )
                     }
 
@@ -237,12 +253,18 @@ fun MenuScreen(
 @Composable
 private fun Preview() {
     GongchaTheme {
-        MenuScreen(
-            state = MenuState(
-                store = StorePreview.store
-            ),
-            onAction = {},
-            snackbarHostState = remember { SnackbarHostState() }
-        )
+        SharedTransitionLayout {
+            AnimatedVisibility(visible = true) {
+                MenuScreen(
+                    state = MenuState(
+                        store = StorePreview.store
+                    ),
+                    onAction = {},
+                    snackbarHostState = remember { SnackbarHostState() },
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this
+                )
+            }
+        }
     }
 }

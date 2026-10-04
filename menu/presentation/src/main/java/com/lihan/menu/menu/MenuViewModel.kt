@@ -58,6 +58,7 @@ class MenuViewModel(
                         _uiEvent.send(MenuEvent.OnSendStorePickWarning)
                         return@launch
                     }
+                    _uiEvent.send(MenuEvent.OnNavigateToTeaOrder(action.tea.id))
                 }
             }
             is MenuAction.OnTeaTypeSelect -> {

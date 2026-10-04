@@ -12,4 +12,6 @@ interface GongchaRepository {
     suspend fun setLatestSelectedStore(id: String)
 
     fun getLatestSelectedStore(): Flow<Store?>
+    fun getCachedTea(id: String): Tea?
+    suspend fun getTeaById(id: String): Tea?
 }

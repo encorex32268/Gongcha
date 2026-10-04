@@ -13,5 +13,8 @@
     <string name="smoothie">沁涼冰沙</string>
     <string name="please_pick_store">請先選擇門市，再進行點餐。</string>
     <string name="select">選擇</string>
-
+    <string name="back">返回</string>
+    <string name="tea_order_title">飲品詳情</string>
+    <string name="order_size">選擇尺寸</string>
+    <string name="size">SIZE</string>
 </resources>

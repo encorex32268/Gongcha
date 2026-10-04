@@ -26,6 +26,8 @@ class GongchaRepositoryImpl(
     private val appDataStore: AppDataStore
 ): GongchaRepository {
 
+    private var cachedTeas: List<Tea> = emptyList()
+
     override fun getTeas(): Flow<Result<List<Tea>, DataError>> {
         return localDataSource
             .getTeas()
@@ -35,6 +37,7 @@ class GongchaRepositoryImpl(
                 Result.Error(DataError.Local.UNKNOWN)
             }
             .map {
+                cachedTeas = it
                 Result.Success(it)
             }
     }
@@ -63,6 +66,14 @@ class GongchaRepositoryImpl(
             .flatMapLatest { id ->
                 localDataSource.getStoreById(id)
             }
+    }
+
+    override fun getCachedTea(id: String): Tea? {
+        return cachedTeas.find { it.id == id }
+    }
+
+    override suspend fun getTeaById(id: String): Tea? {
+        return cachedTeas.find { it.id == id } ?: localDataSource.getTeaById(id)
     }
 
 
