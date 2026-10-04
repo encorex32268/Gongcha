@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.lihan.core.domain.AppDataStore
 import kotlinx.coroutines.flow.Flow
@@ -20,24 +21,44 @@ class DefaultAppDataStore(
 ): AppDataStore {
 
     private companion object {
-        val KEY_VERSION_CODE = intPreferencesKey("versionCode")
+        val KEY_TEAS_VERSION_CODE = intPreferencesKey("teasVersionCode")
+        val KEY_STORES_VERSION_CODE = intPreferencesKey("storesVersionCode")
+        val KEY_STORE_ID = stringPreferencesKey("storeId")
     }
 
-    override val versionCode: Flow<Int> = context.appDataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
+    override val teasVersionCode: Flow<Int>
+        get() = context.appDataStore.data
+            .map { preferences ->
+                preferences[KEY_TEAS_VERSION_CODE] ?: 0
             }
-        }
-        .map { preferences ->
-            preferences[KEY_VERSION_CODE] ?: 0
-        }
 
-    override suspend fun setVersionCode(code: Int) {
+    override suspend fun setTeasVersionCode(code: Int) {
         context.appDataStore.edit { preferences ->
-            preferences[KEY_VERSION_CODE] = code
+            preferences[KEY_TEAS_VERSION_CODE] = code
+        }
+    }
+
+    override val storesVersionCode: Flow<Int>
+        get() = context.appDataStore.data
+            .map { preferences ->
+                preferences[KEY_STORES_VERSION_CODE] ?: 0
+            }
+
+    override suspend fun setStoresVersionCode(code: Int) {
+        context.appDataStore.edit { preferences ->
+            preferences[KEY_STORES_VERSION_CODE] = code
+        }
+    }
+
+    override val storeId: Flow<String>
+        get() = context.appDataStore.data
+            .map { preferences ->
+                preferences[KEY_STORE_ID]?:""
+            }
+
+    override suspend fun setLatestSelectedStoreId(id: String) {
+        context.appDataStore.edit { preferences ->
+            preferences[KEY_STORE_ID] = id
         }
     }
 }

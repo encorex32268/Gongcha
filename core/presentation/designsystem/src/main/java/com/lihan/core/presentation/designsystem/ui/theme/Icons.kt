@@ -1,6 +1,7 @@
 package com.lihan.core.presentation.designsystem.ui.theme
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,5 +34,19 @@ object GongchaIcons {
         @Composable
         get() = Icons.Rounded.Add
 
+    val DrinkMenu: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.drink_menu)
 
+    val ListClock: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.list_clock)
+
+    val Member: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.member)
+
+    val ArrowBack: ImageVector
+        @Composable
+        get() = Icons.AutoMirrored.Filled.ArrowBack
 }

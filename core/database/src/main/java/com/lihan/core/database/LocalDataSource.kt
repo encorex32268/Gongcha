@@ -10,5 +10,5 @@ interface LocalDataSource {
     suspend fun upsertStores(stores: List<Store>)
     suspend fun upsertTeas(teas: List<Tea>)
     suspend fun getTeaById(id: String): Tea?
-    suspend fun getStoreById(id: String): Store?
+    fun getStoreById(id: String): Flow<Store?>
 }

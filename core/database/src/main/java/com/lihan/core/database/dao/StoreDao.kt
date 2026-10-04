@@ -12,7 +12,7 @@ interface StoreDao {
     fun getStores(): Flow<List<StoreEntity>>
 
     @Query("SELECT * FROM stores WHERE id = :id LIMIT 1")
-    suspend fun getStoreById(id: String): StoreEntity?
+    fun getStoreById(id: String): Flow<StoreEntity?>
 
     @Upsert
     suspend fun upsertStores(stores: List<StoreEntity>)

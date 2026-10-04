@@ -35,7 +35,7 @@ class RoomLocalDataSource(
        return teaDao.getTeaById(id)?.toTea()
     }
 
-    override suspend fun getStoreById(id: String): Store? {
-        return storeDao.getStoreById(id)?.toStore()
+    override fun getStoreById(id: String): Flow<Store?> {
+        return storeDao.getStoreById(id).map { it?.toStore() }
     }
 }

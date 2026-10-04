@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
  * Pure Kotlin interface decoupled from Android/DataStore framework.
  */
 interface AppDataStore {
-    val versionCode: Flow<Int>
-    suspend fun setVersionCode(code: Int)
+    val teasVersionCode: Flow<Int>
+    suspend fun setTeasVersionCode(code: Int)
+
+    val storesVersionCode: Flow<Int>
+    suspend fun setStoresVersionCode(code: Int)
+
+    val storeId: Flow<String>
+    suspend fun setLatestSelectedStoreId(id: String)
 }

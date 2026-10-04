@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="nav_menu">菜單</string>
+    <string name="nav_history">紀錄</string>
+    <string name="nav_member">會員</string>
 </resources>
