@@ -19,12 +19,10 @@ class TeaOrderViewModel(
     private val teaId: String? = savedStateHandle.get<String>("teaId")
     private var hasLoadedInitialData = false
 
-    private val initialTea = teaId?.let { repository.getCachedTea(it) }
 
     private val _state = MutableStateFlow(
         TeaOrderState(
-            tea = initialTea,
-            isLoading = initialTea == null
+
         )
     )
     val state = _state
@@ -37,15 +35,16 @@ class TeaOrderViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = TeaOrderState(
-                tea = initialTea,
-                isLoading = initialTea == null
-            )
+            initialValue = TeaOrderState()
         )
 
     fun onAction(action: TeaOrderAction) {
         when (action) {
             TeaOrderAction.OnNavigateBack -> Unit
+            TeaOrderAction.OnCheckoutClick -> {}
+            TeaOrderAction.OnMinusClick -> {}
+            TeaOrderAction.OnPlusClick -> {}
+            is TeaOrderAction.OnToppingClick -> {}
         }
     }
 
