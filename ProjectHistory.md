@@ -1,4 +1,15 @@
 -------
+2026.10.05
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `cf46517` | feat(menu): implement tea order customization options for size, sweetness, ice, and toppings | 實作飲品客製化選擇區塊（杯型大小、甜度、冰量、配料多選）與底部訂購結帳列 `OrderBottomBar`。 |
+| `2c97954` | refactor(app): wrap bottom bar inside SharedTransitionLayout in NavRoot | 在 `NavRoot` 將 `AppBottomBar` 移入 `SharedTransitionLayout` 內部統一階層佈局。 |
+| `0e1c721` | feat(designsystem): add plus, minus, check icons and shape parameter to PrimaryButton | 新增加號、減號與打勾向量圖示資源，並擴充 `PrimaryButton` 支援自訂形狀（`Shape`）。 |
+| `7c62f50` | refactor(core): streamline GongchaRepository and introduce OfflineFirstGongchaRepository | 重構 Repository 合約與 `LocalDataSource` 介面，引入 `OfflineFirstGongchaRepository`，並同步更新 `MenuViewModel` 與 `StoreViewModel`。 |
+| `7ef8e07` | build: add androidTest dependencies to data and presentation modules | 為 `auth:data`、`core:data` 與 `core:presentation:ui` 模組配置 `androidx.junit` Android 測試依賴，並更新 JDK 設定。 |
+| `754bd38` | docs: add ProjectHistory.md tracking commit history | 建立 `ProjectHistory.md` 紀錄專案歷程與 Commit 規範。 |
+-------
 2026.10.04
 commits: 
 | SHA | Commit訊息 | 主要變更 |
@@ -18,7 +29,7 @@ commits:
 | :--- | :--- | :--- |
 | `d945be6` | feat(app): configure GongchaApp Koin initialization and Navigation root | 配置 Application 層 Koin 依賴注入模組初始化與 Navigation 導航入口 `NavRoot`。 |
 | `c956138` | feat(menu): connect MenuViewModel with repository and update UI components | 串接 `MenuViewModel` 與 `GongchaRepository`，更新菜單門市與飲品卡片介面。 |
-| `7cdaadc` | feat(core:data): implement offline-first repository and datastore | 實作 `GongchaRepositoryImpl` 離線優先資料流整合與 `AppDataStore` Preferences。 |
+| `7cdaadc` | feat(core:data): implement offline-first repository and datastore | 實作 `OfflineFirstGongchaRepository` 離線優先資料流整合與 `AppDataStore` Preferences。 |
 | `23f4264` | feat(core:database): setup Room database, entities, daos, and local data source | 建立 Room 資料庫、`TeaEntity` / `StoreEntity`、Dao 與 `LocalDataSource`。 |
 | `11d307e` | feat(core:network): extract network module and implement FirebaseRemoteDataSource | 抽取 `core:network` 模組並透過 Firebase Firestore 實作 `RemoteDataSource`。 |
 | `8338c83` | refactor(core:domain): reorganize models and define repository & datastore contracts | 重構 domain 模組，定義 `GongchaRepository` 與 `AppDataStore` 介面合約。 |
