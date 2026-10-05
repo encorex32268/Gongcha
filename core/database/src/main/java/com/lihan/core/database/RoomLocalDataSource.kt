@@ -2,6 +2,8 @@ package com.lihan.core.database
 
 import com.lihan.core.database.dao.StoreDao
 import com.lihan.core.database.dao.TeaDao
+import com.lihan.core.database.entity.StoreEntity
+import com.lihan.core.database.entity.TeaEntity
 import com.lihan.core.database.mapper.toStore
 import com.lihan.core.database.mapper.toStoreEntity
 import com.lihan.core.database.mapper.toTea
@@ -15,27 +17,28 @@ class RoomLocalDataSource(
     private val teaDao: TeaDao,
     private val storeDao: StoreDao
 ): LocalDataSource {
-    override fun getTeas(): Flow<List<Tea>> {
-        return teaDao.getTeas().map { entities -> entities.map { it.toTea() } }
+
+    override fun getTeas(): Flow<List<TeaEntity>> {
+        return teaDao.getTeas()
     }
 
-    override fun getStores(): Flow<List<Store>> {
-        return storeDao.getStores().map { entities -> entities.map { it.toStore() } }
+    override fun getStores(): Flow<List<StoreEntity>> {
+        return storeDao.getStores()
     }
 
-    override suspend fun upsertStores(stores: List<Store>) {
-        storeDao.upsertStores(stores.map { it.toStoreEntity() })
+    override suspend fun upsertStores(stores: List<StoreEntity>) {
+        storeDao.upsertStores(stores)
     }
 
-    override suspend fun upsertTeas(teas: List<Tea>) {
-        teaDao.upsertTeas(teas.map { it.toTeaEntity() })
+    override suspend fun upsertTeas(teas: List<TeaEntity>) {
+        teaDao.upsertTeas(teas)
     }
 
-    override suspend fun getTeaById(id: String): Tea? {
-       return teaDao.getTeaById(id)?.toTea()
+    override suspend fun getTeaById(id: String): TeaEntity? {
+       return teaDao.getTeaById(id)
     }
 
-    override fun getStoreById(id: String): Flow<Store?> {
-        return storeDao.getStoreById(id).map { it?.toStore() }
+    override suspend fun getStoreById(id: String): StoreEntity? {
+        return storeDao.getStoreById(id)
     }
 }

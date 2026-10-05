@@ -3,6 +3,10 @@
 package com.lihan.core.data
 
 import com.lihan.core.database.LocalDataSource
+import com.lihan.core.database.mapper.toStore
+import com.lihan.core.database.mapper.toStoreEntity
+import com.lihan.core.database.mapper.toTea
+import com.lihan.core.database.mapper.toTeaEntity
 import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.GongchaRepository
 import com.lihan.core.domain.model.Store
@@ -20,64 +24,39 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-class GongchaRepositoryImpl(
+class OfflineFirstGongchaRepository(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appDataStore: AppDataStore
 ): GongchaRepository {
 
-    private var cachedTeas: List<Tea> = emptyList()
 
-    override fun getTeas(): Flow<Result<List<Tea>, DataError>> {
+    override fun getTeas(): Flow<List<Tea>> {
         return localDataSource
             .getTeas()
-            .onStart {
-                syncTeasData()
-            }.catch {
-                Result.Error(DataError.Local.UNKNOWN)
-            }
-            .map {
-                cachedTeas = it
-                Result.Success(it)
-            }
+            .map { entities -> entities.map { it.toTea() } }
     }
 
-    override fun getStores(): Flow<Result<List<Store>, DataError>> {
+    override fun getStores(): Flow<List<Store>> {
         return localDataSource
             .getStores()
-            .onStart {
-                syncStoresData()
-            }.catch {
-                Result.Error(DataError.Local.UNKNOWN)
-            }
-            .map {
-                Result.Success(it)
-            }
+            .map { entities -> entities.map { it.toStore() } }
     }
 
     override suspend fun setLatestSelectedStore(id: String) {
         appDataStore.setLatestSelectedStoreId(id)
     }
 
-    override fun getLatestSelectedStore(): Flow<Store?> {
-        return appDataStore
-            .storeId
-            .distinctUntilChanged()
-            .flatMapLatest { id ->
-                localDataSource.getStoreById(id)
-            }
-    }
-
-    override fun getCachedTea(id: String): Tea? {
-        return cachedTeas.find { it.id == id }
+    override suspend fun getLatestSelectedStore(storeId: String): Store? {
+        return localDataSource.getStoreById(storeId)?.toStore()
     }
 
     override suspend fun getTeaById(id: String): Tea? {
-        return cachedTeas.find { it.id == id } ?: localDataSource.getTeaById(id)
+        return localDataSource.getTeaById(id)?.toTea()
     }
 
 
-    private suspend fun syncTeasData(){
+    override suspend fun syncTeasData(){
         val localVersionCode = appDataStore.teasVersionCode.first()
         val remoteVersionResult = remoteDataSource.getVersionCode("version_teas").first()
 
@@ -85,23 +64,27 @@ class GongchaRepositoryImpl(
             if (localVersionCode < remoteVersionCode){
                 val remoteTeasResult = remoteDataSource.getTeas().first()
                 remoteTeasResult
-                    .onSuccess {
-                        localDataSource.upsertTeas(it)
+                    .onSuccess { teas ->
+                        localDataSource.upsertTeas(
+                            teas.map { it.toTeaEntity() }
+                        )
                         appDataStore.setTeasVersionCode(remoteVersionCode)
                     }
 
             }
         }
     }
-    private suspend fun syncStoresData(){
+    override suspend fun syncStoresData(){
         val localVersionCode = appDataStore.storesVersionCode.first()
         val remoteVersionResult = remoteDataSource.getVersionCode("version_stores").first()
         remoteVersionResult.onSuccess { remoteVersionCode ->
             if (localVersionCode < remoteVersionCode){
                 val remoteStoresResult = remoteDataSource.getStores().first()
                 remoteStoresResult
-                    .onSuccess {
-                        localDataSource.upsertStores(it)
+                    .onSuccess { stores ->
+                        localDataSource.upsertStores(
+                            stores.map { it.toStoreEntity() }
+                        )
                         appDataStore.setTeasVersionCode(remoteVersionCode)
                     }
             }

@@ -2,6 +2,7 @@ package com.lihan.menu.menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.GongchaRepository
 import com.lihan.core.domain.util.onError
 import com.lihan.core.domain.util.onSuccess
@@ -10,6 +11,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +22,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MenuViewModel(
-    private val repository: GongchaRepository
+    private val repository: GongchaRepository,
+    private val appDataStore: AppDataStore
 ): ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -36,7 +39,6 @@ class MenuViewModel(
                     isLoading = true
                 ) }
                 observeTeas()
-                observeSelectedStore()
                 _state.update { it.copy(
                     isLoading = false
                 ) }
@@ -48,6 +50,15 @@ class MenuViewModel(
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = MenuState()
         )
+
+    init {
+        setSelectedStore()
+
+        viewModelScope.launch {
+            repository.syncTeasData()
+        }
+
+    }
 
     fun onAction(action: MenuAction) {
         when (action) {
@@ -71,32 +82,30 @@ class MenuViewModel(
     }
 
     private fun observeTeas(){
+
         combine(
             state.map { it.type },
             repository.getTeas()
-        ){ type , result ->
-            result.onError {
-                //TODO: Handle Error
-            }.onSuccess { teas ->
-                val filterTeas = when(type){
-                    TeaType.ALL -> teas
-                    else -> teas.filter { it.type == type.name }
-                }
-                _state.update { it.copy(
-                    teas = filterTeas
-                ) }
+        ){ type , teas ->
+
+            val filterTeas = when(type){
+                TeaType.ALL -> teas
+                else -> teas.filter { it.type == type.name }
             }
+            _state.update { it.copy(
+                teas = filterTeas
+            ) }
 
         }.launchIn(viewModelScope)
     }
 
-    private fun observeSelectedStore(){
-        repository
-            .getLatestSelectedStore()
-            .onEach { store ->
-                _state.update { it.copy(
-                    store = store
-                ) }
-            }.launchIn(viewModelScope)
+    private fun setSelectedStore(){
+        viewModelScope.launch {
+            val userCurrentSelectedStoreId = appDataStore.storeId.first()
+            val selectedStore = repository.getLatestSelectedStore(userCurrentSelectedStoreId)
+            _state.update { it.copy(
+                store = selectedStore
+            ) }
+        }
     }
 }

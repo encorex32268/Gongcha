@@ -7,11 +7,11 @@ import com.lihan.core.domain.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface GongchaRepository {
-    fun getTeas(): Flow<Result<List<Tea>, DataError>>
-    fun getStores(): Flow<Result<List<Store>, DataError>>
+    fun getTeas(): Flow<List<Tea>>
+    fun getStores(): Flow<List<Store>>
     suspend fun setLatestSelectedStore(id: String)
-
-    fun getLatestSelectedStore(): Flow<Store?>
-    fun getCachedTea(id: String): Tea?
+    suspend fun getLatestSelectedStore(storeId: String): Store?
     suspend fun getTeaById(id: String): Tea?
+    suspend fun syncTeasData()
+    suspend fun syncStoresData()
 }

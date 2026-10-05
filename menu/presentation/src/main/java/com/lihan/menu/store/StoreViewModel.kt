@@ -54,27 +54,21 @@ class StoreViewModel(
     private fun observeStores(){
         repository
             .getStores()
-            .onEach {  result ->
-                result
-                    .onError {
-                        //TODO: Handle Error
-                    }
-                    .onSuccess { stores ->
-                        val mapStores = stores
-                            .sortedBy { it.name }
-                            .groupBy { it.region }
-                            .toSortedMap(compareBy { region ->
-                                when (region) {
-                                    "北區" -> 1
-                                    "中區" -> 2
-                                    "南區" -> 3
-                                    else -> 4
-                                }
-                            })
-                        _state.update { it.copy(
-                            stores = mapStores
-                        ) }
-                    }
+            .onEach {  stores ->
+                val mapStores = stores
+                    .sortedBy { it.name }
+                    .groupBy { it.region }
+                    .toSortedMap(compareBy { region ->
+                        when (region) {
+                            "北區" -> 1
+                            "中區" -> 2
+                            "南區" -> 3
+                            else -> 4
+                        }
+                    })
+                _state.update { it.copy(
+                    stores = mapStores
+                ) }
             }
             .launchIn(viewModelScope)
     }
