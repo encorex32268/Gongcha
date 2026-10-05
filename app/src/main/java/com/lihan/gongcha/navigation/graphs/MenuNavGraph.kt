@@ -1,6 +1,5 @@
 package com.lihan.gongcha.navigation.graphs
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -14,14 +13,13 @@ import com.lihan.menu.menu.MenuRoot
 import com.lihan.menu.store.StoreRoot
 import com.lihan.menu.tea_order.TeaOrderRoot
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.menuGraph(
     navController: NavController,
     navigateToMember: () -> Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     navigation<MenuGraph>(startDestination = MenuRoute) {
-        composable<MenuRoute> {
+        composable<MenuRoute>{
             MenuRoot(
                 navigateToSelectStore = {
                     navController.navigate(SelectStoreRoute)

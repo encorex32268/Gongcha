@@ -31,10 +31,12 @@ import com.lihan.gongcha.navigation.graphs.shoppingCartGraph
 fun NavRoot(
     appState: AppState = rememberAppState()
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        SharedTransitionLayout {
+    SharedTransitionLayout {
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+
             NavHost(
                 navController = appState.navController,
                 startDestination = MenuGraph
@@ -57,22 +59,23 @@ fun NavRoot(
                     navController = appState.navController
                 )
             }
+            AnimatedVisibility(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(8.dp),
+                visible = appState.shouldShowBottomBar,
+                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+            ) {
+                AppBottomBar(
+                    destinations = appState.topLevelDestinations,
+                    onNavigateToDestination = appState::navigateToTopLevelDestination,
+                    currentDestination = appState.currentDestination
+                )
+            }
         }
 
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .padding(8.dp),
-            visible = appState.shouldShowBottomBar,
-            enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-            exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
-        ) {
-            AppBottomBar(
-                destinations = appState.topLevelDestinations,
-                onNavigateToDestination = appState::navigateToTopLevelDestination,
-                currentDestination = appState.currentDestination
-            )
-        }
     }
+
 }
