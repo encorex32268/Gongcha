@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.bundles.koin)
 
     testImplementation(libs.junit)
+    androidTestDebugImplementation(libs.androidx.junit)
 }
