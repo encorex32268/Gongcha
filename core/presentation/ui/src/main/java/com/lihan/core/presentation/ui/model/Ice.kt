@@ -1,8 +1,8 @@
-package com.lihan.menu.tea_order.components
+package com.lihan.core.presentation.ui.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.lihan.menu.presentation.R
+import com.lihan.core.presentation.ui.R
 
 enum class Ice {
     NO,LITTLE,LESS,REGULAR;

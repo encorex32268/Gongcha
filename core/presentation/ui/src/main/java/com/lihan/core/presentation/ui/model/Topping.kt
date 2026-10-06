@@ -1,7 +1,7 @@
-package com.lihan.menu.tea_order.components
+package com.lihan.core.presentation.ui.model
 
 import androidx.annotation.StringRes
-import com.lihan.menu.presentation.R
+import com.lihan.core.presentation.ui.R
 
 enum class Topping(
     val price: Int,
