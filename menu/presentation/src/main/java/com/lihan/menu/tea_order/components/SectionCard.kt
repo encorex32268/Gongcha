@@ -42,13 +42,13 @@ fun SectionCard(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(16.dp)
             )
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             VerticalDivider(
                 modifier = Modifier.clip(RoundedCornerShape(4.dp)),

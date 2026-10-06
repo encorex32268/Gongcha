@@ -16,12 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.menu.tea_order.components.Ice.Companion.toStringResource
-import com.lihan.menu.tea_order.components.Ice.Companion.toSupportText
+import com.lihan.core.presentation.ui.model.Ice
+import com.lihan.core.presentation.ui.model.Ice.Companion.toStringResource
+import com.lihan.core.presentation.ui.model.Ice.Companion.toSupportText
 
 @Composable
 fun IceSelection(
-    currentIce: Ice,
+    currentIce: Ice?,
+    onIceClick: (Ice) -> Unit,
     modifier: Modifier = Modifier
 ) {
     SingleChoiceSegmentedButtonRow(
@@ -32,7 +34,9 @@ fun IceSelection(
             SegmentedButton(
                 selected = currentIce == ice,
                 shape = RoundedCornerShape(12.dp),
-                onClick = {},
+                onClick = {
+                    onIceClick(ice)
+                },
                 label = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,6 +62,7 @@ fun IceSelection(
 private fun IceSelectionPreview() {
     GongchaTheme {
         IceSelection(
+            onIceClick = {},
             currentIce = Ice.LITTLE
         )
     }

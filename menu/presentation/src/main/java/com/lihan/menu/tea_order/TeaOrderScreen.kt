@@ -2,30 +2,22 @@
 
 package com.lihan.menu.tea_order
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,44 +28,47 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.ObserveAsEvents
+import com.lihan.core.presentation.ui.components.Counter
 import com.lihan.menu.menu.preview.TeaPreview
 import com.lihan.menu.presentation.R
-import com.lihan.menu.tea_order.components.Ice
 import com.lihan.menu.tea_order.components.IceSelection
 import com.lihan.menu.tea_order.components.OrderBottomBar
 import com.lihan.menu.tea_order.components.SectionCard
-import com.lihan.menu.tea_order.components.Size
 import com.lihan.menu.tea_order.components.SizeSelection
-import com.lihan.menu.tea_order.components.Sugar
 import com.lihan.menu.tea_order.components.SugarSelection
-import com.lihan.menu.tea_order.components.Topping
 import com.lihan.menu.tea_order.components.ToppingSelection
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TeaOrderRoot(
     onBack: () -> Unit,
+    onNavigateToCart: () -> Unit,
     sharedTransitionScope: SharedTransitionScope?=null,
     animatedVisibilityScope: AnimatedVisibilityScope?=null,
     viewModel: TeaOrderViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            TeaOrderEvent.OnSavedCartItem -> onNavigateToCart()
+        }
+    }
 
     TeaOrderScreen(
         state = state,
@@ -105,8 +100,7 @@ fun TeaOrderScreen(
             TopAppBar(
                 title = {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         if (tea != null) {
                             Text(
@@ -140,19 +134,15 @@ fun TeaOrderScreen(
             )
         },
         bottomBar = {
-            OrderBottomBar(
-                modifier = Modifier.padding(16.dp),
-                count = 10,
-                price = 10,
-                onPlusClick = {
-                    onAction(TeaOrderAction.OnPlusClick)
+            PrimaryButton(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                shape = RoundedCornerShape(12.dp),
+                text = stringResource(R.string.checkout,state.totalPrice.toString()),
+                onClick = {
+                    onAction(TeaOrderAction.OnAddToCartClick)
                 },
-                onMinusClick = {
-                    onAction(TeaOrderAction.OnMinusClick)
-                },
-                onCheckoutClick = {
-                    onAction(TeaOrderAction.OnCheckoutClick)
-                }
+                enabled = state.canCheckout,
+                contentPadding = PaddingValues(12.dp)
             )
         }
     ) { innerPadding ->
@@ -162,7 +152,7 @@ fun TeaOrderScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = PaddingValues(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
             item {
                 // Hero drink image enlarged with sharedElement transition
@@ -193,15 +183,36 @@ fun TeaOrderScreen(
                     }
                 }
             }
+            item {
+               Box(
+                   modifier = Modifier.fillMaxWidth(),
+                   contentAlignment = Alignment.Center
+               ){
+                   Counter(
+                       iconButtonSize = 36.dp,
+                       textSize = 24.sp,
+                       count = state.count,
+                       onPlusClick = {
+                           onAction(TeaOrderAction.OnPlusClick)
+                       },
+                       onMinusClick = {
+                           onAction(TeaOrderAction.OnMinusClick)
+                       }
+                   )
+               }
+            }
             item(key = "size_section") {
                 SectionCard(
                     title = stringResource(R.string.order_size),
                     subTitle = stringResource(R.string.size),
                     content = {
                         SizeSelection(
-                            currentSize = Size.L,
-                            priceM = "",
-                            priceL = ""
+                            currentSize = state.size,
+                            priceM = state.tea?.priceM.toString(),
+                            priceL = state.tea?.priceL.toString(),
+                            onSizeClick = {
+                                onAction(TeaOrderAction.OnSizeSelect(it))
+                            }
                         )
                     }
                 )
@@ -213,9 +224,7 @@ fun TeaOrderScreen(
                     supportText = stringResource(R.string.can_multi_select),
                     content = {
                         ToppingSelection(
-                            selectingToppings = listOf(
-                                Topping.BROWN_SUGAR
-                            ),
+                            selectingToppings = state.toppings,
                             onToppingClick = {
                                 onAction(TeaOrderAction.OnToppingClick(it))
                             }
@@ -229,7 +238,10 @@ fun TeaOrderScreen(
                     subTitle = stringResource(R.string.sugar),
                     content = {
                         SugarSelection(
-                            currentSugar = Sugar.LESS
+                            currentSugar = state.sugar,
+                            onSugarClick = { sugar ->
+                                onAction(TeaOrderAction.OnSugarSelect(sugar))
+                            }
                         )
                     }
                 )
@@ -240,7 +252,10 @@ fun TeaOrderScreen(
                     subTitle = stringResource(R.string.ice),
                     content = {
                         IceSelection(
-                            currentIce = Ice.REGULAR
+                            onIceClick = {
+                                onAction(TeaOrderAction.OnIceSelect(it))
+                            },
+                            currentIce = state.ice
                         )
                     }
                 )

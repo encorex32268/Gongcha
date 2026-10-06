@@ -16,12 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.menu.tea_order.components.Sugar.Companion.toPercent
-import com.lihan.menu.tea_order.components.Sugar.Companion.toStringResource
+import com.lihan.core.presentation.ui.model.Sugar
+import com.lihan.core.presentation.ui.model.Sugar.Companion.toPercent
+import com.lihan.core.presentation.ui.model.Sugar.Companion.toStringResource
 
 @Composable
 fun SugarSelection(
-    currentSugar: Sugar,
+    currentSugar: Sugar?,
+    onSugarClick: (Sugar) -> Unit,
     modifier: Modifier = Modifier
 ) {
     SingleChoiceSegmentedButtonRow(
@@ -32,7 +34,9 @@ fun SugarSelection(
             SegmentedButton(
                 selected = currentSugar == sugar,
                 shape = RoundedCornerShape(12.dp),
-                onClick = {},
+                onClick = {
+                    onSugarClick(sugar)
+                },
                 label = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +62,8 @@ fun SugarSelection(
 private fun SugarSelectionPreview() {
     GongchaTheme {
         SugarSelection(
-            currentSugar = Sugar.LESS
+            currentSugar = Sugar.LESS,
+            onSugarClick = {}
         )
     }
 }

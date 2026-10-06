@@ -38,6 +38,12 @@ class StoreViewModel(
             initialValue = StoreState()
         )
 
+    init {
+        viewModelScope.launch {
+            repository.syncStoresData()
+        }
+    }
+
     fun onAction(action: StoreAction) {
         when (action) {
             StoreAction.OnNavigateBack -> Unit

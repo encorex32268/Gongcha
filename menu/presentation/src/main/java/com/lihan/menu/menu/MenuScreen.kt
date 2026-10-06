@@ -1,10 +1,9 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lihan.menu.menu
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
@@ -25,7 +24,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -118,23 +116,20 @@ fun MenuScreen(
             modifier = Modifier.navigationBarsPadding().padding(bottom = 56.dp),
             hostState = snackbarHostState) },
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
                 ),
                 title = {
-                    if (!state.isLoading){
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            if (state.userName == null){
-                                Text(text = stringResource(R.string.user_greeting))
-                            } else {
-                                Text(text = stringResource(R.string.member_greeting,state.userName))
-                            }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        if (state.userName == null){
+                            Text(text = stringResource(R.string.user_greeting))
+                        } else {
+                            Text(text = stringResource(R.string.member_greeting,state.userName))
                         }
                     }
                 },
@@ -153,96 +148,85 @@ fun MenuScreen(
             )
         }
     ) { padding ->
-        when{
-            state.isLoading ->{
-                CircularProgressIndicator(
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 12.dp)
+                .padding(bottom = 12.dp)
+        ) {
+            item {
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                )
-            }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                        .padding(horizontal = 12.dp)
-                        .padding(bottom = 12.dp)
-                ) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                        ){
-                            if (state.store != null){
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    StoreCard(
-                                        storeButtonText = stringResource(R.string.change_store),
-                                        store = state.store,
-                                        onChangeStoreClick = {
-                                            onAction(MenuAction.OnSelectStore)
-                                        }
-                                    )
-                                    NoticeCard()
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ){
+                    if (state.store != null){
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            StoreCard(
+                                storeButtonText = stringResource(R.string.change_store),
+                                store = state.store,
+                                onChangeStoreClick = {
+                                    onAction(MenuAction.OnSelectStore)
                                 }
-                            }else{
-                                val isShowingWarning = snackbarHostState.currentSnackbarData != null
-                                val buttonScale by animateFloatAsState(
-                                    targetValue = if (isShowingWarning) 1.5f else 1f,
-                                    animationSpec = spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                                        stiffness = Spring.StiffnessLow
-                                    ),
-                                    label = "store_button_scale"
-                                )
-                                PrimaryButton(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .graphicsLayer{
-                                            scaleX = buttonScale
-                                            scaleY = buttonScale
-                                        },
-                                    onClick = {
-                                        onAction(MenuAction.OnSelectStore)
-                                    },
-                                    text = stringResource(R.string.select_store)
-                                )
-                            }
-
+                            )
+                            NoticeCard()
                         }
-                    }
-                    item(
-                        key = "tea_type_chips"
-                    ){
-                        TeaTypeChips(
-                            selectedTeaType = state.type,
-                            onTypeSelect = {
-                                onAction(MenuAction.OnTeaTypeSelect(it))
-                            }
+                    }else{
+                        val isShowingWarning = snackbarHostState.currentSnackbarData != null
+                        val buttonScale by animateFloatAsState(
+                            targetValue = if (isShowingWarning) 1.5f else 1f,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow
+                            ),
+                            label = "store_button_scale"
                         )
-                    }
-                    items(
-                        items = state.teas,
-                        key = { it.id }
-                    ){
-                        TeaCard(
-                            modifier = Modifier.animateItem(),
-                            tea = it,
+                        PrimaryButton(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .graphicsLayer{
+                                    scaleX = buttonScale
+                                    scaleY = buttonScale
+                                },
                             onClick = {
-                                onAction(MenuAction.OnTeaClick(it))
+                                onAction(MenuAction.OnSelectStore)
                             },
-                            sharedTransitionScope = sharedTransitionScope,
-                            animatedVisibilityScope = animatedVisibilityScope
+                            text = stringResource(R.string.select_store)
                         )
                     }
-
 
                 }
-
             }
+            item(
+                key = "tea_type_chips"
+            ){
+                TeaTypeChips(
+                    selectedTeaType = state.type,
+                    onTypeSelect = {
+                        onAction(MenuAction.OnTeaTypeSelect(it))
+                    }
+                )
+            }
+            items(
+                items = state.teas,
+                key = { it.id }
+            ){
+                TeaCard(
+                    modifier = Modifier.animateItem(),
+                    tea = it,
+                    onClick = {
+                        onAction(MenuAction.OnTeaClick(it))
+                    },
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
+            }
+
+
         }
     }
 

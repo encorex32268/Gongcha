@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.model.Topping
 import com.lihan.menu.presentation.R
 
 @Composable

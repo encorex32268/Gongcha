@@ -11,6 +11,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -35,13 +36,7 @@ class MenuViewModel(
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
-                _state.update { it.copy(
-                    isLoading = true
-                ) }
                 observeTeas()
-                _state.update { it.copy(
-                    isLoading = false
-                ) }
                 hasLoadedInitialData = true
             }
         }
@@ -52,7 +47,7 @@ class MenuViewModel(
         )
 
     init {
-        setSelectedStore()
+        observeSelectedStore()
 
         viewModelScope.launch {
             repository.syncTeasData()
@@ -99,13 +94,15 @@ class MenuViewModel(
         }.launchIn(viewModelScope)
     }
 
-    private fun setSelectedStore(){
-        viewModelScope.launch {
-            val userCurrentSelectedStoreId = appDataStore.storeId.first()
-            val selectedStore = repository.getLatestSelectedStore(userCurrentSelectedStoreId)
-            _state.update { it.copy(
-                store = selectedStore
-            ) }
-        }
+    private fun observeSelectedStore(){
+        appDataStore
+            .storeId
+            .distinctUntilChanged()
+            .onEach { storeId ->
+                val selectedStore = repository.getLatestSelectedStore(storeId)
+                _state.update { it.copy(
+                    store = selectedStore
+                ) }
+            }.launchIn(viewModelScope)
     }
 }

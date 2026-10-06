@@ -7,7 +7,6 @@ import com.lihan.menu.menu.components.TeaType
 
 
 data class MenuState(
-    val isLoading: Boolean = true,
     val userName: String?=null,
     val store: Store?=null,
     val teas: List<Tea> = emptyList(),
