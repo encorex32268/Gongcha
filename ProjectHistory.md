@@ -3,6 +3,7 @@
 commits: 
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
+| `c1361f4` | feat(member): initialize member modules and scaffold member presentation | 建立 `member` 模組（`domain`, `data`, `presentation`）與配置 Convention Plugins，搭建 `MemberScreen`、`MemberCard`（銅/銀/金級會員卡面）與 MVI 架構骨架。 |
 | `71b32d1` | assets(app): update app launcher icons and app name to Koalacha | 更新應用程式啟動圖示（Adaptive icon 與各解析度 webp）及應用程式名稱為 Koalacha。 |
 | `6f26e2e` | feat(app): connect cart screen, add bottom bar badge counter, and wire cart navigation | 在 `NavRoot` 串接購物車畫面、`MainViewModel` 監聽購物車項目數量並在 `AppBottomBar` 顯示 Badge 徽章，接線跳轉購物車導航。 |
 | `041e346` | feat(auth): scaffold intro screen and viewmodel | 搭建會員認證引導頁面 `IntroScreen` 與其 MVI 狀態架構骨架。 |
