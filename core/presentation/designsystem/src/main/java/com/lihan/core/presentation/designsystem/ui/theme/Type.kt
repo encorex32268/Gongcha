@@ -14,6 +14,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.DeviceFontFamilyName
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -22,41 +23,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lihan.core.presentation.designsystem.R
 
-/**
- * 貢茶 (Gongcha) 品牌字體族系：Zen Maru Gothic (禪丸黑體)
- * 帶有圓潤溫潤的丸文字筆觸，傳遞手工現萃茶飲的溫度與人文質感。
- */
-val ZenMaruGothic = FontFamily(
-    Font(resId = R.font.zenmarugothic_light, weight = FontWeight.Light),
-    Font(resId = R.font.zenmarugothic_regular, weight = FontWeight.Normal),
-    Font(resId = R.font.zenmarugothic_medium, weight = FontWeight.Medium),
-    Font(resId = R.font.zenmarugothic_bold, weight = FontWeight.SemiBold),
-    Font(resId = R.font.zenmarugothic_bold, weight = FontWeight.Bold),
-    Font(resId = R.font.zenmarugothic_black, weight = FontWeight.Black),
-)
 
-/**
- * Material 3 Typography Scale for Gongcha Brand Design System
- * 完整定義 15 種標準 M3 尺度，深度契合茶飲點餐、菜單瀏覽與行銷展示情境。
- */
+val AppDefaultFontFamily = FontFamily.SansSerif
+
+
 val Typography = Typography(
     // Display: 用於超大醒目標題、大促銷 Banner、滿額折抵大數字
     displayLarge = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Black,
         fontSize = 57.sp,
         lineHeight = 64.sp,
         letterSpacing = (-0.25).sp
     ),
     displayMedium = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 45.sp,
         lineHeight = 52.sp,
         letterSpacing = 0.sp
     ),
     displaySmall = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
         lineHeight = 44.sp,
@@ -65,21 +53,21 @@ val Typography = Typography(
 
     // Headline: 用於一級頁面大標、各分類主視覺區塊
     headlineLarge = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
         lineHeight = 32.sp,
@@ -88,21 +76,21 @@ val Typography = Typography(
 
     // Title: 用於 TopAppBar、飲品卡片名稱、分組標題
     titleLarge = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -111,21 +99,21 @@ val Typography = Typography(
 
     // Body: 用於商品介紹內文、規格說明、長篇內容
     bodyLarge = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
@@ -134,21 +122,21 @@ val Typography = Typography(
 
     // Label: 用於按鈕 CTA、商品標籤（Tag/Badge）、底部導航、輔助小字
     labelLarge = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = ZenMaruGothic,
+        fontFamily = AppDefaultFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,
@@ -169,7 +157,7 @@ private fun GongchaTypographyPreview() {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Gong cha 貢茶 Typography Scale",
+                    text = "Kocha Typography Scale",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

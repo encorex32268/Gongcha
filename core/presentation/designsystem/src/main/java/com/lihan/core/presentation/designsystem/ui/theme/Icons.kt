@@ -61,4 +61,8 @@ object GongchaIcons {
     val Check: ImageVector
         @Composable
         get() = Icons.Rounded.Check
+
+    val Delete: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.trash)
 }

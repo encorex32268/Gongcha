@@ -1,5 +1,6 @@
 package com.lihan.core.presentation.designsystem
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,13 +23,17 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = ButtonDefaults.shape,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     trailingIcon: @Composable (() -> Unit)?=null,
-    leadingIcon: @Composable (() -> Unit)?=null
+    leadingIcon: @Composable (() -> Unit)?=null,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         shape = shape,
+        enabled = enabled,
+        contentPadding = contentPadding
     ) {
         if (leadingIcon != null) {
             leadingIcon()

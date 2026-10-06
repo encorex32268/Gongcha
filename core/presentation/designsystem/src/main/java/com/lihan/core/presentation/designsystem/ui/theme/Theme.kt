@@ -2,20 +2,23 @@ package com.lihan.core.presentation.designsystem.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-
+import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
     primary = GongchaDarkPrimary,
     onPrimary = GongchaDarkOnPrimary,
     primaryContainer = GongchaDarkPrimaryContainer,
     onPrimaryContainer = GongchaDarkOnPrimaryContainer,
+    inversePrimary = GongchaDarkInversePrimary,
     secondary = GongchaDarkSecondary,
     onSecondary = GongchaDarkOnSecondary,
     secondaryContainer = GongchaDarkSecondaryContainer,
@@ -34,8 +37,19 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = GongchaDarkOnSurface,
     surfaceVariant = GongchaDarkSurfaceVariant,
     onSurfaceVariant = GongchaDarkOnSurfaceVariant,
+    surfaceTint = GongchaDarkSurfaceTint,
+    inverseSurface = GongchaDarkInverseSurface,
+    inverseOnSurface = GongchaDarkInverseOnSurface,
     outline = GongchaDarkOutline,
-    outlineVariant = GongchaDarkOutlineVariant
+    outlineVariant = GongchaDarkOutlineVariant,
+    scrim = GongchaDarkScrim,
+    surfaceDim = GongchaDarkSurfaceDim,
+    surfaceBright = GongchaDarkSurfaceBright,
+    surfaceContainerLowest = GongchaDarkSurfaceContainerLowest,
+    surfaceContainerLow = GongchaDarkSurfaceContainerLow,
+    surfaceContainer = GongchaDarkSurfaceContainer,
+    surfaceContainerHigh = GongchaDarkSurfaceContainerHigh,
+    surfaceContainerHighest = GongchaDarkSurfaceContainerHighest
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -43,6 +57,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = GongchaLightOnPrimary,
     primaryContainer = GongchaLightPrimaryContainer,
     onPrimaryContainer = GongchaLightOnPrimaryContainer,
+    inversePrimary = GongchaLightInversePrimary,
     secondary = GongchaLightSecondary,
     onSecondary = GongchaLightOnSecondary,
     secondaryContainer = GongchaLightSecondaryContainer,
@@ -61,8 +76,31 @@ private val LightColorScheme = lightColorScheme(
     onSurface = GongchaLightOnSurface,
     surfaceVariant = GongchaLightSurfaceVariant,
     onSurfaceVariant = GongchaLightOnSurfaceVariant,
+    surfaceTint = GongchaLightSurfaceTint,
+    inverseSurface = GongchaLightInverseSurface,
+    inverseOnSurface = GongchaLightInverseOnSurface,
     outline = GongchaLightOutline,
-    outlineVariant = GongchaLightOutlineVariant
+    outlineVariant = GongchaLightOutlineVariant,
+    scrim = GongchaLightScrim,
+    surfaceDim = GongchaLightSurfaceDim,
+    surfaceBright = GongchaLightSurfaceBright,
+    surfaceContainerLowest = GongchaLightSurfaceContainerLowest,
+    surfaceContainerLow = GongchaLightSurfaceContainerLow,
+    surfaceContainer = GongchaLightSurfaceContainer,
+    surfaceContainerHigh = GongchaLightSurfaceContainerHigh,
+    surfaceContainerHighest = GongchaLightSurfaceContainerHighest
+)
+
+/**
+ * Artisanal Washi & Tea Design System Shapes
+ * 以日系溫潤和紙與圓滾波霸珍珠為靈感的圓角設定
+ */
+val Shapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(32.dp)
 )
 
 @Composable
@@ -85,6 +123,7 @@ fun GongchaTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
