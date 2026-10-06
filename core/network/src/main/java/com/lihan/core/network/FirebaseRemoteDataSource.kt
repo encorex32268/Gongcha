@@ -108,6 +108,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
                 nameZh = nameZh,
                 nameEn = nameEn,
                 imageUrl = imageUrl,
+                price = mPrice.toInt(),
                 priceM = mPrice.toInt(),
                 priceL = lPrice.toInt(),
                 descriptionEn = descriptionEn,

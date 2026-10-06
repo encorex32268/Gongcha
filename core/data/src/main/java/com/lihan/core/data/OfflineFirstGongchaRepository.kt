@@ -3,12 +3,15 @@
 package com.lihan.core.data
 
 import com.lihan.core.database.LocalDataSource
+import com.lihan.core.database.mapper.toCartItem
+import com.lihan.core.database.mapper.toCartItemEntity
 import com.lihan.core.database.mapper.toStore
 import com.lihan.core.database.mapper.toStoreEntity
 import com.lihan.core.database.mapper.toTea
 import com.lihan.core.database.mapper.toTeaEntity
 import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.GongchaRepository
+import com.lihan.core.domain.model.CartItem
 import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.model.Tea
 import com.lihan.core.domain.util.DataError
@@ -41,6 +44,28 @@ class OfflineFirstGongchaRepository(
         return localDataSource
             .getStores()
             .map { entities -> entities.map { it.toStore() } }
+    }
+
+    override fun getCarItems(): Flow<List<CartItem>> {
+        return localDataSource
+            .getCartItems()
+            .map { entities -> entities.map { it.toCartItem() } }
+    }
+
+    override fun getCarItemsCount(): Flow<Int> {
+        return localDataSource.getCarItemsCount()
+    }
+
+    override suspend fun addCartItem(cartItem: CartItem) {
+        localDataSource.upsertCartItem(cartItem.toCartItemEntity())
+    }
+
+    override suspend fun removeCartItem(cartItemId: Int) {
+        localDataSource.deleteCartItem(cartItemId)
+    }
+
+    override suspend fun updateCartItemCount(cartItemId: Int, count: Int) {
+        localDataSource.updateCartItemCount(cartItemId,count)
     }
 
     override suspend fun setLatestSelectedStore(id: String) {
@@ -89,6 +114,10 @@ class OfflineFirstGongchaRepository(
                     }
             }
         }
+    }
+
+    override suspend fun clearCartItems() {
+        localDataSource.clearCartItems()
     }
 
 }
