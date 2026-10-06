@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cart_title">購物車</string>
+    <string name="cart_delete">刪除</string>
+    <string name="cart_cancel">取消</string>
+    <string name="delete">刪除</string>
+    <string name="cart_delete_message">確定要刪除 \n「%1$s」嗎？</string>
+    <string name="cart_empty">今天想喝點什麼？快去挑選喜歡的飲品吧！</string>
+
+</resources>
