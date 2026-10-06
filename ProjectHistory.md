@@ -1,4 +1,17 @@
 -------
+2026.10.06
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `71b32d1` | assets(app): update app launcher icons and app name to Koalacha | 更新應用程式啟動圖示（Adaptive icon 與各解析度 webp）及應用程式名稱為 Koalacha。 |
+| `6f26e2e` | feat(app): connect cart screen, add bottom bar badge counter, and wire cart navigation | 在 `NavRoot` 串接購物車畫面、`MainViewModel` 監聽購物車項目數量並在 `AppBottomBar` 顯示 Badge 徽章，接線跳轉購物車導航。 |
+| `041e346` | feat(auth): scaffold intro screen and viewmodel | 搭建會員認證引導頁面 `IntroScreen` 與其 MVI 狀態架構骨架。 |
+| `c6803e0` | feat(cart): implement shopping cart presentation with item list and empty state | 實作購物車畫面 `CartScreen`、空購物車提示 `CartEmptyView`、商品卡片 `CartItemCard` 與 `CartViewModel`。 |
+| `8fb818c` | feat(menu): connect tea order customization and add to cart flow | 串接客製化飲品點餐（冰塊、甜度、配料、尺寸）與加入購物車事件流程，並監聽門市變更。 |
+| `ca98a30` | feat(core): implement CartItem model, database migrations, and repository operations | 建立 `CartItem` 領域模型、Room 資料表與 Migration（1->2, 2->3）、DAO 與 Repository 購物車操作合約。 |
+| `f7f27fe` | refactor(ui): extract order options to shared presentation models and add Counter | 將甜度、冰塊、配料、尺寸等選項列舉抽取至 `core:presentation:ui` 共享模組，並新增通用 `Counter` 元件。 |
+| `80ff242` | feat(designsystem): update color palette to artisanal theme and add delete icon | 更新 Artisanal Washi & Tea 主題配色與圓角形狀、移除自訂字型改用預設 SansSerif，並新增垃圾桶刪除圖示與按鈕狀態支援。 |
+-------
 2026.10.05
 commits: 
 | SHA | Commit訊息 | 主要變更 |
