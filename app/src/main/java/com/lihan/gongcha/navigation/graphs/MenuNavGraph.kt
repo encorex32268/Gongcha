@@ -16,6 +16,7 @@ import com.lihan.menu.tea_order.TeaOrderRoot
 fun NavGraphBuilder.menuGraph(
     navController: NavController,
     navigateToMember: () -> Unit,
+    navigateToCart: () -> Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     navigation<MenuGraph>(startDestination = MenuRoute) {
@@ -46,6 +47,7 @@ fun NavGraphBuilder.menuGraph(
                 onBack = {
                     navController.navigateUp()
                 },
+                onNavigateToCart = navigateToCart,
                 sharedTransitionScope = sharedTransitionScope,
                 animatedVisibilityScope = this
             )

@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.lihan.cart.cart.CartRoot
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.gongcha.navigation.ShoppingCartGraph
 import com.lihan.gongcha.navigation.ShoppingCartRoute
@@ -26,32 +27,7 @@ fun NavGraphBuilder.shoppingCartGraph(
 ) {
     navigation<ShoppingCartGraph>(startDestination = ShoppingCartRoute) {
         composable<ShoppingCartRoute> {
-            ShoppingCartPlaceholderScreen()
-        }
-    }
-}
-
-@Composable
-private fun ShoppingCartPlaceholderScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = GongchaIcons.ShoppingCart,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "購物車",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            CartRoot()
         }
     }
 }
