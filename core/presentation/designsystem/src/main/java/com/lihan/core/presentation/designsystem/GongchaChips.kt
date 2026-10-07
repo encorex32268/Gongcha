@@ -16,19 +16,23 @@ import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 @Composable
 fun GongchaChips(
     text: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    selected: Boolean = false
+    onClick: (() -> Unit)?=null,
+    selected: Boolean = false,
+    enabled: Boolean = true
 ) {
     FilterChip(
         selected = selected,
-        onClick = onClick,
+        onClick = {
+            onClick?.invoke()
+        },
         modifier = modifier,
         colors = FilterChipDefaults.filterChipColors(
             containerColor = Color.Transparent,
             selectedContainerColor = MaterialTheme.colorScheme.primary,
             selectedLabelColor = MaterialTheme.colorScheme.onPrimary
         ),
+        enabled = enabled,
         label = {
             Text(
                 text = text

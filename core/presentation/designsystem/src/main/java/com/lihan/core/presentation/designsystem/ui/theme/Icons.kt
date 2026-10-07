@@ -65,4 +65,8 @@ object GongchaIcons {
     val Delete: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.trash)
+
+    val Contactless: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.contactless)
 }
