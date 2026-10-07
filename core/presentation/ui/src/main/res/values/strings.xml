@@ -56,5 +56,26 @@
     <string name="order_sugar">選擇糖度</string>
     <string name="minus">Minus</string>
     <string name="plus">Plus</string>
+    <string name="level_copper">銅牌會員</string>
+    <string name="level_silver">銀牌會員</string>
+    <string name="level_gold">金牌會員</string>
+    <string name="level_none">無會員</string>
 
+    <!-- Error messages -->
+    <string name="error_disk_full">儲存空間已滿，請清理空間後重試。</string>
+    <string name="error_not_found">找不到相關資料。</string>
+    <string name="error_bad_request">請求錯誤，請稍後再試。</string>
+    <string name="error_request_timeout">連線逾時，請檢查網路連線後重試。</string>
+    <string name="error_unauthorized">登入驗證失敗或已過期，請重新登入。</string>
+    <string name="error_forbidden">權限不足，無法進行此操作。</string>
+    <string name="error_conflict">資料發生衝突，請重試。</string>
+    <string name="error_too_many_requests">操作過於頻繁，請稍候再試。</string>
+    <string name="error_no_internet">無網路連線，請檢查網路設定。</string>
+    <string name="error_payload_too_large">傳輸資料過大，無法處理。</string>
+    <string name="error_server_error">伺服器錯誤，請稍候再試。</string>
+    <string name="error_service_unavailable">服務暫時無法使用，請稍候重試。</string>
+    <string name="error_serialization">資料解析失敗。</string>
+    <string name="error_canceled">操作已取消。</string>
+    <string name="error_firebase_get_data_failed">讀取遠端資料失敗，請稍後再試。</string>
+    <string name="error_unknown">發生未知錯誤，請稍後再試。</string>
 </resources>

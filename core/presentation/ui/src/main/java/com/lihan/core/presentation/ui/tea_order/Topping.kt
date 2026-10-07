@@ -1,4 +1,4 @@
-package com.lihan.core.presentation.ui.model
+package com.lihan.core.presentation.ui.tea_order
 
 import androidx.annotation.StringRes
 import com.lihan.core.presentation.ui.R
@@ -45,7 +45,7 @@ enum class Topping(
     );
 
     companion object {
-        val originalToppings = Topping.entries.filter { it.price == 10 }
-        val flavorToppings = Topping.entries.filter { it.price > 10 }
+        val originalToppings = entries.filter { it.price == 10 }
+        val flavorToppings = entries.filter { it.price > 10 }
     }
 }

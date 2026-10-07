@@ -1,4 +1,4 @@
-package com.lihan.core.presentation.ui.model
+package com.lihan.core.presentation.ui.tea_order
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
