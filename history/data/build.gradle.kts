@@ -11,4 +11,6 @@ dependencies {
     implementation(projects.core.database)
 
     implementation(projects.history.domain)
+
+    androidTestDebugImplementation(libs.androidx.junit)
 }
