@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="login_continue">繼續</string>
+    <string name="login_continue_without_signing">不登入繼續</string>
+
+</resources>

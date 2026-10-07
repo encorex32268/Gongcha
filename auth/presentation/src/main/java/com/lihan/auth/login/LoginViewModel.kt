@@ -1,4 +1,4 @@
-package com.lihan.auth.intro
+package com.lihan.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
-class IntroViewModel : ViewModel() {
+class LoginViewModel : ViewModel() {
 
     private var hasLoadedInitialData = false
 
-    private val _state = MutableStateFlow(IntroState())
+    private val _state = MutableStateFlow(LoginState())
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
@@ -22,10 +22,10 @@ class IntroViewModel : ViewModel() {
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = IntroState()
+            initialValue = LoginState()
         )
 
-    fun onAction(action: IntroAction) {
+    fun onAction(action: LoginAction) {
         when (action) {
             else -> TODO("Handle actions")
         }
