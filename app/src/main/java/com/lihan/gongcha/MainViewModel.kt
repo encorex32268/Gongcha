@@ -2,7 +2,7 @@ package com.lihan.gongcha
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.GongchaRepository
+import com.lihan.core.domain.CartRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class MainViewModel(
-    private val repository: GongchaRepository
+    private val repository: CartRepository
 ): ViewModel() {
 
     private var hasLoadedInitialData = false
