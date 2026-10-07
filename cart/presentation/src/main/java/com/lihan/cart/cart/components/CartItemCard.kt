@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,19 +24,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.lihan.core.domain.model.CartItem
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.components.Counter
-import com.lihan.core.presentation.ui.model.Ice
-import com.lihan.core.presentation.ui.model.Ice.Companion.toStringResource
-import com.lihan.core.presentation.ui.model.Size
-import com.lihan.core.presentation.ui.model.Size.Companion.toStringResource
-import com.lihan.core.presentation.ui.model.Sugar
-import com.lihan.core.presentation.ui.model.Sugar.Companion.toStringResource
-import com.lihan.core.presentation.ui.model.Topping
+import com.lihan.core.presentation.ui.tea_order.Ice
+import com.lihan.core.presentation.ui.tea_order.Ice.Companion.toStringResource
+import com.lihan.core.presentation.ui.tea_order.Size
+import com.lihan.core.presentation.ui.tea_order.Size.Companion.toStringResource
+import com.lihan.core.presentation.ui.tea_order.Sugar
+import com.lihan.core.presentation.ui.tea_order.Sugar.Companion.toStringResource
+import com.lihan.core.presentation.ui.tea_order.Topping
 
 @Composable
 fun CartItemCard(

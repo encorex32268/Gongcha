@@ -2,46 +2,53 @@
 
 package com.lihan.cart.cart
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lihan.cart.cart.components.CartEmptyView
 import com.lihan.cart.cart.components.CartItemCard
 import com.lihan.cart.presentation.R
 import com.lihan.core.domain.model.CartItem
+import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.core.presentation.ui.model.Ice
-import com.lihan.core.presentation.ui.model.Size
-import com.lihan.core.presentation.ui.model.Sugar
-import com.lihan.core.presentation.ui.model.Topping
+import com.lihan.core.presentation.ui.ObserveAsEvents
+import com.lihan.core.presentation.ui.tea_order.Ice
+import com.lihan.core.presentation.ui.tea_order.Size
+import com.lihan.core.presentation.ui.tea_order.Sugar
+import com.lihan.core.presentation.ui.tea_order.Topping
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -49,10 +56,34 @@ fun CartRoot(
     viewModel: CartViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember{ SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val checkoutSuccess = stringResource(R.string.cart_checkout_success)
+
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            is CartEvent.OnCheckoutFail -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = uiEvent.errorMessage.asStringAsync(context)
+                    )
+                }
+            }
+            CartEvent.OnCheckoutSuccess -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = checkoutSuccess
+                    )
+                }
+            }
+        }
+    }
 
     CartScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -60,8 +91,16 @@ fun CartRoot(
 fun CartScreen(
     state: CartState,
     onAction: (CartAction) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = 56.dp),
+                hostState = snackbarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = { Text(
@@ -70,15 +109,23 @@ fun CartScreen(
             )
         }
     ) { padding ->
-        when{
-            state.cartItems.isEmpty() -> {
-                CartEmptyView()
-            }
-            else ->{
+        if (state.cartItems.isEmpty()){
+            CartEmptyView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 64.dp)
+            )
+        }else{
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
+                        .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
                 ) {
@@ -104,11 +151,23 @@ fun CartScreen(
                         Spacer(modifier = Modifier.height(64.dp))
                     }
                 }
+                PrimaryButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .navigationBarsPadding()
+                        .padding(bottom = 56.dp) //bottomBar's height
+                        .padding(bottom = 8.dp),
+                    text = stringResource(R.string.cart_checkout),
+                    enabled = !state.isCheckoutLoading,
+                    onClick = {
+                        onAction(CartAction.OnCheckout)
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    shape = RoundedCornerShape(16.dp)
+                )
             }
         }
-
-
-
     }
     if (state.deleteItemContent != null){
         AlertDialog(
@@ -156,7 +215,12 @@ fun CartScreen(
 @Composable
 private fun Preview() {
     GongchaTheme {
+        val snackbarHostState = remember { SnackbarHostState() }
+        LaunchedEffect(Unit) {
+            snackbarHostState.showSnackbar(message = "Success")
+        }
         CartScreen(
+            snackbarHostState = remember { SnackbarHostState() },
             state = CartState(
                 cartItems = (0..10).map {
                     CartItem(

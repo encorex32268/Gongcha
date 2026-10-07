@@ -2,27 +2,35 @@ package com.lihan.cart.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.GongchaRepository
+import com.lihan.core.domain.CartRepository
+import com.lihan.core.domain.util.onError
+import com.lihan.core.domain.util.onSuccess
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
+import com.lihan.core.presentation.ui.toUiText
+
 
 class CartViewModel(
-    private val repository: GongchaRepository
+    private val repository: CartRepository
 ): ViewModel() {
 
     private var hasLoadedInitialData = false
 
     private var updateItemCountJob: Job?=null
-    private var preDeleteCartItemId: Int?=null
+
+    private val _uiEvent = Channel<CartEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     private val _state = MutableStateFlow(CartState())
     val state = _state
@@ -40,37 +48,75 @@ class CartViewModel(
 
     fun onAction(action: CartAction) {
         when (action) {
-            is CartAction.OnDeleteClick -> TODO()
             is CartAction.OnMinusClick -> onMinusItem(action.id)
             is CartAction.OnPlusClick -> onPlusItem(action.id)
-            is CartAction.OnShowDeleteDialog -> {
-                preDeleteCartItemId = action.cartItemId
-                _state.update { it.copy(
-                    deleteItemContent = action.text
-                ) }
-            }
-
-            CartAction.OnDismissDeleteDialog -> {
-                preDeleteCartItemId = null
-                _state.update { it.copy(
-                    deleteItemContent = null
-                ) }
-            }
-
+            is CartAction.OnShowDeleteDialog -> showDeleteDialog(action.text,action.cartItemId)
+            CartAction.OnDismissDeleteDialog -> dismissDeleteDialog()
             CartAction.OnConfirmDeleteClick -> onDeleteCartItem()
+            CartAction.OnCheckout -> checkout()
         }
     }
 
+    private fun checkout(){
+        if (_state.value.isCheckoutLoading){
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isCheckoutLoading = true) }
+            try {
+                repository
+                    .checkout()
+                    .onError { error ->
+                        _state.update {
+                            it.copy(isCheckoutLoading = false)
+                        }
+                        _uiEvent.send(CartEvent.OnCheckoutFail(errorMessage = error.toUiText()))
+                    }
+                    .onSuccess {
+                        repository.clearCartItems()
+                        _state.update { it.copy(
+                            isCheckoutLoading = false)
+                        }
+                        _uiEvent.send(CartEvent.OnCheckoutSuccess)
+                    }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _state.update { it.copy(isCheckoutLoading = false) }
+            }
+        }
+    }
+
+
+
+
+    private fun showDeleteDialog(text: String, cartItemId: Int?){
+        if (cartItemId == null){
+            return
+        }
+        _state.update { it.copy(
+            deleteItemContent = text,
+            selectedCartItemId = cartItemId
+        ) }
+    }
+
+    private fun dismissDeleteDialog() {
+        _state.update { it.copy(
+            deleteItemContent = null,
+            selectedCartItemId = null
+        ) }
+    }
+
     private fun onDeleteCartItem(){
-        if (preDeleteCartItemId == null){
+        if (state.value.selectedCartItemId == null){
             return
         }
         viewModelScope.launch {
-            repository.removeCartItem(preDeleteCartItemId!!)
+            repository.removeCartItem(state.value.selectedCartItemId!!)
             _state.update { it.copy(
-                deleteItemContent = null
+                deleteItemContent = null,
+                selectedCartItemId = null
             ) }
-            preDeleteCartItemId = null
         }
     }
 

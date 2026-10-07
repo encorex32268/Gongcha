@@ -7,5 +7,7 @@
     <string name="delete">刪除</string>
     <string name="cart_delete_message">確定要刪除 \n「%1$s」嗎？</string>
     <string name="cart_empty">今天想喝點什麼？快去挑選喜歡的飲品吧！</string>
+    <string name="cart_checkout">送出訂單</string>
+    <string name="cart_checkout_success">訂單成功送出！</string>
 
 </resources>
