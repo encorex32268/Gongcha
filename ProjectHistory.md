@@ -1,4 +1,18 @@
 -------
+2026.10.07
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `0b6aeeb` | refactor(app): inject CartRepository in MainViewModel | 重構 `MainViewModel` 改為注入專屬的 `CartRepository` 監聽購物車項目數量。 |
+| `2d0765d` | feat(auth): implement phone number login screen and validator with unit tests | 實作手機號碼登入頁面 `LoginScreen`、ViewModel 與 `PhoneNumberValidator` 驗證邏輯及單元測試。 |
+| `786673b` | feat(member): update MemberScreen and MemberCard with membership level badges | 更新 `MemberScreen` 與 `MemberCard` 支援無等級/銅/銀/金級漸層卡面、條碼視覺與點數展示。 |
+| `794fd04` | feat(history): implement history order list screen, status chip, and viewmodel | 實作歷史訂單列表頁面 `HistoryScreen`、訂單卡片 `HistoryItemCard`、狀態標籤 `StatusChip` 與 MVI 架構。 |
+| `e577ffd` | feat(cart): add checkout event flow and update CartViewModel with CartRepository | 擴充購物車結帳事件流程（`CartEvent.OnCheckoutSuccess`）並重構 `CartViewModel` 改用 `CartRepository`。 |
+| `7ea6e63` | feat(menu): create MenuRepository in domain and data modules and decouple from core | 於 `menu:domain` 與 `menu:data` 模組建立專屬 `MenuRepository` 與實作，從 core 模組徹底解耦菜單與門市存取。 |
+| `9e79786` | refactor(core): decouple GongchaRepository into CartRepository and define domain models | 解耦通用 Repository 為專責之 `CartRepository`，新增 `History`、`User`、`MemberLevel` 與 `OrderStatus` 等 Domain 模型與 DTO。 |
+| `d155c2e` | refactor(ui): reorganize tea order models, add member level badges, and NoticeCard | 整理飲品客製化模型至 `tea_order` 套件，將會員等級徽章資源移至 `core:presentation:ui`，並抽取通用 `NoticeCard`。 |
+| `f66f635` | refactor(designsystem): remove legacy drink drawables and add contactless icon | 清理不再使用的飲品舊圖檔資源，並新增感應付款圖示 `contactless.xml` 與晶片元件樣式。 |
+-------
 2026.10.06
 commits: 
 | SHA | Commit訊息 | 主要變更 |
@@ -20,7 +34,7 @@ commits:
 | `cf46517` | feat(menu): implement tea order customization options for size, sweetness, ice, and toppings | 實作飲品客製化選擇區塊（杯型大小、甜度、冰量、配料多選）與底部訂購結帳列 `OrderBottomBar`。 |
 | `2c97954` | refactor(app): wrap bottom bar inside SharedTransitionLayout in NavRoot | 在 `NavRoot` 將 `AppBottomBar` 移入 `SharedTransitionLayout` 內部統一階層佈局。 |
 | `0e1c721` | feat(designsystem): add plus, minus, check icons and shape parameter to PrimaryButton | 新增加號、減號與打勾向量圖示資源，並擴充 `PrimaryButton` 支援自訂形狀（`Shape`）。 |
-| `7c62f50` | refactor(core): streamline GongchaRepository and introduce OfflineFirstGongchaRepository | 重構 Repository 合約與 `LocalDataSource` 介面，引入 `OfflineFirstGongchaRepository`，並同步更新 `MenuViewModel` 與 `StoreViewModel`。 |
+| `7c62f50` | refactor(core): streamline GongchaRepository and introduce OfflineFirstGongchaRepository | 重構 Repository 合約與 `LocalDataSource` 介面，引入 `OfflineFirstCartRepository`，並同步更新 `MenuViewModel` 與 `StoreViewModel`。 |
 | `7ef8e07` | build: add androidTest dependencies to data and presentation modules | 為 `auth:data`、`core:data` 與 `core:presentation:ui` 模組配置 `androidx.junit` Android 測試依賴，並更新 JDK 設定。 |
 | `754bd38` | docs: add ProjectHistory.md tracking commit history | 建立 `ProjectHistory.md` 紀錄專案歷程與 Commit 規範。 |
 -------
@@ -42,11 +56,11 @@ commits:
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
 | `d945be6` | feat(app): configure GongchaApp Koin initialization and Navigation root | 配置 Application 層 Koin 依賴注入模組初始化與 Navigation 導航入口 `NavRoot`。 |
-| `c956138` | feat(menu): connect MenuViewModel with repository and update UI components | 串接 `MenuViewModel` 與 `GongchaRepository`，更新菜單門市與飲品卡片介面。 |
-| `7cdaadc` | feat(core:data): implement offline-first repository and datastore | 實作 `OfflineFirstGongchaRepository` 離線優先資料流整合與 `AppDataStore` Preferences。 |
+| `c956138` | feat(menu): connect MenuViewModel with repository and update UI components | 串接 `MenuViewModel` 與 `CartRepository`，更新菜單門市與飲品卡片介面。 |
+| `7cdaadc` | feat(core:data): implement offline-first repository and datastore | 實作 `OfflineFirstCartRepository` 離線優先資料流整合與 `AppDataStore` Preferences。 |
 | `23f4264` | feat(core:database): setup Room database, entities, daos, and local data source | 建立 Room 資料庫、`TeaEntity` / `StoreEntity`、Dao 與 `LocalDataSource`。 |
 | `11d307e` | feat(core:network): extract network module and implement FirebaseRemoteDataSource | 抽取 `core:network` 模組並透過 Firebase Firestore 實作 `RemoteDataSource`。 |
-| `8338c83` | refactor(core:domain): reorganize models and define repository & datastore contracts | 重構 domain 模組，定義 `GongchaRepository` 與 `AppDataStore` 介面合約。 |
+| `8338c83` | refactor(core:domain): reorganize models and define repository & datastore contracts | 重構 domain 模組，定義 `CartRepository` 與 `AppDataStore` 介面合約。 |
 | `2c1e83a` | build: configure dependencies for navigation, datastore, and core:network | 配置 Navigation Compose、DataStore 與 `core:network` 相關依賴。 |
 | `24cc98c` | Add Result & UiText | 在 `core:domain` 與 `core:presentation:ui` 建立通用 Result 封裝、DataError 與 UiText 工具。 |
 | `3d091a2` | Push data to firebase firestore | 建立上傳門市與茶飲資料至 Firebase Firestore 的腳本與資料集合。 |
