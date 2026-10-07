@@ -17,10 +17,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +44,7 @@ import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
-import com.lihan.menu.menu.components.NoticeCard
+import com.lihan.core.presentation.ui.components.NoticeCard
 import com.lihan.menu.menu.components.StoreCard
 import com.lihan.menu.menu.components.TeaCard
 import com.lihan.menu.menu.components.TeaTypeChips
@@ -173,7 +171,9 @@ fun MenuScreen(
                                     onAction(MenuAction.OnSelectStore)
                                 }
                             )
-                            NoticeCard()
+                            NoticeCard(
+                                text = stringResource(R.string.notice)
+                            )
                         }
                     }else{
                         val isShowingWarning = snackbarHostState.currentSnackbarData != null

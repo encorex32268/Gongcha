@@ -16,9 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.core.presentation.ui.model.Sugar
-import com.lihan.core.presentation.ui.model.Sugar.Companion.toPercent
-import com.lihan.core.presentation.ui.model.Sugar.Companion.toStringResource
+import com.lihan.core.presentation.ui.tea_order.Sugar
+import com.lihan.core.presentation.ui.tea_order.Sugar.Companion.toPercent
+import com.lihan.core.presentation.ui.tea_order.Sugar.Companion.toStringResource
 
 @Composable
 fun SugarSelection(

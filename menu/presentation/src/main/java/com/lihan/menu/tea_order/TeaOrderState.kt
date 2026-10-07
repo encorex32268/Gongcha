@@ -1,10 +1,10 @@
 package com.lihan.menu.tea_order
 
 import com.lihan.core.domain.model.Tea
-import com.lihan.core.presentation.ui.model.Ice
-import com.lihan.core.presentation.ui.model.Size
-import com.lihan.core.presentation.ui.model.Sugar
-import com.lihan.core.presentation.ui.model.Topping
+import com.lihan.core.presentation.ui.tea_order.Ice
+import com.lihan.core.presentation.ui.tea_order.Size
+import com.lihan.core.presentation.ui.tea_order.Sugar
+import com.lihan.core.presentation.ui.tea_order.Topping
 
 
 data class TeaOrderState(

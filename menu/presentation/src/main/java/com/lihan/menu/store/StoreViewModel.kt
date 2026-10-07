@@ -2,9 +2,8 @@ package com.lihan.menu.store
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.GongchaRepository
-import com.lihan.core.domain.util.onError
-import com.lihan.core.domain.util.onSuccess
+import com.lihan.core.domain.CartRepository
+import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class StoreViewModel(
-    private val repository: GongchaRepository
+    private val repository: MenuRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false

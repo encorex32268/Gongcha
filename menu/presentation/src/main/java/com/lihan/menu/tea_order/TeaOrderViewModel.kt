@@ -3,12 +3,13 @@ package com.lihan.menu.tea_order
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.GongchaRepository
+import com.lihan.core.domain.CartRepository
 import com.lihan.core.domain.model.CartItem
-import com.lihan.core.presentation.ui.model.Ice
-import com.lihan.core.presentation.ui.model.Size
-import com.lihan.core.presentation.ui.model.Sugar
-import com.lihan.core.presentation.ui.model.Topping
+import com.lihan.core.presentation.ui.tea_order.Ice
+import com.lihan.core.presentation.ui.tea_order.Size
+import com.lihan.core.presentation.ui.tea_order.Sugar
+import com.lihan.core.presentation.ui.tea_order.Topping
+import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class TeaOrderViewModel(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: GongchaRepository
+    private val repository: CartRepository,
+    private val menuRepository: MenuRepository,
 ) : ViewModel() {
 
     private val teaId: String? = savedStateHandle.get<String>("teaId")
@@ -128,7 +130,7 @@ class TeaOrderViewModel(
                 return@launch
             }
 
-            val tea = repository.getTeaById(teaId)
+            val tea = menuRepository.getTeaById(teaId)
             if (tea != null) {
                 _state.update { it.copy(tea = tea) }
             }

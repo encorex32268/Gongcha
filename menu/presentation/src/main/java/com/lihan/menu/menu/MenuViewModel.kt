@@ -3,16 +3,14 @@ package com.lihan.menu.menu
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lihan.core.domain.AppDataStore
-import com.lihan.core.domain.GongchaRepository
-import com.lihan.core.domain.util.onError
-import com.lihan.core.domain.util.onSuccess
+import com.lihan.core.domain.CartRepository
+import com.lihan.menu.domain.MenuRepository
 import com.lihan.menu.menu.components.TeaType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -23,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MenuViewModel(
-    private val repository: GongchaRepository,
+    private val menuRepository: MenuRepository,
     private val appDataStore: AppDataStore
 ): ViewModel() {
 
@@ -50,7 +48,7 @@ class MenuViewModel(
         observeSelectedStore()
 
         viewModelScope.launch {
-            repository.syncTeasData()
+            menuRepository.syncTeasData()
         }
 
     }
@@ -80,7 +78,7 @@ class MenuViewModel(
 
         combine(
             state.map { it.type },
-            repository.getTeas()
+            menuRepository.getTeas()
         ){ type , teas ->
 
             val filterTeas = when(type){
@@ -99,7 +97,7 @@ class MenuViewModel(
             .storeId
             .distinctUntilChanged()
             .onEach { storeId ->
-                val selectedStore = repository.getLatestSelectedStore(storeId)
+                val selectedStore = menuRepository.getLatestSelectedStore(storeId)
                 _state.update { it.copy(
                     store = selectedStore
                 ) }
