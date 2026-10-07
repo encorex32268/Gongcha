@@ -1,15 +1,24 @@
+@file:OptIn(InternalCoroutinesApi::class)
+
 package com.lihan.core.network
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.lihan.core.domain.model.BusinessHour
+import com.lihan.core.domain.model.CartItem
 import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.model.Tea
 import com.lihan.core.domain.util.DataError
+import com.lihan.core.domain.util.EmptyResult
 import com.lihan.core.domain.util.Result
+import com.lihan.core.network.mapper.toHistoryDto
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
 
 class FirebaseRemoteDataSource: RemoteDataSource {
 
@@ -19,6 +28,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         private const val DOC_TEAS = "teas"
         private const val DOC_STORES = "stores"
         private const val DOC_VERSIONS = "versions"
+        private const val DOC_ORDERS = "orders"
     }
 
     override fun getTeas(): Flow<Result<List<Tea>, DataError>> = callbackFlow {
@@ -88,6 +98,34 @@ class FirebaseRemoteDataSource: RemoteDataSource {
 
         awaitClose()
     }
+
+    override suspend fun checkout(cartItems: List<CartItem>): EmptyResult<DataError> =
+        suspendCancellableCoroutine{ cancellableContinuation ->
+            val docRef = firebaseStore
+                .collection(DOC_ORDERS)
+                .document()
+
+            val historyDto = cartItems.toHistoryDto(docRef.id)
+
+            docRef
+                .set(historyDto)
+                .addOnFailureListener {
+                    it.printStackTrace()
+                    if (cancellableContinuation.isActive) {
+                        cancellableContinuation.resume(Result.Error(DataError.Network.BAD_REQUEST))
+                    }
+                }
+                .addOnCanceledListener {
+                    if (cancellableContinuation.isActive) {
+                        cancellableContinuation.resume(Result.Error(DataError.Network.CANCELED))
+                    }
+                }
+                .addOnSuccessListener {
+                    if (cancellableContinuation.isActive) {
+                        cancellableContinuation.resume(Result.Success(Unit))
+                    }
+                }
+        }
 
     private fun QueryDocumentSnapshot.toTea(): Tea? {
         return try {

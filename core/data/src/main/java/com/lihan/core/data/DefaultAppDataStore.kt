@@ -9,9 +9,11 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.lihan.core.domain.AppDataStore
+import com.lihan.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
 import java.io.IOException
 
 val Context.appDataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
@@ -24,6 +26,7 @@ class DefaultAppDataStore(
         val KEY_TEAS_VERSION_CODE = intPreferencesKey("teasVersionCode")
         val KEY_STORES_VERSION_CODE = intPreferencesKey("storesVersionCode")
         val KEY_STORE_ID = stringPreferencesKey("storeId")
+        val KEY_USER = stringPreferencesKey("user")
     }
 
     override val teasVersionCode: Flow<Int>
@@ -61,4 +64,21 @@ class DefaultAppDataStore(
             preferences[KEY_STORE_ID] = id
         }
     }
+
+    override suspend fun setUser(user: User) {
+        context.appDataStore.edit { preferences ->
+            preferences[KEY_USER] = Json.encodeToString(user)
+        }
+    }
+
+    override val user: Flow<User?>
+        get() = context.appDataStore.data
+            .map { preferences ->
+                val userJsonString = preferences[KEY_USER]?:""
+                if (userJsonString.isBlank()){
+                    null
+                }else{
+                    Json.decodeFromString<User>(userJsonString)
+                }
+            }
 }

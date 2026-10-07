@@ -1,5 +1,6 @@
 package com.lihan.core.domain
 
+import com.lihan.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,4 +16,7 @@ interface AppDataStore {
 
     val storeId: Flow<String>
     suspend fun setLatestSelectedStoreId(id: String)
+
+    suspend fun setUser(user: User)
+    val user: Flow<User?>
 }

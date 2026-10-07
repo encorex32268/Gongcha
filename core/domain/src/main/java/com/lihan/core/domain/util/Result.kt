@@ -30,7 +30,7 @@ inline fun <T, E : Error> Result<T, E>.onSuccess(
 
 // Alias for onFailure to support legacy naming conventions
 inline fun <T, E : Error> Result<T, E>.onError(
-    action: (e: com.lihan.core.domain.util.Error) -> Unit
+    action: (e: E) -> Unit
 ): Result<T, E> {
     if (this is Result.Error) action(error)
     return this

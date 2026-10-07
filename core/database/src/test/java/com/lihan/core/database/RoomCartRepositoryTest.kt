@@ -18,7 +18,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class RoomGongchaRepositoryTest {
+class RoomCartRepositoryTest {
 
     private lateinit var fakeTeaDao: FakeTeaDao
     private lateinit var fakeStoreDao: FakeStoreDao
