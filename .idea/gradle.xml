@@ -44,6 +44,10 @@
             <option value="$PROJECT_DIR$/history/data" />
             <option value="$PROJECT_DIR$/history/domain" />
             <option value="$PROJECT_DIR$/history/presentation" />
+            <option value="$PROJECT_DIR$/member" />
+            <option value="$PROJECT_DIR$/member/data" />
+            <option value="$PROJECT_DIR$/member/domain" />
+            <option value="$PROJECT_DIR$/member/presentation" />
             <option value="$PROJECT_DIR$/menu" />
             <option value="$PROJECT_DIR$/menu/data" />
             <option value="$PROJECT_DIR$/menu/domain" />
