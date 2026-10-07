@@ -3,6 +3,7 @@
 commits: 
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
+| `582c378` | fix(ui): trim transparent padding from member level badge drawables | 自動裁切會員等級徽章圖檔（無等級/銅/銀/金牌）四周多餘透明空白，避免卡面排版佔位過大。 |
 | `0b6aeeb` | refactor(app): inject CartRepository in MainViewModel | 重構 `MainViewModel` 改為注入專屬的 `CartRepository` 監聽購物車項目數量。 |
 | `2d0765d` | feat(auth): implement phone number login screen and validator with unit tests | 實作手機號碼登入頁面 `LoginScreen`、ViewModel 與 `PhoneNumberValidator` 驗證邏輯及單元測試。 |
 | `786673b` | feat(member): update MemberScreen and MemberCard with membership level badges | 更新 `MemberScreen` 與 `MemberCard` 支援無等級/銅/銀/金級漸層卡面、條碼視覺與點數展示。 |
