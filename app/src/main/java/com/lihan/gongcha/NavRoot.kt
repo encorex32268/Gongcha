@@ -12,41 +12,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.lihan.gongcha.navigation.AppBottomBar
 import com.lihan.gongcha.navigation.AppState
-import com.lihan.gongcha.navigation.AuthGraph
-import com.lihan.gongcha.navigation.MenuGraph
 import com.lihan.gongcha.navigation.TopLevelDestination
 import com.lihan.gongcha.navigation.graphs.authGraph
 import com.lihan.gongcha.navigation.graphs.historyGraph
 import com.lihan.gongcha.navigation.graphs.memberGraph
 import com.lihan.gongcha.navigation.graphs.menuGraph
-import com.lihan.gongcha.navigation.rememberAppState
 import com.lihan.gongcha.navigation.graphs.shoppingCartGraph
-import org.koin.compose.viewmodel.koinViewModel
+import com.lihan.gongcha.navigation.rememberAppState
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavRoot(
-    mainViewModel: MainViewModel = koinViewModel(),
+    state: MainState,
     appState: AppState = rememberAppState()
 ) {
-    val cartItemsCount by mainViewModel.cartItemCount.collectAsStateWithLifecycle()
-
     SharedTransitionLayout {
         Box(
             modifier = Modifier.fillMaxSize(),
         ) {
-
             NavHost(
                 navController = appState.navController,
-                startDestination = AuthGraph
+                startDestination = state.startDestination
             ) {
                 authGraph(
                     navController = appState.navController,
@@ -88,11 +80,9 @@ fun NavRoot(
                     destinations = appState.topLevelDestinations,
                     onNavigateToDestination = appState::navigateToTopLevelDestination,
                     currentDestination = appState.currentDestination,
-                    cartItemsCount = cartItemsCount
+                    cartItemsCount = state.cartItemCount
                 )
             }
         }
-
     }
-
 }
