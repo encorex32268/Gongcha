@@ -20,38 +20,16 @@ import androidx.navigation.navigation
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.gongcha.navigation.MemberGraph
 import com.lihan.gongcha.navigation.MemberRoute
+import com.lihan.member.presentation.member.MemberRoot
 
 fun NavGraphBuilder.memberGraph(
     navController: NavController
 ) {
     navigation<MemberGraph>(startDestination = MemberRoute) {
         composable<MemberRoute> {
-            MemberPlaceholderScreen()
+            MemberRoot()
         }
     }
 }
 
-@Composable
-private fun MemberPlaceholderScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = GongchaIcons.Member,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "會員中心",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
+

@@ -2,5 +2,6 @@
 <resources>
 
     <string name="member_title">會員中心</string>
+    <string name="guest">訪客</string>
 
 </resources>

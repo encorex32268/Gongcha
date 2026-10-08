@@ -1,5 +1,6 @@
-package com.lihan.auth.login
+package com.lihan.auth.presentation.login
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,8 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -19,27 +26,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.play.integrity.internal.ac
 import com.lihan.auth.presentation.R
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.ObserveAsEvents
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginRoot(
-    viewModel: LoginViewModel = viewModel()
+    onNavigateToCodeVerify: () -> Unit,
+    onNavigateToMenu: () -> Unit,
+    viewModel: LoginViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            LoginEvent.OnNavigateToCodeVerify -> onNavigateToCodeVerify()
+            LoginEvent.OnNavigateToMenu -> onNavigateToMenu()
+        }
+    }
+
     LoginScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when(action){
+                LoginAction.OnWithoutSigningClick -> onNavigateToMenu()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
@@ -48,6 +77,8 @@ fun LoginScreen(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
 ) {
+    val activity = LocalActivity.current
+    val focusManager = LocalFocusManager.current
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -56,7 +87,8 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
+                .padding(16.dp)
+                .padding(top = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -64,23 +96,41 @@ fun LoginScreen(
                 painter = painterResource(R.drawable.playstore_512),
                 contentDescription = null
             )
-
+            Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 state = state.textFieldState,
                 shape = CircleShape,
+                lineLimits = TextFieldLineLimits.SingleLine,
+                inputTransformation = InputTransformation.maxLength(13),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
                 ),
+                onKeyboardAction = {
+                    focusManager.clearFocus()
+                },
                 placeholder = {
                     Text(
-                        text = "0912345678"
+                        text = "0912345678",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.surfaceDim
+                        )
                     )
                 },
                 supportingText = {
-                    Text(
-                        text = "SupportText"
-                    )
-                }
+                    if (state.errorMessage!=null){
+                        Text(
+                            text = state.errorMessage.asString(),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.error
+                            ),
+
+                        )
+                    }
+                },
+                textStyle = MaterialTheme.typography.titleMedium.copy(
+                    textAlign = TextAlign.Center
+                )
             )
             Spacer(Modifier.height(8.dp))
             PrimaryButton(
@@ -88,9 +138,22 @@ fun LoginScreen(
                 contentPadding = PaddingValues(16.dp),
                 text = stringResource(R.string.login_continue),
                 onClick = {
-                    onAction(LoginAction.OnContinueClick)
+                    if (activity != null){
+                        onAction(LoginAction.OnContinueClick(activity))
+                    }else{
+                        println("Activity not found!")
+                    }
                 },
-                enabled = state.isPhoneNumberValid
+                enabled = state.isPhoneNumberValid,
+                trailingIcon = {
+                    if (state.isVerifying){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    }
+                }
             )
             Spacer(Modifier.height(4.dp))
             TextButton(
@@ -119,7 +182,11 @@ fun LoginScreen(
 private fun Preview() {
     GongchaTheme {
         LoginScreen(
-            state = LoginState(),
+            state = LoginState(
+                textFieldState = TextFieldState(),
+                isPhoneNumberValid = true,
+                isVerifying = true
+            ),
             onAction = {}
         )
     }

@@ -20,8 +20,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.lihan.gongcha.navigation.AppBottomBar
 import com.lihan.gongcha.navigation.AppState
+import com.lihan.gongcha.navigation.AuthGraph
 import com.lihan.gongcha.navigation.MenuGraph
 import com.lihan.gongcha.navigation.TopLevelDestination
+import com.lihan.gongcha.navigation.graphs.authGraph
 import com.lihan.gongcha.navigation.graphs.historyGraph
 import com.lihan.gongcha.navigation.graphs.memberGraph
 import com.lihan.gongcha.navigation.graphs.menuGraph
@@ -44,8 +46,14 @@ fun NavRoot(
 
             NavHost(
                 navController = appState.navController,
-                startDestination = MenuGraph
+                startDestination = AuthGraph
             ) {
+                authGraph(
+                    navController = appState.navController,
+                    navigateToMenu = {
+                        appState.navigateToTopLevelDestination(TopLevelDestination.MENU)
+                    }
+                )
                 // Menu Graph (Scoped SharedTransitionScope for tea image enlargement)
                 menuGraph(
                     navController = appState.navController,

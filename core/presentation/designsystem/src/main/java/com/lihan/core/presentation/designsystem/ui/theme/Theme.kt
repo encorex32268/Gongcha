@@ -121,7 +121,7 @@ fun GongchaTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = LightColorScheme,
         typography = Typography,
         shapes = Shapes,
         content = content

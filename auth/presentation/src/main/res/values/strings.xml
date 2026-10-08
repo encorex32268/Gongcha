@@ -3,5 +3,7 @@
 
     <string name="login_continue">繼續</string>
     <string name="login_continue_without_signing">不登入繼續</string>
+    <string name="verify_error">驗證失敗。</string>
+    <string name="resend">重新發送驗證碼</string>
 
 </resources>

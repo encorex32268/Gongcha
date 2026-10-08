@@ -1,6 +1,8 @@
 package com.lihan.gongcha
 
 import android.app.Application
+import com.lihan.auth.di.authDataModule
+import com.lihan.auth.di.authPresentationModule
 import com.lihan.cart.di.cartPresentationModule
 import com.lihan.core.data.di.coreDataModule
 import com.lihan.core.database.di.coreDatabaseModule
@@ -22,6 +24,8 @@ class GongchaApp : Application() {
                 appModule,
                 coreDataModule,
                 coreDatabaseModule,
+                authDataModule,
+                authPresentationModule,
                 networkModule,
                 menuDataModule,
                 menuPresentationModule,

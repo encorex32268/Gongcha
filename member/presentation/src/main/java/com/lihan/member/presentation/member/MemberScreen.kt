@@ -60,7 +60,7 @@ private fun MemberScreen(
         ) {
             if (state.user == null){
                 MemberCard(
-                    userName = "",
+                    userName = stringResource(R.string.guest),
                     level = MemberLevel.NONE,
                     pointsInt = 0
                 )

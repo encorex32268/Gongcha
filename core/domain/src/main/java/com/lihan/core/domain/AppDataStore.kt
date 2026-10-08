@@ -17,6 +17,9 @@ interface AppDataStore {
     val storeId: Flow<String>
     suspend fun setLatestSelectedStoreId(id: String)
 
-    suspend fun setUser(user: User)
     val user: Flow<User?>
+    suspend fun setUser(user: User)
+
+    val phoneNumber: Flow<String>
+    suspend fun setPhoneNumber(phoneNumber: String)
 }

@@ -33,3 +33,13 @@ data object SelectStoreRoute
 
 @Serializable
 data class TeaOrderRoute(val teaId: String)
+
+@Serializable
+data object AuthGraph
+
+@Serializable
+data object LoginRoute
+
+@Serializable
+data object CodeVerifyRoute
+

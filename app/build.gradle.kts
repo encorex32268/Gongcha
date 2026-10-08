@@ -30,8 +30,6 @@ dependencies {
 
     implementation(libs.androidx.navigation)
 
-    //push用
-    implementation(libs.firebase.firestore)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(projects.core.data)
@@ -56,6 +54,10 @@ dependencies {
     implementation(projects.history.data)
     implementation(projects.history.domain)
     implementation(projects.history.presentation)
+
+    implementation(projects.member.data)
+    implementation(projects.member.domain)
+    implementation(projects.member.presentation)
 
     testImplementation(libs.junit)
 }

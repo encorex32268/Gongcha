@@ -27,6 +27,7 @@ class DefaultAppDataStore(
         val KEY_STORES_VERSION_CODE = intPreferencesKey("storesVersionCode")
         val KEY_STORE_ID = stringPreferencesKey("storeId")
         val KEY_USER = stringPreferencesKey("user")
+        val KEY_PHONE_NUMBER = stringPreferencesKey("phoneNumber")
     }
 
     override val teasVersionCode: Flow<Int>
@@ -68,6 +69,23 @@ class DefaultAppDataStore(
     override suspend fun setUser(user: User) {
         context.appDataStore.edit { preferences ->
             preferences[KEY_USER] = Json.encodeToString(user)
+        }
+    }
+
+    override val phoneNumber: Flow<String>
+        get() = context.appDataStore.data
+            .map { preferences ->
+                val phoneNumberJson = preferences[KEY_PHONE_NUMBER]?:""
+                if (phoneNumberJson.isBlank()){
+                    ""
+                }else{
+                    Json.decodeFromString(phoneNumberJson)
+                }
+            }
+
+    override suspend fun setPhoneNumber(phoneNumber: String) {
+        context.appDataStore.edit { preferences ->
+            preferences[KEY_PHONE_NUMBER] = Json.encodeToString(phoneNumber)
         }
     }
 

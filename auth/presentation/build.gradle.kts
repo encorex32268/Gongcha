@@ -14,4 +14,7 @@ dependencies {
     implementation(projects.core.network)
 
     implementation(projects.auth.domain)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 }
