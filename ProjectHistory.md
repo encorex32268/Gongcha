@@ -1,4 +1,13 @@
 -------
+2026.10.08
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `237b23d` | feat(app): implement splash screen and decouple navigation root state | 整合 `core-splashscreen`、配置 `Theme.App.Starting`、於 `MainViewModel` 處理初始化狀態，並在 `MainActivity` 由狀態驅動控制 Splash Screen 關閉與解耦 `NavRoot`。 |
+| `def74a9` | assets(app): add splash_icon vector drawable | 新增 Splash Screen 向量 Logo 資源 `splash_icon.xml`。 |
+| `a7a26b8` | feat(auth): implement phone verification code flow and wire auth navigation | 實作手機驗證碼驗證流程（`CodeVerifyRoot`）、ViewModel 與接線導航跳轉。 |
+| `e280a88` | assets(auth): remove background and crop playstore_512 drawable | 裁切並移除 `playstore_512.webp` 背景多餘空白。 |
+-------
 2026.10.07
 commits: 
 | SHA | Commit訊息 | 主要變更 |
