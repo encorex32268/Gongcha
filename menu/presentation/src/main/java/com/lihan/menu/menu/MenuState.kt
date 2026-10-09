@@ -8,6 +8,7 @@ import com.lihan.menu.menu.components.TeaType
 
 data class MenuState(
     val userName: String?=null,
+    val profileImageUrl: String?=null,
     val store: Store?=null,
     val teas: List<Tea> = emptyList(),
     val type: TeaType = TeaType.ALL,

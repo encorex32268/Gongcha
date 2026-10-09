@@ -2,7 +2,7 @@
 <resources>
     <string name="change_store">更換門市</string>
     <string name="user_greeting">嗨! 今天想喝什麼呢？</string>
-    <string name="member_greeting">嗨~ $1%s! 今天想喝什麼呢？</string>
+    <string name="member_greeting">嗨~ %1$s! \n今天想喝什麼呢？</string>
     <string name="user">User</string>
     <string name="select_store">選擇門市</string>
     <string name="notice">各門市飲品品項與定價依所在門市為準，點餐前請先確認取餐門市。</string>

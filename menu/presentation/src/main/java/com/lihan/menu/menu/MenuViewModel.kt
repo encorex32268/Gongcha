@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -46,10 +48,11 @@ class MenuViewModel(
 
     init {
         observeSelectedStore()
-
+        observeUser()
         viewModelScope.launch {
             menuRepository.syncTeasData()
         }
+
 
     }
 
@@ -100,6 +103,18 @@ class MenuViewModel(
                 val selectedStore = menuRepository.getLatestSelectedStore(storeId)
                 _state.update { it.copy(
                     store = selectedStore
+                ) }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun observeUser(){
+        appDataStore
+            .user
+            .mapNotNull { it }
+            .onEach { user ->
+                _state.update { it.copy(
+                    userName = user.name,
+                    profileImageUrl = user.imageUrl
                 ) }
             }.launchIn(viewModelScope)
     }
