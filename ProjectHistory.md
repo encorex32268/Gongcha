@@ -1,4 +1,15 @@
 -------
+2026.10.09
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `baad453` | feat(menu): display user profile image and dynamic greeting on MenuScreen | 在 `MenuViewModel` 監聽 DataStore 使用者資料，在 `MenuScreen` 頂部 App Bar 顯示圓形使用者頭像與動態歡迎問候語。 |
+| `7c4d7cc` | feat(app): check Firebase Auth user state for start destination in MainViewModel | 導入 Firebase Auth 依賴，於 `MainViewModel` 初始化時透過 `FirebaseAuth.currentUser` 判斷登入狀態以決定啟動頁面導航目的地。 |
+| `b6661e0` | feat(auth): implement Google Sign-In with Credential Manager and update AuthRepository | 整合 Credential Manager 與 Google ID 依賴，新增 `GoogleAuthManager`，將 `AuthRepository` 升級為儲存 `User` 模型，並在 `LoginScreen` 串接 Google 登入流程。 |
+| `6a2a016` | assets(auth): add Google sign-in button drawables | 加入 Google 登入按鈕圖片資源（`google_sigin_button_pill`、`google_sigin_button_pill_dark`）。 |
+| `118b8ad` | feat(core:domain): add serialization support for User and MemberLevel | 為 `core:domain` 模組導入 `kotlinx.serialization`，並替 `User` 與 `MemberLevel` 模型加上 `@Serializable` 註解。 |
+| `e801619` | test(cart): remove default ExampleInstrumentedTest in cart:data | 移除 `cart:data` 模組預設產生的 instrumentation 測試檔案。 |
+-------
 2026.10.08
 commits: 
 | SHA | Commit訊息 | 主要變更 |
