@@ -2,6 +2,8 @@ package com.lihan.gongcha
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.CartRepository
 import com.lihan.gongcha.navigation.MenuGraph
@@ -25,8 +27,8 @@ class MainViewModel(
     init {
         observeCartItemCount()
         viewModelScope.launch {
-            val phoneNumber = appDataStore.phoneNumber.first()
-            if (phoneNumber.isNotBlank()) {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null) {
                 _state.update { it.copy(
                     startDestination = MenuGraph
                 ) }

@@ -33,6 +33,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
     implementation(projects.core.data)
     implementation(projects.core.database)
     implementation(projects.core.network)
