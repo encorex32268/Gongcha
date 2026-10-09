@@ -1,4 +1,4 @@
-package com.lihan.auth.verify_phonenumber
+package com.lihan.auth.presentation.manager
 
 import android.app.Activity
 import com.google.firebase.FirebaseException

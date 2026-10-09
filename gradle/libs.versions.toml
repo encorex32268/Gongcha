@@ -28,6 +28,8 @@ coroutines = "1.11.0"
 firebaseBom = "35.0.0"
 googleServices = "4.5.0"
 navigation = "2.10.2"
+credentials = "1.6.0"
+googleid = "1.2.1"
 
 #App Versions
 projectCompileSdk = "37"
@@ -109,6 +111,10 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-firestore = { module = "com.google.firebase:firebase-firestore"}
 firebase-auth = { module = "com.google.firebase:firebase-auth"}
 
+# Credential Manager
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+google-id = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 
 # Gradle
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

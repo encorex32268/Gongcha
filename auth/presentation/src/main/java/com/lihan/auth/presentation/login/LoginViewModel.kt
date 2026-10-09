@@ -4,12 +4,13 @@ import android.app.Activity
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.lihan.auth.domain.AuthRepository
 import com.lihan.auth.domain.PhoneNumberValidator
-import com.lihan.auth.presentation.R
-import com.lihan.auth.verify_phonenumber.PhoneAuthManager
+import com.lihan.auth.presentation.manager.GoogleAuthManager
+import com.lihan.auth.presentation.manager.PhoneAuthManager
 import com.lihan.core.domain.AppDataStore
+import com.lihan.core.domain.model.MemberLevel
+import com.lihan.core.domain.model.User
 import com.lihan.core.presentation.ui.UiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +24,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val phoneAuthManager: PhoneAuthManager,
-    private val authRepository: AuthRepository
+    private val googleAuthManager: GoogleAuthManager,
+    private val authRepository: AuthRepository,
 ): ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -50,56 +51,90 @@ class LoginViewModel(
 
     fun onAction(action: LoginAction) {
         when (action) {
-            is LoginAction.OnContinueClick -> onContinueClick(action.activity)
+//            is LoginAction.OnContinueClick -> onContinueClick(action.activity)
             LoginAction.OnWithoutSigningClick -> Unit
+            is LoginAction.OnContinueClick -> Unit
+            is LoginAction.OnGoogleSignIn -> googleSignIn(action.activity)
         }
     }
 
-    private fun onContinueClick(activity: Activity){
-
-        val phoneNumber = _state.value.textFieldState.text.toString()
-        val formatedPhoneNumber = formatToE164(phoneNumber)
-        _state.update { it.copy(
-            isVerifying = true,
-            errorMessage = null
-        ) }
-        //Save User PhoneNumber To DataStore
+    private fun googleSignIn(activity: Activity){
         viewModelScope.launch {
-            authRepository.setPhoneNumber(formatedPhoneNumber)
+
+            val webClientId = "148497736151-28j91ni5hsmi0o14omt0aiphb3ubh7vo.apps.googleusercontent.com"
+            val result = googleAuthManager.signIn(activity, webClientId)
+            result.onSuccess { user ->
+
+                authRepository.setUser(
+                    User(
+                        level = MemberLevel.NONE,
+                        name = user.displayName?:user.email?:"",
+                        imageUrl = user.photoUrl?.toString(),
+                        points = 0,
+                        memberCode = "KC" + user.uid
+                    )
+                )
+
+                _state.update { it.copy(isVerifying = false) }
+                // 登入成功，導航至首頁/Menu
+                _uiEvent.send(LoginEvent.OnNavigateToMenu)
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isVerifying = false,
+                        errorMessage = UiText.DynamicString(error.message ?: "Google 登入失敗")
+                    )
+                }
+            }
         }
 
-        //Send PhoneNumber To Firebase
-        phoneAuthManager
-            .sendPhoneNumber(
-                activity = activity,
-                phoneNumber = formatedPhoneNumber,
-                onError = { error ->
-                    _state.update { it.copy(
-                        errorMessage = UiText.DynamicString(error),
-                        isVerifying = false
-                    ) }
-                },
-                onAutoVerifiedSuccess = {
-                    _state.update { it.copy(
-                        errorMessage = null,
-                        isVerifying = false
-                    ) }
-                    viewModelScope.launch {
-                        _uiEvent.send(LoginEvent.OnNavigateToMenu)
-                    }
-                },
-                onCodeSent = {
-                    _state.update { it.copy(
-                        errorMessage = null,
-                        isVerifying = false
-                    ) }
-                    viewModelScope.launch {
-                        _uiEvent.send(LoginEvent.OnNavigateToCodeVerify)
-                    }
-                }
-            )
-
     }
+
+//    private fun onContinueClick(activity: Activity){
+//
+//        val phoneNumber = _state.value.textFieldState.text.toString()
+//        val formatedPhoneNumber = formatToE164(phoneNumber)
+//        _state.update { it.copy(
+//            isVerifying = true,
+//            errorMessage = null
+//        ) }
+//        //Save User PhoneNumber To DataStore
+//        viewModelScope.launch {
+//            authRepository.setPhoneNumber(formatedPhoneNumber)
+//        }
+//
+//        //Send PhoneNumber To Firebase
+//        phoneAuthManager
+//            .sendPhoneNumber(
+//                activity = activity,
+//                phoneNumber = formatedPhoneNumber,
+//                onError = { error ->
+//                    _state.update { it.copy(
+//                        errorMessage = UiText.DynamicString(error),
+//                        isVerifying = false
+//                    ) }
+//                },
+//                onAutoVerifiedSuccess = {
+//                    _state.update { it.copy(
+//                        errorMessage = null,
+//                        isVerifying = false
+//                    ) }
+//                    viewModelScope.launch {
+//                        _uiEvent.send(LoginEvent.OnNavigateToMenu)
+//                    }
+//                },
+//                onCodeSent = {
+//                    _state.update { it.copy(
+//                        errorMessage = null,
+//                        isVerifying = false
+//                    ) }
+//                    viewModelScope.launch {
+//                        _uiEvent.send(LoginEvent.OnNavigateToCodeVerify)
+//                    }
+//                }
+//            )
+//
+//    }
 
     private fun observePhoneNumberText(){
         phoneNumberTextFlow

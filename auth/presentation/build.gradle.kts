@@ -14,7 +14,12 @@ dependencies {
     implementation(projects.core.network)
 
     implementation(projects.auth.domain)
-
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    //noinspection LoginCredentials
+    implementation(libs.androidx.credentials.play.services.auth)
+    //noinspection LoginCredentials
+    implementation(libs.androidx.credentials)
+    //noinspection LoginCredentials
+    implementation(libs.google.id)
 }

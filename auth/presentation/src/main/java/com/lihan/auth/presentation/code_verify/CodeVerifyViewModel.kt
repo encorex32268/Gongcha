@@ -6,15 +6,13 @@ import android.app.Activity
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.play.integrity.internal.ac
 import com.lihan.auth.domain.AuthRepository
-import com.lihan.auth.verify_phonenumber.PhoneAuthManager
+import com.lihan.auth.presentation.manager.PhoneAuthManager
 import com.lihan.core.domain.util.TimerFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -63,43 +61,43 @@ class CodeVerifyViewModel(
     }
 
     private fun resendSMSCode(activity: Activity?) {
-        if (activity == null) {
-            return
-        }
-        _state.update {
-            it.copy(
-                isVerifyCodeTimeout = false
-            )
-        }
-        viewModelScope.launch {
-            val phoneNumber = authRepository.phoneNumber.first()
-            if (phoneNumber.isBlank()) {
-                return@launch
-            }
-            phoneAuthManager
-                .sendPhoneNumber(
-                    activity = activity,
-                    phoneNumber = phoneNumber,
-                    onError = { error ->
-                        _state.update {
-                            it.copy(
-                                isVerifyCodeTimeout = true
-                            )
-                        }
-                    },
-                    onCodeSent = {
-                        _state.update {
-                            it.copy(
-                                isVerifyCodeTimeout = false,
-                                isCountDownTimer = true,
-                                timer = 60.seconds
-                            )
-                        }
-                    },
-                    onAutoVerifiedSuccess = { /*Nothing*/ }
-                )
-
-        }
+//        if (activity == null) {
+//            return
+//        }
+//        _state.update {
+//            it.copy(
+//                isVerifyCodeTimeout = false
+//            )
+//        }
+//        viewModelScope.launch {
+//            val phoneNumber = authRepository.phoneNumber.first()
+//            if (phoneNumber.isBlank()) {
+//                return@launch
+//            }
+//            phoneAuthManager
+//                .sendPhoneNumber(
+//                    activity = activity,
+//                    phoneNumber = phoneNumber,
+//                    onError = { error ->
+//                        _state.update {
+//                            it.copy(
+//                                isVerifyCodeTimeout = true
+//                            )
+//                        }
+//                    },
+//                    onCodeSent = {
+//                        _state.update {
+//                            it.copy(
+//                                isVerifyCodeTimeout = false,
+//                                isCountDownTimer = true,
+//                                timer = 60.seconds
+//                            )
+//                        }
+//                    },
+//                    onAutoVerifiedSuccess = { /*Nothing*/ }
+//                )
+//
+//        }
 
     }
 
