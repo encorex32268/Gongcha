@@ -1,4 +1,11 @@
 -------
+2026.10.11
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `ca396d0` | feat(member): implement MemberViewModel with AppDataStore and add MemberNotLogin view | 於 `MemberViewModel` 注入 `AppDataStore` 監聽使用者狀態，在 `MemberScreen` 新增未登入提示畫面 `MemberNotLogin`，並升級 `MemberCard` 支援顯示頭像圖示與 Koin DI 註冊。 |
+| `10361d8` | refactor: standardize presentation and DI package structure across modules | 統一 `auth`、`cart`、`menu` 等模組之 presentation 與 DI 套件結構路徑，修正購物車空狀態資源檔名稱錯字（`cart_empty_image.webp`），並同步更新導航圖與 Application 之依賴引入。 |
+-------
 2026.10.09
 commits: 
 | SHA | Commit訊息 | 主要變更 |
