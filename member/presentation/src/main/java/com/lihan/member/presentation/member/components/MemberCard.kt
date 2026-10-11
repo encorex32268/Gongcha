@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,15 +23,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.lihan.core.domain.model.MemberLevel
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
@@ -45,8 +45,8 @@ fun MemberCard(
     pointsInt: Int,
     level: MemberLevel,
     modifier: Modifier = Modifier,
+    profileImageUrl: String?=null,
 ) {
-    Surface() { }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -70,13 +70,28 @@ fun MemberCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Image(
+                Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    imageVector = GongchaIcons.Member,
-                    contentDescription = null
-                )
+                        .padding(end = 4.dp)
+                        .clip(CircleShape)
+                        .size(36.dp),
+                    contentAlignment = Alignment.Center
+                ){
+                    if (profileImageUrl != null){
+                        AsyncImage(
+                            model = profileImageUrl,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(36.dp),
+                            contentDescription = null
+                        )
+                    }else{
+                        Icon(
+                            imageVector = GongchaIcons.Member,
+                            contentDescription = null
+                        )
+                    }
+                }
                 Column {
                     Text(
                         text = userName
@@ -84,56 +99,47 @@ fun MemberCard(
                 }
             }
 
-            if (level != MemberLevel.NONE){
-                Image(
+            Image(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .padding(start = 36.dp)
+                    .size(64.dp),
+                painter = painterResource(R.drawable.kocha_20261007),
+                contentDescription = null
+            )
+            Spacer(Modifier.height(12.dp))
+            Row{
+                Text(
+                    text = "累積點數"
+                )
+                Text(
                     modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .padding(start = 36.dp)
-                        .size(64.dp),
-                    painter = painterResource(R.drawable.kocha_20261007),
-                    contentDescription = null
+                        .alignByBaseline()
+                        .padding(horizontal = 12.dp)
+                        .offset(y = (-4).dp),
+                    text = pointsInt.toString(),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 )
-                Spacer(Modifier.height(12.dp))
-                Row{
-                    Text(
-                        text = "累積點數"
+                Text(
+                    text = "pts"
+                )
+                Spacer(Modifier.weight(1f))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = GongchaIcons.Contactless,
+                        contentDescription = null
                     )
                     Text(
-                        modifier = Modifier
-                            .alignByBaseline()
-                            .padding(horizontal = 12.dp)
-                            .offset(y = (-4).dp),
-                        text = pointsInt.toString(),
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        text = "終身資格・永久有效"
                     )
-                    Text(
-                        text = "pts"
-                    )
-                    Spacer(Modifier.weight(1f))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            imageVector = GongchaIcons.Contactless,
-                            contentDescription = null
-                        )
-                        Text(
-                            text = "終身資格・永久有效"
-                        )
 
-                    }
                 }
-            }else{
-                PrimaryButton(
-                    modifier = Modifier.padding(
-                        horizontal = 24.dp, vertical = 12.dp),
-                    text = "登入會員",
-                    onClick = {}
-                )
             }
 
         }
@@ -155,27 +161,14 @@ private fun MemberCardPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ){
-            MemberCard(
-                userName = "Koala",
-                pointsInt = 100,
-                level = MemberLevel.NONE
-            )
-
-            MemberCard(
-                userName = "Koala",
-                pointsInt = 100,
-                level = MemberLevel.COPPER
-            )
-            MemberCard(
-                userName = "Koala",
-                pointsInt = 6000,
-                level = MemberLevel.SILVER
-            )
-            MemberCard(
-                pointsInt = 0,
-                userName = "Koala",
-                level = MemberLevel.GOLD
-            )
+            MemberLevel.entries.forEach { memberLevel ->
+                MemberCard(
+                    profileImageUrl = "",
+                    userName = "Koala",
+                    pointsInt = 100,
+                    level = memberLevel
+                )
+            }
         }
     }
 }

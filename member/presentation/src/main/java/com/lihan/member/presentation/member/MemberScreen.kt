@@ -24,10 +24,12 @@ import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons.ArrowBack
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.member.presentation.R
 import com.lihan.member.presentation.member.components.MemberCard
+import com.lihan.member.presentation.member.components.MemberNotLogin
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MemberRoot(
-    viewModel: MemberViewModel = viewModel()
+    viewModel: MemberViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -51,28 +53,32 @@ private fun MemberScreen(
             )
         }
     ) { padding ->
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            if (state.user == null){
+        if (state.user == null){
+            MemberNotLogin(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(top = 64.dp),
+                onLoginClick = {
+                    onAction(MemberAction.OnLoginClick)
+                }
+            )
+        }else{
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+            ) {
                 MemberCard(
-                    userName = stringResource(R.string.guest),
-                    level = MemberLevel.NONE,
-                    pointsInt = 0
-                )
-            }else{
-                MemberCard(
+                    profileImageUrl = state.user.imageUrl,
                     userName = state.user.name,
                     level = state.user.level,
                     pointsInt = state.user.points,
                 )
             }
-
         }
+
 
 
     }

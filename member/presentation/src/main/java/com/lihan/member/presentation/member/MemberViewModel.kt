@@ -2,12 +2,18 @@ package com.lihan.member.presentation.member
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lihan.core.domain.AppDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
-class MemberViewModel : ViewModel() {
+class MemberViewModel(
+    private val appDataStore: AppDataStore
+): ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -23,6 +29,17 @@ class MemberViewModel : ViewModel() {
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = MemberState()
         )
+
+    init {
+        appDataStore
+            .user
+            .onEach { user ->
+                _state.update { it.copy(
+                    user = user
+                ) }
+            }.launchIn(viewModelScope)
+
+    }
 
     fun onAction(action: MemberAction) {
         when (action) {

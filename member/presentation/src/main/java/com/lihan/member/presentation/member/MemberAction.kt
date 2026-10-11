@@ -1,3 +1,5 @@
 package com.lihan.member.presentation.member
 
-sealed interface MemberAction {}
+sealed interface MemberAction {
+    data object OnLoginClick: MemberAction
+}
