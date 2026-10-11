@@ -9,9 +9,9 @@ import com.lihan.gongcha.navigation.MenuGraph
 import com.lihan.gongcha.navigation.MenuRoute
 import com.lihan.gongcha.navigation.SelectStoreRoute
 import com.lihan.gongcha.navigation.TeaOrderRoute
-import com.lihan.menu.menu.MenuRoot
-import com.lihan.menu.store.StoreRoot
-import com.lihan.menu.tea_order.TeaOrderRoot
+import com.lihan.menu.presentation.menu.MenuRoot
+import com.lihan.menu.presentation.store.StoreRoot
+import com.lihan.menu.presentation.tea_order.TeaOrderRoot
 
 fun NavGraphBuilder.menuGraph(
     navController: NavController,
