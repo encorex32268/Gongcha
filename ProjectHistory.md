@@ -3,6 +3,12 @@
 commits: 
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
+| `c19d3b0` | feat(app): wire sign out flow across navigation and listen to user-scoped cart count | 在 `MainActivity`、`NavRoot` 與 `MenuNavGraph` 串接登出回呼跳轉至 `AuthGraph` 並清空返回棧，並於 `MainViewModel` 新增 `signOut()` 與依目前使用者的 `userId` 監聽購物車項目數量。 |
+| `810e6ae` | feat(menu): add sign out confirmation dialog and restrict store selection when cart has items | 在 `MenuScreen` 頂部欄加入登出圖示按鈕與確認對話框，將使用者頭像移至左側問候區，並在 `MenuViewModel` 監聽購物車項目；當購物車有飲料時禁止切換門市並彈出提醒對話框。 |
+| `cf9a3e3` | feat(cart): scope cart items by user and pass storeId in TeaOrderRoute | 在 `TeaOrderRoute` 加入 `storeId` 參數，於 `TeaOrderViewModel` 注入 `AuthRepository` 綁定使用者 ID 與門市名稱加入購物車；`CartViewModel` 依登入使用者的 `userId` 監聽與清空購物車商品。 |
+| `25cdb29` | feat(auth): add clean method to AppDataStore and implement signOut in AuthRepository | 為 `AppDataStore` 增加 `clean()` 清除 DataStore 資料，於 `AuthRepository` 與 `AuthRepositoryImpl` 實作 `signOut()` 流程（清空本地 DataStore 並呼叫 `FirebaseAuth.signOut()`）。 |
+| `c15c59f` | feat(database): add userId to CartItem with Room migration 4 to 5 and update CartRepository | 實作 Room 資料庫 Migration 4 升級至 5，在 `CartItemEntity` 與領域模型 `CartItem` 增加 `userId` 欄位，擴充 `CartItemDao`、`LocalDataSource` 與 `CartRepository` 支援依 `userId` 查詢/清空購物車。 |
+| `d035c7d` | feat(designsystem): add log out icon and vector drawable | 在 `core:presentation:designsystem` 加入登出向量圖示資源 `log_out.xml` 與 `GongchaIcons.LogOut` 定義。 |
 | `af5b35f` | feat(history): implement order history tracking, cancellation, and UI | 串接歷史訂單流程（建立/取消/查詢）、實作 `HistoryRepositoryImpl` 與 `HistoryViewModel`、支援訂單狀態顯示（`IN_ORDER`/`IN_PROGRESS`/`COMPLETED`）與取消訂單按鈕，並於 `GongchaApp` 與 `HistoryNavGraph` 接線。 |
 | `a98a343` | refactor(auth): migrate AuthRepository to core and support Firestore user management | 將 `AuthRepository` 下放至 `core` 模組，`RemoteDataSource` 整合 Firestore 使用者資料存取（`createUser`、`getUserById`），支援匿名登入，並更新 `MainViewModel` 與登入流程。 |
 | `3cd0911` | feat(menu): use applicationScope for background cache syncing in MenuRepositoryImpl | 在 `MenuRepositoryImpl` 注入 `applicationScope` 處理店家與茶飲資料寫入 Room 本地快取，避免因畫面生命週期結束被中斷。 |
