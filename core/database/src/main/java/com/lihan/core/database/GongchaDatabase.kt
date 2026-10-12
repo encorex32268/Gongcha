@@ -21,7 +21,7 @@ import com.lihan.core.database.entity.TeaEntity
         CartItemEntity::class,
         HistoryEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 @TypeConverters(

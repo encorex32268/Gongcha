@@ -7,6 +7,7 @@ import com.lihan.core.database.RoomLocalDataSource
 import com.lihan.core.database.migration.MIGRATION_1_2
 import com.lihan.core.database.migration.MIGRATION_2_3
 import com.lihan.core.database.migration.MIGRATION_3_4
+import com.lihan.core.database.migration.MIGRATION_4_5
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
@@ -23,6 +24,7 @@ val coreDatabaseModule = module {
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
             .addMigrations(MIGRATION_3_4)
+            .addMigrations(MIGRATION_4_5)
             .build()
     }
     single { get<GongchaDatabase>().teaDao }

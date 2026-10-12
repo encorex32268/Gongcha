@@ -162,12 +162,17 @@ class RoomLocalDataSourceTest {
     private class FakeCartItemDao : CartItemDao {
         private val state = MutableStateFlow<List<CartItemEntity>>(emptyList())
         override fun getCartItems(): Flow<List<CartItemEntity>> = state
+        override fun getCartItemsByUserId(userId: String): Flow<List<CartItemEntity>> =
+            state.map { list -> list.filter { it.userId == userId } }
         override suspend fun deleteCartItem(id: Int) { state.value = state.value.filterNot { it.id == id } }
-        override suspend fun clearCartItems() { state.value = emptyList() }
+        override suspend fun clearCartItemsByUserId(userId: String) {
+            state.value = state.value.filterNot { it.userId == userId }
+        }
         override suspend fun upsertCartItem(cartItem: CartItemEntity) {
             state.value = state.value + cartItem
         }
-        override fun getTotalItemCount(): Flow<Int> = state.map { it.sumOf { item -> item.count } }
+        override fun getTotalItemCountByUserId(userId: String): Flow<Int> =
+            state.map { it.filter { item -> item.userId == userId }.sumOf { item -> item.count } }
         override suspend fun updateCartItemCount(cartItemId: Int, count: Int) {
             state.value = state.value.map { if (it.id == cartItemId) it.copy(count = count) else it }
         }

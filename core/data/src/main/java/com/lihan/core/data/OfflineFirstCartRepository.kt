@@ -29,8 +29,14 @@ class OfflineFirstCartRepository(
             .map { entities -> entities.map { it.toCartItem() } }
     }
 
-    override fun getCarItemsCount(): Flow<Int> {
-        return localDataSource.getCarItemsCount()
+    override fun getCartItemsByUserId(userId: String): Flow<List<CartItem>> {
+        return localDataSource
+            .getCartItemsByUserId(userId)
+            .map { entities -> entities.map { it.toCartItem() } }
+    }
+
+    override fun getCarItemsCountByUserId(userId: String): Flow<Int> {
+        return localDataSource.getCarItemsCountByUserId(userId)
     }
 
     override suspend fun addCartItem(cartItem: CartItem) {
@@ -45,8 +51,8 @@ class OfflineFirstCartRepository(
         localDataSource.updateCartItemCount(cartItemId,count)
     }
 
-    override suspend fun clearCartItems() {
-        localDataSource.clearCartItems()
+    override suspend fun clearCartItemsByUserId(userId: String) {
+        localDataSource.clearCartItemsByUserId(userId)
     }
 
     override suspend fun checkout(): EmptyResult<DataError> {

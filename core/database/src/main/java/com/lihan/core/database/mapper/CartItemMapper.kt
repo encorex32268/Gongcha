@@ -14,10 +14,12 @@ fun CartItemEntity.toCartItem(): CartItem = CartItem(
     sugar = sugar,
     ice = ice,
     count = count,
-    price = price
+    price = price,
+    userId = userId,
 )
 
 fun CartItem.toCartItemEntity(): CartItemEntity = CartItemEntity(
+    userId = userId,
     teaId = teaId,
     teaName = teaName,
     imageUrl = imageUrl,

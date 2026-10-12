@@ -8,14 +8,7 @@ import com.lihan.core.database.entity.CartItemEntity
 import com.lihan.core.database.entity.HistoryEntity
 import com.lihan.core.database.entity.StoreEntity
 import com.lihan.core.database.entity.TeaEntity
-import com.lihan.core.database.mapper.toStore
-import com.lihan.core.database.mapper.toStoreEntity
-import com.lihan.core.database.mapper.toTea
-import com.lihan.core.database.mapper.toTeaEntity
-import com.lihan.core.domain.model.Store
-import com.lihan.core.domain.model.Tea
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class RoomLocalDataSource(
     private val teaDao: TeaDao,
@@ -36,8 +29,12 @@ class RoomLocalDataSource(
         return cartItemDao.getCartItems()
     }
 
-    override fun getCarItemsCount(): Flow<Int> {
-        return cartItemDao.getTotalItemCount()
+    override fun getCartItemsByUserId(userId: String): Flow<List<CartItemEntity>> {
+        return cartItemDao.getCartItemsByUserId(userId)
+    }
+
+    override fun getCarItemsCountByUserId(userId: String): Flow<Int> {
+        return cartItemDao.getTotalItemCountByUserId(userId)
     }
 
     override fun getHistories(): Flow<List<HistoryEntity>> {
@@ -92,8 +89,8 @@ class RoomLocalDataSource(
         return historyDao.getHistoryById(id)
     }
 
-    override suspend fun clearCartItems() {
-        cartItemDao.clearCartItems()
+    override suspend fun clearCartItemsByUserId(userId: String) {
+        cartItemDao.clearCartItemsByUserId(userId)
     }
 
     override suspend fun clearHistories() {

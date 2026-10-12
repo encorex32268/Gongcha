@@ -2,6 +2,7 @@ package com.lihan.core.domain.model
 
 data class CartItem(
     val id: Int?=null,
+    val userId: String,
     val teaId: String,
     val teaName: String,
     val imageUrl: String?=null,

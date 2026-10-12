@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class CartItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int?=null,
+    val userId: String,
     val teaId: String,
     val teaName: String,
     val imageUrl: String?=null,
