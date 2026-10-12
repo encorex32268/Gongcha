@@ -89,6 +89,12 @@ class DefaultAppDataStore(
         }
     }
 
+    override suspend fun clean() {
+        context.appDataStore.edit {
+            it.clear()
+        }
+    }
+
     override val user: Flow<User?>
         get() = context.appDataStore.data
             .map { preferences ->

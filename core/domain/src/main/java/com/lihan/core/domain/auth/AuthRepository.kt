@@ -13,4 +13,6 @@ interface AuthRepository {
 
     suspend fun createUser(user: User): EmptyResult<DataError>
     suspend fun getUserById(id: String): Result<User?, DataError>
+
+    suspend fun signOut()
 }

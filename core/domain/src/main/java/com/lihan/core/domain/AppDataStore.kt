@@ -22,4 +22,6 @@ interface AppDataStore {
 
     val phoneNumber: Flow<String>
     suspend fun setPhoneNumber(phoneNumber: String)
+
+    suspend fun clean()
 }

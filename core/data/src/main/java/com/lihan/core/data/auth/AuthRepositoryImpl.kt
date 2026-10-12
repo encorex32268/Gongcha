@@ -1,5 +1,6 @@
 package com.lihan.core.data.auth
 
+import com.google.firebase.auth.FirebaseAuth
 import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.core.domain.model.User
@@ -19,6 +20,8 @@ class AuthRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val applicationScope: CoroutineScope
 ): AuthRepository {
+
+    private val firebaseAuth =  FirebaseAuth.getInstance()
 
     override val user: Flow<User?>
         get() = appDataStore.user
@@ -47,6 +50,11 @@ class AuthRepositoryImpl(
                 }
             }
 
+    }
+
+    override suspend fun signOut() {
+        appDataStore.clean()
+        firebaseAuth.signOut()
     }
 
 }
