@@ -73,4 +73,8 @@ object GongchaIcons {
     val Close: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.close)
+
+    val LogOut: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.log_out)
 }
