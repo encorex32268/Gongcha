@@ -11,5 +11,8 @@ data class MenuState(
     val store: Store?=null,
     val teas: List<Tea> = emptyList(),
     val type: TeaType = TeaType.ALL,
-    val error: UiText?=null
+    val error: UiText?=null,
+    val isShowSignOutDialog: Boolean = false,
+    val isShowSelectStoreWarning: Boolean = false,
+    val canSelectStore: Boolean = false,
 )

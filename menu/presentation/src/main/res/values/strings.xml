@@ -28,4 +28,10 @@
     <string name="sugar">SWEETNESS</string>
     <string name="order_sugar">選擇糖度</string>
     <string name="checkout">加入購物車・合計 NT$ %1$s</string>
+    <string name="sign_out">登出</string>
+    <string name="cart_cancel">sign_out_cancel</string>
+    <string name="sign_out_message">不喝飲料了嗎？</string>
+    <string name="sure">確定</string>
+    <string name="select_store_message">請先清空購物車，才能更換門市。</string>
+    <string name="select_store_warning">提醒</string>
 </resources>

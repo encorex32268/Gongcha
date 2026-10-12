@@ -22,12 +22,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -40,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,8 +66,9 @@ import org.koin.compose.viewmodel.koinViewModel
 fun MenuRoot(
     navigateToSelectStore: () -> Unit,
     navigateToMember: () -> Unit,
-    navigateToTeaOrder: (teaId: String) -> Unit,
-    viewModel: com.lihan.menu.presentation.menu.MenuViewModel = koinViewModel(),
+    signOut: () -> Unit,
+    navigateToTeaOrder: (storeId: String,teaId: String) -> Unit,
+    viewModel: MenuViewModel = koinViewModel(),
     sharedTransitionScope: SharedTransitionScope?=null,
     animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
@@ -84,8 +90,14 @@ fun MenuRoot(
                 }
             }
             is MenuEvent.OnNavigateToTeaOrder -> {
-                navigateToTeaOrder(uiEvent.teaId)
+                val storeId = state.store?.id?:return@ObserveAsEvents
+                navigateToTeaOrder(
+                    storeId,
+                    uiEvent.teaId
+                )
             }
+            MenuEvent.OnSignOut -> signOut()
+            MenuEvent.OnNavigateToSelectStore -> navigateToSelectStore()
         }
     }
 
@@ -96,7 +108,6 @@ fun MenuRoot(
         animatedVisibilityScope = animatedVisibilityScope,
         onAction = { action ->
             when(action){
-                MenuAction.OnSelectStore -> navigateToSelectStore()
                 MenuAction.OnNavigateToMember -> navigateToMember()
                 else -> Unit
             }
@@ -128,6 +139,34 @@ fun MenuScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clip(CircleShape)
+                                .size(36.dp)
+                                .clickable(
+                                    onClick = {
+                                        onAction(MenuAction.OnNavigateToMember)
+                                    }
+                                ),
+                            contentAlignment = Alignment.Center
+                        ){
+                            if (state.profileImageUrl != null){
+                                AsyncImage(
+                                    model = state.profileImageUrl,
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(36.dp),
+                                    contentDescription = null
+                                )
+                            }else{
+                                Icon(
+                                    imageVector = GongchaIcons.Member,
+                                    contentDescription = stringResource(R.string.user)
+                                )
+                            }
+                        }
+
                         if (state.userName == null){
                             Text(text = stringResource(R.string.user_greeting))
                         } else {
@@ -136,34 +175,16 @@ fun MenuScreen(
                     }
                 },
                 actions = {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .clip(CircleShape)
-                            .size(36.dp)
-                            .clickable(
-                                onClick = {
-                                    onAction(MenuAction.OnNavigateToMember)
-                                }
-                            ),
-                        contentAlignment = Alignment.Center
-                    ){
-                        if (state.profileImageUrl != null){
-                            AsyncImage(
-                                model = state.profileImageUrl,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(36.dp),
-                                contentDescription = null
-                            )
-                        }else{
-                            Icon(
-                                imageVector = GongchaIcons.Member,
-                                contentDescription = stringResource(R.string.user)
-                            )
+                    IconButton(
+                        onClick = {
+                            onAction(MenuAction.OnShowSignOutDialog)
                         }
+                    ) {
+                        Icon(
+                            imageVector = GongchaIcons.LogOut,
+                            contentDescription = null
+                        )
                     }
-
                 }
             )
         }
@@ -249,6 +270,73 @@ fun MenuScreen(
             }
 
 
+        }
+
+        if (state.isShowSignOutDialog){
+            AlertDialog(
+                onDismissRequest = {
+                    onAction(MenuAction.OnDismissSignOutDialog)
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            onAction(MenuAction.OnSignOutDialogConfirmClick)
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.sign_out),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            onAction(MenuAction.OnDismissSignOutDialog)
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.cart_cancel),
+                            fontWeight = FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                },
+                title = {
+                    Text(text = stringResource(R.string.sign_out))
+                },
+                text = {
+                    Text(text = stringResource(R.string.sign_out_message))
+                }
+            )
+        }
+
+        if (state.isShowSelectStoreWarning){
+            AlertDialog(
+                onDismissRequest = {
+                    onAction(MenuAction.OnDismissSelectStoreWarningDialog)
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            onAction(MenuAction.OnDismissSelectStoreWarningDialog)
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.sure),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                title = {
+                    Text(text = stringResource(R.string.select_store_warning))
+                },
+                text = {
+                    Text(text = stringResource(R.string.select_store_message))
+                }
+            )
         }
     }
 
