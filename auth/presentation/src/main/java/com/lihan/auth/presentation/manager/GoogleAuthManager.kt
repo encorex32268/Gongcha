@@ -24,6 +24,7 @@ class GoogleAuthManager {
      * @param webClientId Firebase 後台取得的 Web Client ID
      * @return 登入結果 Result<FirebaseUser>
      */
+    //TODO: Fix Error Handle
     suspend fun signIn(
         activity: Activity,
         webClientId: String
@@ -72,6 +73,23 @@ class GoogleAuthManager {
         }
     }
 
+
+    suspend fun signInAnonymously(): Result<FirebaseUser> = suspendCancellableCoroutine { continuation ->
+        FirebaseAuth.getInstance()
+            .signInAnonymously()
+            .addOnCompleteListener{
+                if (it.isSuccessful){
+                    if (continuation.isActive){
+                        continuation.resume(Result.success(it.result.user!!))
+                    }
+                }
+            }
+
+        continuation.invokeOnCancellation {
+            //TODO: Fix Error Handle
+            continuation.resume(Result.failure(Exception("Error")))
+        }
+    }
 
 
 

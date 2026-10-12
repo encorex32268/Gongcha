@@ -6,8 +6,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.lihan.core.domain.model.BusinessHour
 import com.lihan.core.domain.model.CartItem
+import com.lihan.core.domain.model.History
+import com.lihan.core.domain.model.OrderStatus
 import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.model.Tea
+import com.lihan.core.domain.model.User
 import com.lihan.core.domain.util.DataError
 import com.lihan.core.domain.util.EmptyResult
 import com.lihan.core.domain.util.Result
@@ -18,7 +21,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.time.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class FirebaseRemoteDataSource: RemoteDataSource {
 
@@ -29,6 +36,8 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         private const val DOC_STORES = "stores"
         private const val DOC_VERSIONS = "versions"
         private const val DOC_ORDERS = "orders"
+        private const val DOC_USERS = "users"
+        private const val DOC_USERS_ORDERS = "orders"
     }
 
     override fun getTeas(): Flow<Result<List<Tea>, DataError>> = callbackFlow {
@@ -99,16 +108,81 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         awaitClose()
     }
 
-    override suspend fun checkout(cartItems: List<CartItem>): EmptyResult<DataError> =
+    override suspend fun getHistories(userId: String): Result<List<History>, DataError> =
         suspendCancellableCoroutine{ cancellableContinuation ->
-            val docRef = firebaseStore
-                .collection(DOC_ORDERS)
-                .document()
+            firebaseStore
+                .collection(DOC_USERS)
+                .document(userId)
+                .collection(DOC_USERS_ORDERS)
+                .get()
+                .addOnFailureListener {
+                    it.printStackTrace()
+                    if (cancellableContinuation.isActive) {
+                        cancellableContinuation.resume(Result.Error(DataError.Network.BAD_REQUEST))
+                    }
+                }
+                .addOnCanceledListener {
+                    if (cancellableContinuation.isActive) {
+                        cancellableContinuation.resume(Result.Error(DataError.Network.CANCELED))
+                    }
+                }
+                .addOnSuccessListener { result ->
+                    if (cancellableContinuation.isActive) {
 
-            val historyDto = cartItems.toHistoryDto(docRef.id)
+                        val remoteHistories = result.mapNotNull { it.toHistory() }
+                        cancellableContinuation.resume(Result.Success(remoteHistories))
+                    }
+                }
+
+
+
+    }
+
+
+    override suspend fun checkout(
+        userId: String,
+        cartItems: List<CartItem>
+    ): EmptyResult<DataError> =
+        withTimeoutOrNull(8.seconds){
+            suspendCancellableCoroutine{ cancellableContinuation ->
+                val docRef = firebaseStore
+                    .collection(DOC_USERS)
+                    .document(userId)
+                    .collection(DOC_USERS_ORDERS)
+                    .document()
+
+
+                val historyDto = cartItems.toHistoryDto(docRef.id)
+
+                docRef
+                    .set(historyDto)
+                    .addOnFailureListener {
+                        it.printStackTrace()
+                        if (cancellableContinuation.isActive) {
+                            cancellableContinuation.resume(Result.Error(DataError.Network.BAD_REQUEST))
+                        }
+                    }
+                    .addOnCanceledListener {
+                        if (cancellableContinuation.isActive) {
+                            cancellableContinuation.resume(Result.Error(DataError.Network.CANCELED))
+                        }
+                    }
+                    .addOnSuccessListener {
+                        if (cancellableContinuation.isActive) {
+                            cancellableContinuation.resume(Result.Success(Unit))
+                        }
+                    }
+            }
+        }?: Result.Error(DataError.Network.NO_INTERNET)
+
+    override suspend fun createUser(user: User): EmptyResult<DataError> =
+        suspendCancellableCoroutine { cancellableContinuation ->
+            val docRef = firebaseStore
+                .collection(DOC_USERS)
+                .document(user.id)
 
             docRef
-                .set(historyDto)
+                .set(user)
                 .addOnFailureListener {
                     it.printStackTrace()
                     if (cancellableContinuation.isActive) {
@@ -125,7 +199,81 @@ class FirebaseRemoteDataSource: RemoteDataSource {
                         cancellableContinuation.resume(Result.Success(Unit))
                     }
                 }
+    }
+
+    override suspend fun getUserById(id: String): Result<User?, DataError> = suspendCancellableCoroutine{ cancellableContinuation ->
+        val docRef = firebaseStore
+            .collection(DOC_USERS)
+            .document(id)
+
+        docRef
+           .get()
+           .addOnFailureListener {
+               it.printStackTrace()
+               if (cancellableContinuation.isActive) {
+                   cancellableContinuation.resume(Result.Error(DataError.Network.BAD_REQUEST))
+               }
+           }
+           .addOnCanceledListener {
+               if (cancellableContinuation.isActive) {
+                   cancellableContinuation.resume(Result.Error(DataError.Network.CANCELED))
+               }
+           }
+           .addOnSuccessListener { result ->
+               if (cancellableContinuation.isActive) {
+                   val user = result.toObject(User::class.java)
+                   cancellableContinuation.resume(Result.Success(user))
+               }
+           }
+    }
+
+    override suspend fun cancelOrder(
+        userId: String,
+        orderId: String
+    ): EmptyResult<DataError> = suspendCancellableCoroutine { cancellableContinuation ->
+
+       firebaseStore
+            .collection(DOC_USERS)
+            .document(userId)
+            .collection(DOC_ORDERS)
+            .document(orderId)
+            .delete()
+            .addOnFailureListener {
+                if (cancellableContinuation.isActive){
+                    cancellableContinuation.resume(Result.Error(DataError.Network.BAD_REQUEST))
+                }
+            }
+            .addOnCanceledListener {
+                if (cancellableContinuation.isActive){
+                    cancellableContinuation.resume(Result.Error(DataError.Network.CANCELED))
+                }
+            }
+
+    }
+
+    private fun QueryDocumentSnapshot.toHistory(): History? {
+        return try {
+            val id = this.getString("id")?:""
+            val createAt = this.getLong("createAt")?:0L
+            val orderCode = this.getString("orderCode")?:""
+            val status = this.getString("status")?:""
+            val totalPrice = this.getLong("totalPrice")?.toInt()?:0
+            val teas = this.get("teas") as? List<String>?: emptyList()
+
+            History(
+                id = id,
+                createAt = createAt,
+                orderCode = orderCode,
+                status = OrderStatus.valueOf(status),
+                totalPrice = totalPrice,
+                teas = teas
+            )
+        }catch (e: Exception){
+            e.printStackTrace()
+            null
         }
+    }
+
 
     private fun QueryDocumentSnapshot.toTea(): Tea? {
         return try {

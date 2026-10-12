@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lihan.core.domain.model.MemberLevel
+import com.lihan.core.domain.model.User
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons.ArrowBack
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.member.presentation.R
@@ -91,7 +92,13 @@ private fun MemberScreenPreview() {
     GongchaTheme {
         MemberScreen(
             state = MemberState(
-                user = null
+                user = User(
+                    id = "1234",
+                    level = MemberLevel.SILVER,
+                    name = "Li",
+                    points = 1000,
+                    memberCode = "KC123456"
+                )
             ),
             onAction = {}
         )

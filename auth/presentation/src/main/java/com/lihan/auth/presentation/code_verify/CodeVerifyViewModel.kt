@@ -6,7 +6,7 @@ import android.app.Activity
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.auth.domain.AuthRepository
+import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.auth.presentation.manager.PhoneAuthManager
 import com.lihan.core.domain.util.TimerFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,7 +14,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn

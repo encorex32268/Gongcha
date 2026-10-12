@@ -68,13 +68,7 @@ fun LoginRoot(
 
     LoginScreen(
         state = state,
-        onAction = { action ->
-            when(action){
-                LoginAction.OnWithoutSigningClick -> onNavigateToMenu()
-                else -> Unit
-            }
-            viewModel.onAction(action)
-        }
+        onAction = viewModel::onAction
     )
 }
 

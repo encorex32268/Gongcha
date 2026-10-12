@@ -126,20 +126,6 @@ fun MemberCard(
                     text = "pts"
                 )
                 Spacer(Modifier.weight(1f))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = GongchaIcons.Contactless,
-                        contentDescription = null
-                    )
-                    Text(
-                        text = "終身資格・永久有效"
-                    )
-
-                }
             }
 
         }
