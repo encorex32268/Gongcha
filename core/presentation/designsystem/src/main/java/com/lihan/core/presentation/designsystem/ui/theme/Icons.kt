@@ -69,4 +69,8 @@ object GongchaIcons {
     val Contactless: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.contactless)
+
+    val Close: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.close)
 }

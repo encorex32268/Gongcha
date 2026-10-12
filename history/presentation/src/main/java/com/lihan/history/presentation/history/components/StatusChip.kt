@@ -14,39 +14,38 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lihan.core.domain.model.OrderStatus
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.history.toStringResourceId
 import com.lihan.history.presentation.R
 
 @Composable
 fun StatusChip(
-    modifier: Modifier = Modifier,
-    isProgress: Boolean = false
+    orderStatus: OrderStatus,
+    modifier: Modifier = Modifier
 ) {
+    val color = when(orderStatus){
+        OrderStatus.IN_ORDER -> MaterialTheme.colorScheme.tertiaryContainer
+        OrderStatus.IN_PROGRESS ->  MaterialTheme.colorScheme.primaryContainer
+        OrderStatus.COMPLETED -> MaterialTheme.colorScheme.secondaryContainer
+    }
+    val textColor = when(orderStatus){
+        OrderStatus.IN_ORDER -> MaterialTheme.colorScheme.onTertiaryContainer
+        OrderStatus.IN_PROGRESS ->  MaterialTheme.colorScheme.onPrimaryContainer
+        OrderStatus.COMPLETED -> MaterialTheme.colorScheme.onSecondaryContainer
+    }
+
     Box(
         modifier = modifier
-            .clip(CircleShape)
-            .background(
-                color = if (isProgress){
-                    MaterialTheme.colorScheme.primaryContainer
-                }else{
-                    MaterialTheme.colorScheme.secondaryContainer
-                }
-            )
-            .padding(8.dp)
-        ,
+            .background(color = color, shape = CircleShape)
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = if (isProgress){
-                stringResource(R.string.history_order_in_progress)
-            }else{
-                stringResource(R.string.history_order_completed)
-            },
-            color = if (isProgress){
-                MaterialTheme.colorScheme.onPrimaryContainer
-            }else{
-                MaterialTheme.colorScheme.onSecondaryContainer
-            }
+            text = orderStatus.toStringResourceId(),
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = textColor
+            )
         )
     }
 }
@@ -57,8 +56,9 @@ fun StatusChip(
 private fun StatusChipPreview() {
     GongchaTheme {
         Column {
-            StatusChip()
-            StatusChip(isProgress = true)
+            StatusChip(orderStatus = OrderStatus.IN_ORDER)
+            StatusChip(orderStatus = OrderStatus.COMPLETED)
+            StatusChip(orderStatus = OrderStatus.IN_PROGRESS)
         }
     }
 }

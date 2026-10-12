@@ -5,7 +5,8 @@ package com.lihan.core.data
 import com.lihan.core.database.LocalDataSource
 import com.lihan.core.database.mapper.toCartItem
 import com.lihan.core.database.mapper.toCartItemEntity
-import com.lihan.core.domain.CartRepository
+import com.lihan.core.domain.AppDataStore
+import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.model.CartItem
 import com.lihan.core.domain.util.DataError
 import com.lihan.core.domain.util.EmptyResult
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.map
 
 class OfflineFirstCartRepository(
     private val localDataSource: LocalDataSource,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val appDataStore: AppDataStore,
 ): CartRepository {
 
     override fun getCarItems(): Flow<List<CartItem>> {
@@ -53,7 +55,10 @@ class OfflineFirstCartRepository(
             .first()
             .map { it.toCartItem() }
 
-        return remoteDataSource.checkout(cartItems)
+        val user = appDataStore.user.first()?: return Result.Error(DataError.Local.NOT_FOUND)
+        return remoteDataSource.checkout(
+            userId = user.id,
+            cartItems = cartItems)
 
     }
 }

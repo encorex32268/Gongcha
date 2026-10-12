@@ -20,38 +20,14 @@ import androidx.navigation.navigation
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.gongcha.navigation.HistoryGraph
 import com.lihan.gongcha.navigation.HistoryRoute
+import com.lihan.history.presentation.history.HistoryRoot
 
 fun NavGraphBuilder.historyGraph(
     navController: NavController
 ) {
     navigation<HistoryGraph>(startDestination = HistoryRoute) {
         composable<HistoryRoute> {
-            HistoryPlaceholderScreen()
-        }
-    }
-}
-
-@Composable
-private fun HistoryPlaceholderScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = GongchaIcons.ListClock,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "歷史紀錄",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            HistoryRoot()
         }
     }
 }

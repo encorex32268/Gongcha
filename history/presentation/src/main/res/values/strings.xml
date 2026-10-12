@@ -5,7 +5,8 @@
     <string name="not_login">未登入</string>
     <string name="history_title">歷史訂單</string>
     <string name="history_order_code">訂單編號#%1$s</string>
-    <string name="history_order_in_progress">製作中</string>
-    <string name="history_order_completed">完成</string>
     <string name="history_notice">未登入會員者，訂單完成後紀錄將會消失。</string>
+    <string name="remove_order">移除訂單</string>
+    <string name="order_total">訂單總金額:</string>
+    <string name="dollar_sign">NT$ %d</string>
 </resources>

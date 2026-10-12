@@ -13,7 +13,7 @@ fun List<CartItem>.toHistoryDto(id: String): HistoryDto {
     return HistoryDto(
         id = id,
         createAt = createAt,
-        status = OrderStatus.IN_PROGRESS.name,
+        status = OrderStatus.IN_ORDER.name,
         orderCode = createAt.toString().takeLast(6),
         totalPrice = totalPrice,
         teas = buildTeasString(this)

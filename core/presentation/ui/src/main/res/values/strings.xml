@@ -78,4 +78,7 @@
     <string name="error_canceled">操作已取消。</string>
     <string name="error_firebase_get_data_failed">讀取遠端資料失敗，請稍後再試。</string>
     <string name="error_unknown">發生未知錯誤，請稍後再試。</string>
+    <string name="order_status_completed">完成</string>
+    <string name="order_status_in_progress">製作中</string>
+    <string name="order_status_in_order">建立訂單中</string>
 </resources>
