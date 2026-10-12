@@ -1,4 +1,14 @@
 -------
+2026.10.12
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `af5b35f` | feat(history): implement order history tracking, cancellation, and UI | 串接歷史訂單流程（建立/取消/查詢）、實作 `HistoryRepositoryImpl` 與 `HistoryViewModel`、支援訂單狀態顯示（`IN_ORDER`/`IN_PROGRESS`/`COMPLETED`）與取消訂單按鈕，並於 `GongchaApp` 與 `HistoryNavGraph` 接線。 |
+| `a98a343` | refactor(auth): migrate AuthRepository to core and support Firestore user management | 將 `AuthRepository` 下放至 `core` 模組，`RemoteDataSource` 整合 Firestore 使用者資料存取（`createUser`、`getUserById`），支援匿名登入，並更新 `MainViewModel` 與登入流程。 |
+| `3cd0911` | feat(menu): use applicationScope for background cache syncing in MenuRepositoryImpl | 在 `MenuRepositoryImpl` 注入 `applicationScope` 處理店家與茶飲資料寫入 Room 本地快取，避免因畫面生命週期結束被中斷。 |
+| `0d3d2e8` | feat(database): add histories table with Room migration 3 to 4 and LocalDataSource support | 實作 Room 資料庫 Migration 3 升級至 4，新增 `histories` 資料表、`HistoryDao`、`HistoryEntity`、`HistoryMapper`、`OrderStatus` TypeConverter 與 `LocalDataSource` 歷史訂單 CRUD 支援。 |
+| `48c7f27` | refactor(domain): move tea customization models to core:domain | 將飲品客製化模型（`Ice`、`Size`、`Sugar`、`Topping`）由 presentation 層移至 `core:domain:model`，UI 層保留擴充函式，並整理 `CartRepository` 至 `core.domain.cart` 套件。 |
+-------
 2026.10.11
 commits: 
 | SHA | Commit訊息 | 主要變更 |
