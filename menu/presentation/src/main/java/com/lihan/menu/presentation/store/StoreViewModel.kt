@@ -2,7 +2,6 @@ package com.lihan.menu.presentation.store
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.CartRepository
 import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

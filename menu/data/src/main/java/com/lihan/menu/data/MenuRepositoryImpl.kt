@@ -11,15 +11,20 @@ import com.lihan.core.domain.model.Tea
 import com.lihan.core.domain.util.onSuccess
 import com.lihan.core.network.RemoteDataSource
 import com.lihan.menu.domain.MenuRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.collections.map
 
 class MenuRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appDataStore: AppDataStore
+    private val appDataStore: AppDataStore,
+    private val applicationScope: CoroutineScope
 ): MenuRepository {
 
     override fun getTeas(): Flow<List<Tea>> {
@@ -55,10 +60,12 @@ class MenuRepositoryImpl(
                 val remoteTeasResult = remoteDataSource.getTeas().first()
                 remoteTeasResult
                     .onSuccess { teas ->
-                        localDataSource.upsertTeas(
-                            teas.map { it.toTeaEntity() }
-                        )
-                        appDataStore.setTeasVersionCode(remoteVersionCode)
+                        applicationScope.launch {
+                            localDataSource.upsertTeas(
+                                teas.map { it.toTeaEntity() }
+                            )
+                            appDataStore.setTeasVersionCode(remoteVersionCode)
+                        }.join()
                     }
 
             }
@@ -72,10 +79,12 @@ class MenuRepositoryImpl(
                 val remoteStoresResult = remoteDataSource.getStores().first()
                 remoteStoresResult
                     .onSuccess { stores ->
-                        localDataSource.upsertStores(
-                            stores.map { it.toStoreEntity() }
-                        )
-                        appDataStore.setStoresVersionCode(remoteVersionCode)
+                        applicationScope.launch {
+                            localDataSource.upsertStores(
+                                stores.map { it.toStoreEntity() }
+                            )
+                            appDataStore.setStoresVersionCode(remoteVersionCode)
+                        }
                     }
             }
         }
