@@ -2,6 +2,7 @@ package com.lihan.core.database.converter
 
 import androidx.room.TypeConverter
 import com.lihan.core.domain.model.BusinessHour
+import com.lihan.core.domain.model.OrderStatus
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -40,4 +41,20 @@ class Converters {
             emptyList()
         }
     }
+
+    @TypeConverter
+    fun fromOrderStatus(value: OrderStatus?): String? {
+        return value?.name
+    }
+
+    @TypeConverter
+    fun toOrderStatus(value: String?): OrderStatus? {
+        if (value.isNullOrEmpty()) return null
+        return try {
+            OrderStatus.valueOf(value)
+        } catch (e: Exception) {
+            OrderStatus.IN_ORDER
+        }
+    }
 }
+

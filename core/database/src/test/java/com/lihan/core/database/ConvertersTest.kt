@@ -2,8 +2,10 @@ package com.lihan.core.database
 
 import com.lihan.core.database.converter.Converters
 import com.lihan.core.domain.model.BusinessHour
+import com.lihan.core.domain.model.OrderStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -41,5 +43,18 @@ class ConvertersTest {
 
         val invalidJsonResult = converters.toBusinessHourList("invalid-json")
         assertTrue(invalidJsonResult.isEmpty())
+    }
+
+    @Test
+    fun testOrderStatusConversion() {
+        assertEquals("IN_PROGRESS", converters.fromOrderStatus(OrderStatus.IN_PROGRESS))
+        assertEquals(OrderStatus.IN_PROGRESS, converters.toOrderStatus("IN_PROGRESS"))
+        assertEquals(OrderStatus.COMPLETED, converters.toOrderStatus("COMPLETED"))
+        assertEquals(OrderStatus.IN_ORDER, converters.toOrderStatus("IN_ORDER"))
+
+        assertNull(converters.fromOrderStatus(null))
+        assertNull(converters.toOrderStatus(null))
+        assertNull(converters.toOrderStatus(""))
+        assertEquals(OrderStatus.IN_ORDER, converters.toOrderStatus("UNKNOWN_STATUS"))
     }
 }

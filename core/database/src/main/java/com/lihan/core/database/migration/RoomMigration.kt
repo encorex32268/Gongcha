@@ -28,3 +28,20 @@ val MIGRATION_2_3 = object : Migration(2,3){
         db.execSQL("ALTER TABLE `CartItemEntity` ADD COLUMN `imageUrl` TEXT")
     }
 }
+
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS `histories` (
+                `id` TEXT NOT NULL,
+                `userId` TEXT NOT NULL,
+                `createAt` INTEGER NOT NULL,
+                `status` TEXT NOT NULL,
+                `orderCode` TEXT NOT NULL,
+                `totalPrice` INTEGER NOT NULL,
+                `teas` TEXT NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+        """.trimIndent())
+    }
+}

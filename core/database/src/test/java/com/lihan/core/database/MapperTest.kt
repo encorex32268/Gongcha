@@ -1,10 +1,14 @@
 package com.lihan.core.database
 
+import com.lihan.core.database.mapper.toHistory
+import com.lihan.core.database.mapper.toHistoryEntity
 import com.lihan.core.database.mapper.toStore
 import com.lihan.core.database.mapper.toStoreEntity
 import com.lihan.core.database.mapper.toTea
 import com.lihan.core.database.mapper.toTeaEntity
 import com.lihan.core.domain.model.BusinessHour
+import com.lihan.core.domain.model.History
+import com.lihan.core.domain.model.OrderStatus
 import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.model.Tea
 import org.junit.Assert.assertEquals
@@ -67,6 +71,30 @@ class MapperTest {
         assertEquals(1, entity.businessHours.size)
 
         val mappedBack = entity.toStore()
+        assertEquals(domain, mappedBack)
+    }
+
+    @Test
+    fun testHistoryEntityMapping() {
+        val domain = History(
+            id = "order_1",
+            createAt = 1700000000000L,
+            status = OrderStatus.IN_PROGRESS,
+            orderCode = "123456",
+            totalPrice = 150,
+            teas = listOf("1 x 珍珠奶茶 (M·微糖·微冰)", "2 x 烏龍茶 (L·無糖·少冰)")
+        )
+
+        val entity = domain.toHistoryEntity(userId = "user_123")
+        assertEquals("order_1", entity.id)
+        assertEquals("user_123", entity.userId)
+        assertEquals(1700000000000L, entity.createAt)
+        assertEquals(OrderStatus.IN_PROGRESS, entity.status)
+        assertEquals("123456", entity.orderCode)
+        assertEquals(150, entity.totalPrice)
+        assertEquals(2, entity.teas.size)
+
+        val mappedBack = entity.toHistory()
         assertEquals(domain, mappedBack)
     }
 }
