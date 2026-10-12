@@ -30,7 +30,8 @@ import com.lihan.gongcha.navigation.rememberAppState
 @Composable
 fun NavRoot(
     state: MainState,
-    appState: AppState = rememberAppState()
+    signOut: () -> Unit,
+    appState: AppState
 ) {
     SharedTransitionLayout {
         Box(
@@ -55,6 +56,7 @@ fun NavRoot(
                     navigateToCart = {
                         appState.navigateToTopLevelDestination(TopLevelDestination.SHOPPING_CART)
                     },
+                    signOut = signOut,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
                 shoppingCartGraph(

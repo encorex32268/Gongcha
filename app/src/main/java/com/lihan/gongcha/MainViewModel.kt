@@ -1,18 +1,21 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.lihan.gongcha
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.util.Result
 import com.lihan.gongcha.navigation.AuthGraph
 import com.lihan.gongcha.navigation.MenuGraph
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -42,19 +45,27 @@ class MainViewModel(
         )
 
     init {
+        initial()
+    }
 
+    private fun initial() {
         viewModelScope.launch {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val uid = currentUser?.uid?:""
-            val startDestination = when(
-                val result = authRepository.getUserById(uid)
-            ){
-                is Result.Error-> AuthGraph
-                is Result.Success-> {
-                    if (result.data == null){
-                        AuthGraph
-                    }else{
-                        MenuGraph
+            println("Uid: ${uid}")
+            val startDestination = if (uid.isBlank()){
+                AuthGraph
+            }else{
+                when(
+                    val result = authRepository.getUserById(uid)
+                ){
+                    is Result.Error-> AuthGraph
+                    is Result.Success-> {
+                        if (result.data == null){
+                            AuthGraph
+                        }else{
+                            MenuGraph
+                        }
                     }
                 }
             }
@@ -65,11 +76,22 @@ class MainViewModel(
         }
     }
 
+    fun signOut(){
+        viewModelScope.launch {
+            authRepository.signOut()
+        }
+    }
+
     private fun observeCartItemCount() {
-        repository
-            .getCarItemsCount()
-            .distinctUntilChanged()
-            .onEach { count ->
+
+        authRepository.user
+            .flatMapLatest { user ->
+                if (user == null){
+                    emptyFlow()
+                }else{
+                    repository.getCarItemsCountByUserId(user.id)
+                }
+            }.onEach { count ->
                 _state.update { it.copy(
                     cartItemCount = count
                 ) }

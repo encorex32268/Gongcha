@@ -17,6 +17,7 @@ fun NavGraphBuilder.menuGraph(
     navController: NavController,
     navigateToMember: () -> Unit,
     navigateToCart: () -> Unit,
+    signOut: () -> Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     navigation<MenuGraph>(startDestination = MenuRoute) {
@@ -26,9 +27,10 @@ fun NavGraphBuilder.menuGraph(
                     navController.navigate(SelectStoreRoute)
                 },
                 navigateToMember = navigateToMember,
-                navigateToTeaOrder = { teaId ->
-                    navController.navigate(TeaOrderRoute(teaId = teaId))
+                navigateToTeaOrder = { storeId,teaId ->
+                    navController.navigate(TeaOrderRoute(storeId = storeId ,teaId = teaId))
                 },
+                signOut = signOut,
                 sharedTransitionScope = sharedTransitionScope,
                 animatedVisibilityScope = this
             )
