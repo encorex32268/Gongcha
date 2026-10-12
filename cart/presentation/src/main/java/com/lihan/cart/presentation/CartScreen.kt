@@ -42,10 +42,10 @@ import com.lihan.core.domain.model.CartItem
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
-import com.lihan.core.presentation.ui.tea_order.Ice
-import com.lihan.core.presentation.ui.tea_order.Size
-import com.lihan.core.presentation.ui.tea_order.Sugar
-import com.lihan.core.presentation.ui.tea_order.Topping
+import com.lihan.core.domain.model.Ice
+import com.lihan.core.domain.model.Size
+import com.lihan.core.domain.model.Sugar
+import com.lihan.core.domain.model.Topping
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -111,6 +111,7 @@ fun CartScreen(
             CartEmptyView(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(padding)
                     .padding(top = 64.dp)
             )
         }else{

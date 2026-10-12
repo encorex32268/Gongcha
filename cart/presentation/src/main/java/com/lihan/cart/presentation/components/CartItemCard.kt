@@ -29,13 +29,12 @@ import com.lihan.core.domain.model.CartItem
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.components.Counter
-import com.lihan.core.presentation.ui.tea_order.Ice
-import com.lihan.core.presentation.ui.tea_order.Ice.Companion.toStringResource
-import com.lihan.core.presentation.ui.tea_order.Size
-import com.lihan.core.presentation.ui.tea_order.Size.Companion.toStringResource
-import com.lihan.core.presentation.ui.tea_order.Sugar
-import com.lihan.core.presentation.ui.tea_order.Sugar.Companion.toStringResource
-import com.lihan.core.presentation.ui.tea_order.Topping
+import com.lihan.core.domain.model.Ice
+import com.lihan.core.domain.model.Size
+import com.lihan.core.domain.model.Sugar
+import com.lihan.core.domain.model.Topping
+import com.lihan.core.presentation.ui.tea_order.nameZhResId
+import com.lihan.core.presentation.ui.tea_order.toStringResource
 
 @Composable
 fun CartItemCard(

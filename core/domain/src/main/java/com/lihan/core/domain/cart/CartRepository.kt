@@ -1,4 +1,4 @@
-package com.lihan.core.domain
+package com.lihan.core.domain.cart
 
 import com.lihan.core.domain.model.CartItem
 import com.lihan.core.domain.util.DataError

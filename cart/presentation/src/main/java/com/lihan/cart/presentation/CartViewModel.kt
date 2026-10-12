@@ -2,7 +2,7 @@ package com.lihan.cart.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.CartRepository
+import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.util.onError
 import com.lihan.core.domain.util.onSuccess
 import kotlinx.coroutines.Job
@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 import com.lihan.core.presentation.ui.toUiText
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 
 
 class CartViewModel(
@@ -81,6 +83,7 @@ class CartViewModel(
                         _uiEvent.send(CartEvent.OnCheckoutSuccess)
                     }
             } catch (e: Exception) {
+                ensureActive()
                 e.printStackTrace()
                 _state.update { it.copy(isCheckoutLoading = false) }
             }

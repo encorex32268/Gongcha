@@ -3,12 +3,12 @@ package com.lihan.menu.presentation.tea_order
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.CartRepository
+import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.model.CartItem
-import com.lihan.core.presentation.ui.tea_order.Ice
-import com.lihan.core.presentation.ui.tea_order.Size
-import com.lihan.core.presentation.ui.tea_order.Sugar
-import com.lihan.core.presentation.ui.tea_order.Topping
+import com.lihan.core.domain.model.Ice
+import com.lihan.core.domain.model.Size
+import com.lihan.core.domain.model.Sugar
+import com.lihan.core.domain.model.Topping
 import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

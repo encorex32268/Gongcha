@@ -1,9 +1,9 @@
 package com.lihan.menu.presentation.tea_order
 
-import com.lihan.core.presentation.ui.tea_order.Ice
-import com.lihan.core.presentation.ui.tea_order.Size
-import com.lihan.core.presentation.ui.tea_order.Sugar
-import com.lihan.core.presentation.ui.tea_order.Topping
+import com.lihan.core.domain.model.Ice
+import com.lihan.core.domain.model.Size
+import com.lihan.core.domain.model.Sugar
+import com.lihan.core.domain.model.Topping
 
 sealed interface TeaOrderAction {
     data object OnNavigateBack : TeaOrderAction
