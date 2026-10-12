@@ -3,6 +3,7 @@ package com.lihan.menu.presentation.tea_order
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.model.CartItem
 import com.lihan.core.domain.model.Ice
@@ -13,6 +14,7 @@ import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -23,6 +25,7 @@ class TeaOrderViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val repository: CartRepository,
     private val menuRepository: MenuRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val teaId: String? = savedStateHandle.get<String>("teaId")
@@ -79,12 +82,16 @@ class TeaOrderViewModel(
             val currentState = state.value
             val tea = currentState.tea ?: return@launch
 
+            val user = authRepository.user.first()?: return@launch
+            val storeId = savedStateHandle.get<String>("storeId")
+
             repository
                 .addCartItem(
                     CartItem(
+                        userId = user.id,
                         teaId = tea.id,
                         teaName = tea.nameZh,
-                        storeName = "",
+                        storeName = storeId?:"",
                         size = currentState.size.name,
                         toppings = currentState.toppings.map { it.name },
                         sugar = currentState.sugar!!.name,

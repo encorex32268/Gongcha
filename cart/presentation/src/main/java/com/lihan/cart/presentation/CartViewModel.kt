@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.lihan.cart.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.util.onError
 import com.lihan.core.domain.util.onSuccess
@@ -20,11 +23,17 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 import com.lihan.core.presentation.ui.toUiText
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 
 
 class CartViewModel(
-    private val repository: CartRepository
+    private val repository: CartRepository,
+    private val authRepository: AuthRepository
 ): ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -33,6 +42,7 @@ class CartViewModel(
 
     private val _uiEvent = Channel<CartEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
 
     private val _state = MutableStateFlow(CartState())
     val state = _state
@@ -76,7 +86,11 @@ class CartViewModel(
                         _uiEvent.send(CartEvent.OnCheckoutFail(errorMessage = error.toUiText()))
                     }
                     .onSuccess {
-                        repository.clearCartItems()
+                        val currentUser = authRepository.user.first()
+                        if (currentUser != null){
+                            repository.clearCartItemsByUserId(userId = currentUser.id)
+                        }
+
                         _state.update { it.copy(
                             isCheckoutLoading = false)
                         }
@@ -153,14 +167,18 @@ class CartViewModel(
 
 
     private fun observeCartItems(){
-        repository
-            .getCarItems()
-            .onEach { cartItems ->
+        authRepository.user
+            .flatMapLatest { user ->
+                if (user == null){
+                    emptyFlow()
+                }else{
+                    repository.getCartItemsByUserId(user.id)
+                }
+            }.onEach { cartItems ->
                 val storeItems = cartItems.sortedByDescending { it.id }
                 _state.update { it.copy(
                     cartItems = storeItems
                 ) }
-
             }.launchIn(viewModelScope)
     }
 

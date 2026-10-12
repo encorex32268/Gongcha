@@ -156,6 +156,7 @@ private fun CartItemCardPreview() {
     GongchaTheme {
         CartItemCard(
             cartItem = CartItem(
+                userId = "",
                 teaId = "",
                 teaName = "茉香綠",
                 imageUrl = "",

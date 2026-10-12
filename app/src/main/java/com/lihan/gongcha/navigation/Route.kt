@@ -32,7 +32,7 @@ data object MemberRoute
 data object SelectStoreRoute
 
 @Serializable
-data class TeaOrderRoute(val teaId: String)
+data class TeaOrderRoute(val storeId: String,val teaId: String)
 
 @Serializable
 data object AuthGraph

@@ -223,6 +223,7 @@ private fun Preview() {
             state = CartState(
                 cartItems = (0..10).map {
                     CartItem(
+                        userId = "Id: ${it}",
                         id = it + 1,
                         teaId = it.toString(),
                         teaName = "茉香綠_${it}",
