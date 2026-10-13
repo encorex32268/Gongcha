@@ -1,6 +1,7 @@
 package com.lihan.auth.domain
 
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PhoneNumberValidatorTest {

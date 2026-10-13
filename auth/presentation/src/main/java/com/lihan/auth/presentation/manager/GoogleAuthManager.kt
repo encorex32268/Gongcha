@@ -11,6 +11,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.lihan.core.domain.util.DataError
+import com.lihan.core.domain.util.Result
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -24,11 +26,10 @@ class GoogleAuthManager {
      * @param webClientId Firebase 後台取得的 Web Client ID
      * @return 登入結果 Result<FirebaseUser>
      */
-    //TODO: Fix Error Handle
     suspend fun signIn(
         activity: Activity,
         webClientId: String
-    ): Result<FirebaseUser> {
+    ): Result<FirebaseUser, DataError> {
 
         val credentialManager = CredentialManager.create(activity)
         // 1. 設定 Google ID 請求選項
@@ -61,33 +62,39 @@ class GoogleAuthManager {
                 signInWithFirebase(activity, idToken)
 
             } else {
-                Result.failure(Exception("不支援的憑證類型: ${credential.type}"))
+                Result.Error(DataError.Firebase.NOT_SUPPORT_CREDENTIAL)
             }
         } catch (e: GetCredentialCancellationException) {
+            e.printStackTrace()
             // 使用者主動取消/滑掉 Bottom Sheet，不算系統錯誤
-            Result.failure(Exception("使用者已取消登入"))
+//            Result.failure(Exception("使用者已取消登入"))
+            Result.Error(DataError.Firebase.GET_SIGNING_CANCELLED)
         } catch (e: GetCredentialException) {
-            Result.failure(Exception("取得憑證失敗: ${e.message}"))
+            e.printStackTrace()
+            Result.Error(DataError.Firebase.GET_CREDENTIAL_FAILED)
         } catch (e: Exception) {
-            Result.failure(e)
+            e.printStackTrace()
+            Result.Error(DataError.Firebase.UNKNOWN)
         }
     }
 
 
-    suspend fun signInAnonymously(): Result<FirebaseUser> = suspendCancellableCoroutine { continuation ->
+    suspend fun signInAnonymously(): Result<FirebaseUser, DataError> = suspendCancellableCoroutine { continuation ->
         FirebaseAuth.getInstance()
             .signInAnonymously()
             .addOnCompleteListener{
                 if (it.isSuccessful){
                     if (continuation.isActive){
-                        continuation.resume(Result.success(it.result.user!!))
+                        continuation.resume(Result.Success(it.result.user!!))
                     }
                 }
             }
+            .addOnFailureListener {
+                continuation.resume(Result.Error(DataError.Firebase.SIGNING_FAILED))
+            }
 
         continuation.invokeOnCancellation {
-            //TODO: Fix Error Handle
-            continuation.resume(Result.failure(Exception("Error")))
+            continuation.resume(Result.Error(DataError.Firebase.CANCELED))
         }
     }
 
@@ -99,20 +106,20 @@ class GoogleAuthManager {
     private suspend fun signInWithFirebase(
         activity: Activity,
         idToken: String
-    ): kotlin.Result<FirebaseUser> = suspendCancellableCoroutine { continuation ->
+    ): Result<FirebaseUser, DataError> = suspendCancellableCoroutine { continuation ->
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     if (user != null) {
-                        continuation.resume(kotlin.Result.success(user))
+                        continuation.resume(Result.Success(user))
                     } else {
-                        continuation.resume(kotlin.Result.failure(Exception("登入成功但找不到使用者資料")))
+                        continuation.resume(Result.Error(DataError.Firebase.UNKNOWN_USER))
                     }
                 } else {
                     continuation.resume(
-                        kotlin.Result.failure(task.exception ?: Exception("Firebase 登入失敗"))
+                        Result.Error(DataError.Firebase.SIGNING_FAILED)
                     )
                 }
             }

@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.visible
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,14 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lihan.auth.presentation.R
 import com.lihan.auth.presentation.code_verify.components.CodeTextField
-import com.lihan.auth.presentation.login.LoginAction
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
-import com.lihan.core.presentation.ui.UiText
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

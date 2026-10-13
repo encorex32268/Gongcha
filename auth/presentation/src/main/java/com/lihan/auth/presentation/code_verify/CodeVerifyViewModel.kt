@@ -6,8 +6,8 @@ import android.app.Activity
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.auth.presentation.manager.PhoneAuthManager
+import com.lihan.core.domain.auth.AuthRepository
 import com.lihan.core.domain.util.TimerFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel

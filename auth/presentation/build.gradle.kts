@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.network)
 
-    implementation(projects.auth.domain)
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     //noinspection LoginCredentials
