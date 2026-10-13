@@ -1,9 +1,9 @@
 package com.lihan.gongcha.navigation
 
 import androidx.annotation.DrawableRes
-import com.lihan.core.presentation.designsystem.R as DesignR
 import com.lihan.core.presentation.ui.UiText
 import kotlin.reflect.KClass
+import com.lihan.core.presentation.designsystem.R as DesignR
 
 enum class TopLevelDestination(
     val route: KClass<*>,

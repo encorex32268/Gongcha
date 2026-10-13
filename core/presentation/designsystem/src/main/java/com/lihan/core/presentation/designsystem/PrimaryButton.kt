@@ -1,5 +1,6 @@
 package com.lihan.core.presentation.designsystem
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -52,24 +53,45 @@ fun PrimaryButton(
 @Composable
 private fun PrimaryButtonPreview() {
     GongchaTheme {
-        PrimaryButton(
-            text = "Button",
-            onClick = {},
-            leadingIcon = {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.location),
-                    contentDescription = null
-                )
-            },
-            trailingIcon = {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    progress = { 0.5f },
-                    strokeWidth = 2.dp
-                )
-            }
-        )
+        Column{
+            PrimaryButton(
+                text = "Button",
+                onClick = {},
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.location),
+                        contentDescription = null
+                    )
+                },
+                trailingIcon = {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        progress = { 0.5f },
+                        strokeWidth = 2.dp
+                    )
+                }
+            )
+            PrimaryButton(
+                text = "Button",
+                enabled = false,
+                onClick = {},
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.location),
+                        contentDescription = null
+                    )
+                },
+                trailingIcon = {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        progress = { 0.5f },
+                        strokeWidth = 2.dp
+                    )
+                }
+            )
+        }
     }
 
 }

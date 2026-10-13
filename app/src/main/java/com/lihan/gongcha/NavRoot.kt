@@ -24,7 +24,6 @@ import com.lihan.gongcha.navigation.graphs.historyGraph
 import com.lihan.gongcha.navigation.graphs.memberGraph
 import com.lihan.gongcha.navigation.graphs.menuGraph
 import com.lihan.gongcha.navigation.graphs.shoppingCartGraph
-import com.lihan.gongcha.navigation.rememberAppState
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

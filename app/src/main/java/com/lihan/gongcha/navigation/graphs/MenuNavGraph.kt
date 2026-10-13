@@ -49,7 +49,10 @@ fun NavGraphBuilder.menuGraph(
                 onBack = {
                     navController.navigateUp()
                 },
-                onNavigateToCart = navigateToCart,
+                onNavigateToCart = {
+                    navController.popBackStack()
+                    navigateToCart()
+                },
                 sharedTransitionScope = sharedTransitionScope,
                 animatedVisibilityScope = this
             )

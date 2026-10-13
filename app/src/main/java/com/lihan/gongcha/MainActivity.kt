@@ -2,11 +2,16 @@ package com.lihan.gongcha
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lihan.core.presentation.designsystem.ui.theme.GongchaDarkOnBackground
+import com.lihan.core.presentation.designsystem.ui.theme.GongchaLightOnBackground
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.gongcha.navigation.AuthGraph
 import com.lihan.gongcha.navigation.rememberAppState
@@ -18,13 +23,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition {
             !viewModel.state.value.isReady
         }
 
-        enableEdgeToEdge()
         setContent {
             val state by viewModel.state.collectAsStateWithLifecycle()
             val appState = rememberAppState()
