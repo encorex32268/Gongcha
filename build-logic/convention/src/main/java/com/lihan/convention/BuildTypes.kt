@@ -16,15 +16,19 @@ internal fun Project.configureBuildTypes(
 
 //    val apiKey = gradleLocalProperties(rootDir, rootProject.providers).getProperty("API_KEY")
 
+    //TODO: Need to change this id , when git private to public.
+    val webClientId = "148497736151-28j91ni5hsmi0o14omt0aiphb3ubh7vo.apps.googleusercontent.com"
+
     when(extensionType) {
         ExtensionType.APPLICATION -> {
             this@configureBuildTypes.extensions.configure<ApplicationExtension> {
                 buildTypes {
                     debug {
-
+                        configureDebugBuildType(webClientId = webClientId)
                     }
                     release {
                         configureReleaseBuildType(
+                            webClientId = webClientId,
                             extensionType = extensionType,
                             defaultProguardFile = getDefaultProguardFile("proguard-android-optimize.txt")
                         )
@@ -36,10 +40,11 @@ internal fun Project.configureBuildTypes(
             this@configureBuildTypes.extensions.configure<LibraryExtension> {
                 buildTypes {
                     debug {
-
+                        configureDebugBuildType(webClientId = webClientId)
                     }
                     release {
                         configureReleaseBuildType(
+                            webClientId = webClientId,
                             extensionType = extensionType,
                             defaultProguardFile = getDefaultProguardFile("proguard-android-optimize.txt")
                         )
@@ -51,10 +56,19 @@ internal fun Project.configureBuildTypes(
 }
 
 
+private fun BuildType.configureDebugBuildType(webClientId: String){
+    buildConfigField("String","WEB_CLIENT_ID","\"$webClientId\"")
+}
+
+
 private fun BuildType.configureReleaseBuildType(
     extensionType: ExtensionType,
-    defaultProguardFile: File
+    defaultProguardFile: File,
+    webClientId: String
 ) {
+
+    buildConfigField("String","WEB_CLIENT_ID","\"$webClientId\"")
+
     isMinifyEnabled = true
     if (extensionType == ExtensionType.APPLICATION) {
         isShrinkResources = true

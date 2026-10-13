@@ -43,12 +43,8 @@ dependencies {
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
 
-    implementation(projects.auth.data)
-    implementation(projects.auth.domain)
     implementation(projects.auth.presentation)
 
-    implementation(projects.cart.data)
-    implementation(projects.cart.domain)
     implementation(projects.cart.presentation)
 
     implementation(projects.menu.data)
@@ -59,8 +55,6 @@ dependencies {
     implementation(projects.history.domain)
     implementation(projects.history.presentation)
 
-    implementation(projects.member.data)
-    implementation(projects.member.domain)
     implementation(projects.member.presentation)
 
     testImplementation(libs.junit)
