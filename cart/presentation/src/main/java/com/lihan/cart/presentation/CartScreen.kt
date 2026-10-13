@@ -2,7 +2,9 @@
 
 package com.lihan.cart.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,26 +30,29 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lihan.cart.presentation.components.CartEmptyView
 import com.lihan.cart.presentation.components.CartItemCard
 import com.lihan.core.domain.model.CartItem
-import com.lihan.core.presentation.designsystem.PrimaryButton
-import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
-import com.lihan.core.presentation.ui.ObserveAsEvents
 import com.lihan.core.domain.model.Ice
 import com.lihan.core.domain.model.Size
 import com.lihan.core.domain.model.Sugar
 import com.lihan.core.domain.model.Topping
+import com.lihan.core.presentation.designsystem.PrimaryButton
+import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.ui.ObserveAsEvents
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -54,13 +61,13 @@ fun CartRoot(
     viewModel: CartViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val snackbarHostState = remember{ SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val checkoutSuccess = stringResource(R.string.cart_checkout_success)
 
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
-        when(uiEvent){
+        when (uiEvent) {
             is CartEvent.OnCheckoutFail -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(
@@ -68,6 +75,7 @@ fun CartRoot(
                     )
                 }
             }
+
             CartEvent.OnCheckoutSuccess -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(
@@ -91,30 +99,53 @@ fun CartScreen(
     onAction: (CartAction) -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
+    var previousCount by remember { mutableIntStateOf(state.cartItems.size) }
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(state.cartItems.size) {
+        if (state.cartItems.size != previousCount) {
+            listState.animateScrollToItem(0)
+            previousCount = state.cartItems.size
+        }
+    }
+
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .padding(bottom = 56.dp),
-                hostState = snackbarHostState)
+                hostState = snackbarHostState
+            )
         },
         topBar = {
             TopAppBar(
-                title = { Text(
-                    stringResource(R.string.cart_title)
-                ) }
+                title = {
+                    Text(
+                        stringResource(R.string.cart_title)
+                    )
+                }
             )
         }
     ) { padding ->
-        if (state.cartItems.isEmpty()){
-            CartEmptyView(
+        if (state.cartItems.isEmpty()) {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(top = 64.dp)
-            )
-        }else{
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    modifier = Modifier.size(200.dp),
+                    painter = painterResource(R.drawable.cart_empty_image),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
+                )
+
+            }
+        } else {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,16 +153,18 @@ fun CartScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+
                 LazyColumn(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
                 ) {
                     items(
                         items = state.cartItems,
                         key = { it.id!! }
-                    ){  cartItem ->
+                    ) { cartItem ->
                         CartItemCard(
                             cartItem = cartItem,
                             onPlusClick = {
@@ -142,11 +175,16 @@ fun CartScreen(
                             },
                             onDeleteClick = {
                                 val deleteItemContent = "${cartItem.teaName} x ${cartItem.count}"
-                                onAction(CartAction.OnShowDeleteDialog(deleteItemContent,cartItem.id))
+                                onAction(
+                                    CartAction.OnShowDeleteDialog(
+                                        deleteItemContent,
+                                        cartItem.id
+                                    )
+                                )
                             }
                         )
                     }
-                    item{
+                    item {
                         Spacer(modifier = Modifier.height(64.dp))
                     }
                 }
@@ -159,6 +197,14 @@ fun CartScreen(
                         .padding(bottom = 8.dp),
                     text = stringResource(R.string.cart_checkout),
                     enabled = !state.isCheckoutLoading,
+                    trailingIcon = {
+                        Text(
+                            text = stringResource(R.string.cart_total_price,state.cartItemTotalPrice),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
                     onClick = {
                         onAction(CartAction.OnCheckout)
                     },
@@ -168,7 +214,7 @@ fun CartScreen(
             }
         }
     }
-    if (state.deleteItemContent != null){
+    if (state.deleteItemContent != null) {
         AlertDialog(
             onDismissRequest = {
                 onAction(CartAction.OnDismissDeleteDialog)
@@ -203,7 +249,7 @@ fun CartScreen(
                 Text(text = stringResource(R.string.delete))
             },
             text = {
-                Text(text = stringResource(R.string.cart_delete_message,state.deleteItemContent))
+                Text(text = stringResource(R.string.cart_delete_message, state.deleteItemContent))
             }
         )
     }
@@ -230,7 +276,8 @@ private fun Preview() {
                         imageUrl = "",
                         storeName = "高雄市苓雅區光華一路230號",
                         size = Size.entries.random().name,
-                        toppings = Topping.entries.shuffled().take(4).map { topping -> topping.name },
+                        toppings = Topping.entries.shuffled().take(4)
+                            .map { topping -> topping.name },
                         sugar = Sugar.entries.random().name,
                         ice = Ice.entries.random().name,
                         count = 100,

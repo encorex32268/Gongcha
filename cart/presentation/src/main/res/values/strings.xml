@@ -9,5 +9,6 @@
     <string name="cart_empty">今天想喝點什麼？快去挑選喜歡的飲品吧！</string>
     <string name="cart_checkout">送出訂單</string>
     <string name="cart_checkout_success">訂單成功送出！</string>
+    <string name="cart_total_price">總共: NT$ %1$d</string>
 
 </resources>

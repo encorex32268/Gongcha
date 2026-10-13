@@ -7,4 +7,6 @@ data class CartState(
     val deleteItemContent: String? =null,
     val selectedCartItemId: Int? =null,
     val isCheckoutLoading: Boolean = false
-)
+){
+    val cartItemTotalPrice: Int = cartItems.sumOf { it.count * it.price}
+}
