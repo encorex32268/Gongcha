@@ -84,7 +84,7 @@ class TeaOrderViewModel(
 
             val user = authRepository.user.first()?: return@launch
             val storeId = savedStateHandle.get<String>("storeId")
-
+            //TODO: 當購物車裡面有一樣的直的話？
             repository
                 .addCartItem(
                     CartItem(

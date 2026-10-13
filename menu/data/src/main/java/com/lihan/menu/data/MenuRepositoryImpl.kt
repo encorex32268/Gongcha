@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.lihan.menu.data
 
 import com.lihan.core.database.LocalDataSource
@@ -12,13 +14,11 @@ import com.lihan.core.domain.util.onSuccess
 import com.lihan.core.network.RemoteDataSource
 import com.lihan.menu.domain.MenuRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.collections.map
 
 class MenuRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
@@ -27,17 +27,22 @@ class MenuRepositoryImpl(
     private val applicationScope: CoroutineScope
 ): MenuRepository {
 
-    override fun getTeas(): Flow<List<Tea>> {
-        return localDataSource
+    override val selectedStore: Flow<Store?>
+        get() = appDataStore
+            .storeId
+            .map { id ->
+                localDataSource.getStoreById(id)?.toStore()
+            }
+
+    override val teas: Flow<List<Tea>>
+        get() = localDataSource
             .getTeas()
             .map { entities -> entities.map { it.toTea() } }
-    }
 
-    override fun getStores(): Flow<List<Store>> {
-        return localDataSource
+    override val stores: Flow<List<Store>>
+        get() =  localDataSource
             .getStores()
             .map { entities -> entities.map { it.toStore() } }
-    }
 
     override suspend fun setLatestSelectedStore(id: String) {
         appDataStore.setLatestSelectedStoreId(id)
@@ -53,11 +58,14 @@ class MenuRepositoryImpl(
 
     override suspend fun syncTeasData(){
         val localVersionCode = appDataStore.teasVersionCode.first()
-        val remoteVersionResult = remoteDataSource.getVersionCode("version_teas").first()
+        val remoteVersionResult = remoteDataSource.getVersionCode("version_teas")
 
         remoteVersionResult.onSuccess { remoteVersionCode ->
-            if (localVersionCode < remoteVersionCode){
-                val remoteTeasResult = remoteDataSource.getTeas().first()
+            val isTeasEmpty =  localDataSource.getTeas().first().isEmpty()
+            val isVersionOutdated = localVersionCode < remoteVersionCode
+
+            if (isVersionOutdated || isTeasEmpty){
+                val remoteTeasResult = remoteDataSource.getTeas()
                 remoteTeasResult
                     .onSuccess { teas ->
                         applicationScope.launch {
@@ -73,18 +81,22 @@ class MenuRepositoryImpl(
     }
     override suspend fun syncStoresData(){
         val localVersionCode = appDataStore.storesVersionCode.first()
-        val remoteVersionResult = remoteDataSource.getVersionCode("version_stores").first()
+        val remoteVersionResult = remoteDataSource.getVersionCode("version_stores")
         remoteVersionResult.onSuccess { remoteVersionCode ->
-            if (localVersionCode < remoteVersionCode){
-                val remoteStoresResult = remoteDataSource.getStores().first()
+            val isStoresEmpty =  localDataSource.getStores().first().isEmpty()
+            val isVersionOutdated = localVersionCode < remoteVersionCode
+
+            if (isVersionOutdated || isStoresEmpty){
+                val remoteStoresResult = remoteDataSource.getStores()
                 remoteStoresResult
                     .onSuccess { stores ->
+                        println("Stores")
                         applicationScope.launch {
                             localDataSource.upsertStores(
                                 stores.map { it.toStoreEntity() }
                             )
                             appDataStore.setStoresVersionCode(remoteVersionCode)
-                        }
+                        }.join()
                     }
             }
         }

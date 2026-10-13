@@ -5,8 +5,10 @@ import com.lihan.core.domain.model.Tea
 import kotlinx.coroutines.flow.Flow
 
 interface MenuRepository {
-    fun getTeas(): Flow<List<Tea>>
-    fun getStores(): Flow<List<Store>>
+    val selectedStore: Flow<Store?>
+    val teas: Flow<List<Tea>>
+    val stores: Flow<List<Store>>
+
     suspend fun getTeaById(id: String): Tea?
     suspend fun setLatestSelectedStore(id: String)
     suspend fun getLatestSelectedStore(storeId: String): Store?

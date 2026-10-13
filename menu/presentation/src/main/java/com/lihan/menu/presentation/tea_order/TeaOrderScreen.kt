@@ -5,6 +5,7 @@ package com.lihan.menu.presentation.tea_order
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -102,6 +104,7 @@ fun TeaOrderScreen(
                     ) {
                         if (tea != null) {
                             Text(
+                                modifier = Modifier.basicMarquee(),
                                 text = tea.nameZh,
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.Bold
@@ -110,6 +113,7 @@ fun TeaOrderScreen(
                             )
                             if (tea.nameEn.isNotBlank()) {
                                 Text(
+                                    modifier = Modifier.basicMarquee(),
                                     text = tea.nameEn,
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -133,7 +137,10 @@ fun TeaOrderScreen(
         },
         bottomBar = {
             PrimaryButton(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .navigationBarsPadding(),
                 shape = RoundedCornerShape(12.dp),
                 text = stringResource(R.string.checkout,state.totalPrice.toString()),
                 onClick = {

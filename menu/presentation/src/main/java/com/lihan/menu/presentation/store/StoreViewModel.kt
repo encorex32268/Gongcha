@@ -48,7 +48,6 @@ class StoreViewModel(
             is StoreAction.OnStoreSelected -> {
                 viewModelScope.launch {
                     repository.setLatestSelectedStore(action.id)
-
                     _uiEvent.send(StoreEvent.OnSavedSelectedStore)
                 }
             }
@@ -57,7 +56,7 @@ class StoreViewModel(
 
     private fun observeStores(){
         repository
-            .getStores()
+            .stores
             .onEach {  stores ->
                 val mapStores = stores
                     .sortedBy { it.name }
