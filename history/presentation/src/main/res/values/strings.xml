@@ -9,4 +9,10 @@
     <string name="remove_order">移除訂單</string>
     <string name="order_total">訂單總金額:</string>
     <string name="dollar_sign">NT$ %d</string>
+    <string name="history_cancel_order_success">成功取消訂單。</string>
+    <string name="order_cancel">取消訂單</string>
+    <string name="order_cancel_confirm">是</string>
+    <string name="order_cancel_cancel">否</string>
+    <string name="order_cancel_title">是否要取消訂單</string>
+    <string name="order_cancel_message">您確定要取消此訂單嗎？</string>
 </resources>

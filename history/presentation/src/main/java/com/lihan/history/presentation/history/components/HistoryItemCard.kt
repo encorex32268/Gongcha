@@ -28,7 +28,7 @@ import com.lihan.core.domain.model.OrderStatus
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.history.presentation.R
-import com.lihan.history.presentation.history.formattedTeas
+import com.lihan.history.presentation.history.util.formattedTeas
 
 @Composable
 fun HistoryItemCard(
@@ -36,12 +36,15 @@ fun HistoryItemCard(
     onOrderCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val formattedTeas = history.teas.formattedTeas()
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
         shape = RoundedCornerShape(12.dp),
-        shadowElevation = 4.dp,
+        shadowElevation = 2.dp,
     ) {
         Column(
             modifier = Modifier
@@ -93,7 +96,7 @@ fun HistoryItemCard(
                         .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    history.teas.formattedTeas().forEach { text ->
+                    formattedTeas.forEach { text ->
                         Text(
                             text = text,
                             style = MaterialTheme.typography.bodySmall

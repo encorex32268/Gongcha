@@ -6,7 +6,8 @@ import com.lihan.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {
-    fun getHistories(): Flow<List<History>>
+    val histories: Flow<List<History>>
+
     suspend fun cancelOrder(orderId: String): EmptyResult<DataError>
     suspend fun syncHistories()
 }

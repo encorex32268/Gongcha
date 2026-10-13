@@ -15,7 +15,6 @@ import com.lihan.history.domain.HistoryRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -28,15 +27,13 @@ class HistoryRepositoryImpl(
     private val applicationScope: CoroutineScope
 ): HistoryRepository{
 
-    override fun getHistories(): Flow<List<History>> {
-        return appDataStore.user
+    override val histories: Flow<List<History>>
+        get() = appDataStore.user
             .flatMapLatest { user ->
                 localDataSource.getHistoriesByUserId(user?.id?:"")
             }.map { entities ->
                 entities.map { it.toHistory() }
             }
-    }
-
 
     override suspend fun cancelOrder(orderId: String): EmptyResult<DataError> {
         val user = appDataStore.user.first() ?: return Result.Error(DataError.Local.NOT_FOUND)
@@ -49,14 +46,20 @@ class HistoryRepositoryImpl(
     override suspend fun syncHistories() {
         val user = appDataStore.user.first() ?: return
         val result = remoteDataSource.getHistories(user.id)
+        val localData = localDataSource.getHistories().first()
 
         if (result is Result.Success){
-            applicationScope.launch {
-                localDataSource
-                    .upsertHistories(
-                        result.data.map { it.toHistoryEntity(user.id) }
-                    )
-            }.join()
+            val isNeedUpdate = result.data.size != localData.size
+            if (isNeedUpdate){
+                applicationScope.launch {
+                    localDataSource.clearHistories()
+
+                    localDataSource
+                        .upsertHistories(
+                            result.data.map { it.toHistoryEntity(user.id) }
+                        )
+                }.join()
+            }
         }
     }
 }
