@@ -4,7 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import com.lihan.core.domain.model.MemberLevel
-import com.lihan.core.domain.model.MemberLevel.*
+import com.lihan.core.domain.model.MemberLevel.COPPER
+import com.lihan.core.domain.model.MemberLevel.GOLD
+import com.lihan.core.domain.model.MemberLevel.NONE
+import com.lihan.core.domain.model.MemberLevel.SILVER
 import com.lihan.core.presentation.designsystem.ui.theme.CopperBackgroundGradient
 import com.lihan.core.presentation.designsystem.ui.theme.GoldBackgroundGradient
 import com.lihan.core.presentation.designsystem.ui.theme.SilverBackgroundGradient

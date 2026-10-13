@@ -10,10 +10,8 @@ import com.lihan.core.domain.util.Result
 import com.lihan.core.domain.util.onSuccess
 import com.lihan.core.network.RemoteDataSource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
     private val appDataStore: AppDataStore,
@@ -25,10 +23,6 @@ class AuthRepositoryImpl(
 
     override val user: Flow<User?>
         get() = appDataStore.user
-
-    override suspend fun setUser(user: User) {
-        appDataStore.setUser(user)
-    }
 
     override suspend fun createUser(user: User): EmptyResult<DataError> {
        return remoteDataSource

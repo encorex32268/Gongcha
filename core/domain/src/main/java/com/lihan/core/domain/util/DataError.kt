@@ -15,8 +15,19 @@ sealed interface DataError : Error {
         SERVICE_UNAVAILABLE,
         SERIALIZATION,
         UNKNOWN,
+        CANCELED
+    }
+
+    enum class Firebase: DataError {
+        NOT_SUPPORT_CREDENTIAL,
+        GET_CREDENTIAL_FAILED,
+        FIREBASE_GET_DATA_FAILED,
+        GET_SIGNING_CANCELLED,
+        SIGNING_FAILED,
+        UNKNOWN,
+        UNKNOWN_USER,
         CANCELED,
-        FIREBASE_GET_DATA_FAILED
+
     }
 
     enum class Local : DataError {

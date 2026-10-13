@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 interface AuthRepository {
 
     val user: Flow<User?>
-    suspend fun setUser(user: User)
 
     suspend fun createUser(user: User): EmptyResult<DataError>
     suspend fun getUserById(id: String): Result<User?, DataError>

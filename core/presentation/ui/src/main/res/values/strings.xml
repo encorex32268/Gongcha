@@ -81,4 +81,9 @@
     <string name="order_status_completed">完成</string>
     <string name="order_status_in_progress">製作中</string>
     <string name="order_status_in_order">建立訂單中</string>
+    <string name="error_not_support_credential">不支援此簽章</string>
+    <string name="error_get_credential_failed">獲取簽章失敗，請稍後再試。</string>
+    <string name="error_get_signing_cancelled">此登入操作被取消。</string>
+    <string name="error_signing_failed">登入失敗。</string>
+    <string name="error_unknown_user">不明使用者。</string>
 </resources>

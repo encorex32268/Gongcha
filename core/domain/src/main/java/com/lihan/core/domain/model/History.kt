@@ -1,7 +1,6 @@
 package com.lihan.core.domain.model
 
 import java.time.ZoneId
-import kotlin.time.Instant
 
 data class History(
     val id: String,
