@@ -1,4 +1,17 @@
 -------
+2026.10.13
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `a35799a` | docs: add project architecture, offline-first design, and roadmap in README.md | 新增完整 `README.md` 架構設計文件，包含 Multi-Module 架構圖、離線優先同步流程、技術棧清單與 Roadmap 建議。 |
+| `bd66394` | refactor(ui): clean up theme, primary button preview, navigation, and member screen | 修復 `GongchaTheme` 動態主題套用、在 `PrimaryButton` 增加 Disabled 預覽、在 `MemberScreen` 為空使用者名稱提供預設顯示，並清理各模組未使用 imports 與測試樣板。 |
+| `7d6d88c` | feat(auth): use BuildConfig webClientId and map GoogleAuthManager errors to DataError | 將 `GoogleAuthManager` 與 `LoginViewModel` 改用 `BuildConfig.WEB_CLIENT_ID`，並將 Firebase / Credential Manager 登入錯誤統一轉換為型別安全之 `DataError`。 |
+| `b162624` | feat(history): implement order cancellation confirmation dialog and empty state view | 實作歷史訂單取消確認對話框（`AlertDialog`）與 Snackbar 提示事件回饋，新增訂單空狀態圖檔 `hitstory_empty_image.webp`，並將飲品格式化工具抽離至 `util/BuildFormattedTeas.kt`。 |
+| `a5f1a60` | feat(cart): add real-time total price calculation and auto-scroll on item changes | 在 `CartState` 增加 `cartItemTotalPrice` 即時統計購物車總金額並於按鈕尾端顯示，在 `CartScreen` 導入自動滾動置頂（`animateScrollToItem(0)`），並將空狀態直接內嵌於主畫面。 |
+| `ed9a97a` | feat(menu): optimize tea catalog sync and reactive state handling in MenuViewModel | `MenuViewModel` 改以單一 `combine` 響應式匯整店家、飲品、分類與購物車狀態；`MenuRepositoryImpl` 改用 property Flow 並在快取為空時強制遠端同步；飲品名稱支援長文字跑馬燈。 |
+| `5a52208` | refactor(core:network): migrate Firestore operations to coroutines await with safeFirebaseCall | 將 `RemoteDataSource` 查詢 API 改為 suspend 函式，`FirebaseRemoteDataSource` 導入 `safeFirebaseCall` 與 `await()`，細緻化映射 `DataError.Firebase` 並新增多國語系字串。 |
+| `2242086` | refactor(build): prune unused modules and inject webClientId via build-logic BuildConfig | 移除未使用的 `auth:data/domain`、`cart:data/domain` 與 `member:data/domain` 子模組，於 `build-logic` 為所有模組注入 `WEB_CLIENT_ID` BuildConfig 欄位，並引入 `kotlinx-coroutines-play-services`。 |
+-------
 2026.10.12
 commits: 
 | SHA | Commit訊息 | 主要變更 |
