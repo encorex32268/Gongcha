@@ -1,4 +1,14 @@
 -------
+2026.10.14
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `1f7cc79` | feat(app): add dark theme splash screen, update launcher asset, and tune AppBottomBar | 新增深色模式 Splash 畫面樣式資源（`splash_theme.xml`）、將 Play Store 啟動圖示重命名為標準底線格式 `ic_launcher_playstore.png`、微調 `splash_icon.xml`，並更新 `AppBottomBar` 容器顏色為 background 以提升深色主題適應性。 |
+| `14e548b` | refactor(auth): remove unused phone validator and add full-screen loading overlay to LoginScreen | 移除未使用之 `PhoneNumberValidator` 與未啟用之手機輸入狀態，並在 `LoginScreen` 登入驗證中（`isVerifying`）增加半透明全螢幕 Loading 指示器遮罩與深色預覽。 |
+| `c5930ae` | feat(menu): apply gradient background and refine card borders on MenuScreen | 在 `MenuScreen` 導入自適應深淺色垂直漸層背景（`BackgroundGradient`）、移除門市選擇按鈕動畫以改善效能，並為 `StoreCard` 與 `TeaCard` 加入邊框線條增強視覺層次。 |
+| `d7b17d9` | feat(member): implement member QR code dialog, level perks display, and refine MemberCard | 整合 ZXing QRCode 生成器（`QRCodeGenerator`）與彈出對話框、改從 `authRepository.user` 監聽使用者資料、重新設計 `MemberCard` 排版（包含會員頭像、`LevelTag`、`LevelDescription` 專屬權益說明、累積點數與下一等級升級條件）。 |
+| `8dd32dc` | feat(designsystem): add member level theme colors, icons, and level benefit descriptions | 引入 ZXing 核心依賴，於 designsystem 新增會員等級主題色、背景漸層、`CircleStar` 與 `QRCode` 向量圖示，並於 `core:presentation:ui` 擴充等級顏色/權益文字與升級門檻多國語言字串。 |
+-------
 2026.10.13
 commits: 
 | SHA | Commit訊息 | 主要變更 |
