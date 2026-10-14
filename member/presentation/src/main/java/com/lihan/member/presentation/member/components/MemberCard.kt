@@ -1,9 +1,7 @@
 package com.lihan.member.presentation.member.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,30 +9,32 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.lihan.core.domain.model.MemberLevel
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
+import com.lihan.core.presentation.designsystem.ui.theme.MemberPointsColor
+import com.lihan.core.presentation.designsystem.ui.theme.MemberTextColor
 import com.lihan.core.presentation.ui.member.toGradient
 import com.lihan.core.presentation.ui.member.toLevelImageResId
+import com.lihan.core.presentation.ui.member.toNextLevelCondition
 import com.lihan.member.presentation.R
 
 @Composable
@@ -45,100 +45,123 @@ fun MemberCard(
     modifier: Modifier = Modifier,
     profileImageUrl: String?=null,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .surface(
-                shape = RoundedCornerShape(16.dp),
-                backgroundColor = Color.White,
-                border = null,
-                shadowElevation = 8.dp.value
-            )
-            .background(
-                brush = level.toGradient(),
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(12.dp)
-    ){
-        Column(
-            modifier = Modifier.fillMaxWidth()
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        shadowElevation = 2.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = level.toGradient(),
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
+
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .clip(CircleShape)
-                        .size(36.dp),
-                    contentAlignment = Alignment.Center
-                ){
-                    if (profileImageUrl != null){
-                        AsyncImage(
-                            model = profileImageUrl,
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(36.dp),
-                            contentDescription = null
-                        )
-                    }else{
-                        Icon(
-                            imageVector = GongchaIcons.Member,
-                            contentDescription = null
-                        )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(36.dp),
+                                contentAlignment = Alignment.Center
+                            ){
+                                if (profileImageUrl != null){
+                                    AsyncImage(
+                                        model = profileImageUrl,
+                                        modifier = Modifier
+                                            .clip(CircleShape)
+                                            .size(36.dp),
+                                        contentDescription = null
+                                    )
+                                }else{
+                                    Icon(
+                                        imageVector = GongchaIcons.Member,
+                                        contentDescription = null,
+                                        tint = MemberTextColor
+                                    )
+                                }
+                            }
+                            Text(
+                                text = userName,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MemberTextColor
+                            )
+                        }
+                        LevelTag(level)
                     }
+                    Spacer(Modifier.weight(1f))
+                    Image(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .align(Alignment.Bottom),
+                        painter = painterResource(level.toLevelImageResId()),
+                        contentDescription = null,
+                    )
                 }
-                Column {
+                LevelDescription(level)
+                Row(
+                    modifier = Modifier.padding(top = 8.dp, start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ){
+                        Text(
+                            text = stringResource(R.string.member_points),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MemberTextColor
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ){
+                            Text(
+                                text = pointsInt.toString(),
+                                style = MaterialTheme.typography.headlineLarge.copy(
+                                    color = MemberPointsColor
+                                )
+                            )
+                            Text(
+                                text = stringResource(R.string.points),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MemberPointsColor
+                            )
+                        }
+                    }
                     Text(
-                        text = userName
+                        modifier = Modifier.align(Alignment.Bottom),
+                        text = level.toNextLevelCondition(),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
+
                 }
             }
-
-            Image(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .padding(start = 36.dp)
-                    .size(64.dp),
-                painter = painterResource(R.drawable.kocha_20261007),
-                contentDescription = null
-            )
-            Spacer(Modifier.height(12.dp))
-            Row{
-                Text(
-                    text = "累積點數"
-                )
-                Text(
-                    modifier = Modifier
-                        .alignByBaseline()
-                        .padding(horizontal = 12.dp)
-                        .offset(y = (-4).dp),
-                    text = pointsInt.toString(),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                )
-                Text(
-                    text = "pts"
-                )
-                Spacer(Modifier.weight(1f))
-            }
-
         }
 
-
-
-        Image(
-            modifier = Modifier.align(Alignment.CenterEnd).size(120.dp),
-            painter = painterResource(level.toLevelImageResId()),
-            contentDescription = null,
-        )
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun MemberCardPreview() {
     GongchaTheme {
@@ -146,34 +169,16 @@ private fun MemberCardPreview() {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ){
             MemberLevel.entries.forEach { memberLevel ->
-                MemberCard(
-                    profileImageUrl = "",
-                    userName = "Koala",
-                    pointsInt = 100,
-                    level = memberLevel
-                )
+                if (memberLevel != MemberLevel.NONE){
+                    MemberCard(
+                        profileImageUrl = null,
+                        userName = "Koala",
+                        pointsInt = 100,
+                        level = memberLevel
+                    )
+
+                }
             }
         }
     }
 }
-
-fun Modifier.surface(
-    shape: Shape,
-    backgroundColor: Color,
-    border: BorderStroke?,
-    shadowElevation: Float,
-) =
-    this.then(
-        if (shadowElevation > 0f) {
-            Modifier.graphicsLayer(
-                shadowElevation = shadowElevation,
-                shape = shape,
-                clip = false,
-            )
-        } else {
-            Modifier
-        }
-    )
-        .then(if (border != null) Modifier.border(border, shape) else Modifier)
-        .background(color = backgroundColor, shape = shape)
-        .clip(shape)

@@ -12,4 +12,5 @@ dependencies {
     implementation(projects.core.presentation.ui)
 
     implementation(libs.coil.compose)
+    implementation(libs.qrcode.core)
 }
