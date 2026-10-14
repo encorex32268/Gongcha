@@ -60,6 +60,27 @@
     <string name="level_silver">銀牌會員</string>
     <string name="level_gold">金牌會員</string>
     <string name="level_none">無會員</string>
+    <string name="level_silver_upgrade">年度消費滿 $1,000 升級成銀牌會員</string>
+    <string name="level_gold_upgrade">年度消費滿 $3,000 升級成金牌會員</string>
+
+    <string-array name="level_copper_description">
+        <item>・現金回饋：1.0x（每 $10 累積 1 點）</item>
+        <item>・每月禮遇：贈 9 折券 x 1</item>
+        <item>・全品折扣：95折</item>
+    </string-array>
+
+    <string-array name="level_silver_description">
+        <item>・現金回饋：1.5x（每 $10 累積 1.5 點）</item>
+        <item>・每月禮遇：贈 $30 飲品折價券 x 1</item>
+        <item>・全品折扣：8折</item>
+    </string-array>
+
+    <string-array name="level_gold_description">
+        <item>・現金回饋：2.0x（每 $10 累積 2 點）</item>
+        <item>・每月禮遇：贈 任選飲品免費券 x 1</item>
+        <item>・全品折扣：7折</item>
+    </string-array>
+
 
     <!-- Error messages -->
     <string name="error_disk_full">儲存空間已滿，請清理空間後重試。</string>

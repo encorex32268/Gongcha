@@ -1,5 +1,7 @@
 package com.lihan.core.presentation.designsystem.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
@@ -133,34 +135,66 @@ val ArtisanalTeaBorderInactive = Color(0xFFD8CFC4)
 val ArtisanalMutedEarthGrey = Color(0xFF6E675F)
 val ArtisanalWarmStone = Color(0xFFA49D94)
 
+
+val MemberPointsColor = Color(0xFFAD6028)
+val MemberTextColor = Color(0xFF171310)
+val MemberNone = Color(0xFFE5CAAD)
+val MemberCopper = Color(0xFFD9966A)
+val MemberSilver = Color(0xFFBDC9DB)
+val MemberGold = Color(0xFFE3A73D)
+
 val StandardBackgroundGradient: Brush = Brush.horizontalGradient(
     colors = listOf(
-        Color(0xFFFBF7F2), // 柔和宣紙暖白 (Washi Warm White)
+//        Color(0xFFFBF7F2), // 柔和宣紙暖白 (Washi Warm White)
         Color(0xFFF3ECE4), // 輕焙茶燕麥色 (Oat Tea Tint)
-        Color(0xFFE8DDD2)  // 沉靜淺奶茶米灰 (Soft Milk Tea Clay)
+        MemberNone  // 沉靜淺奶茶米灰 (Soft Milk Tea Clay)
     )
 )
 
 val CopperBackgroundGradient: Brush = Brush.horizontalGradient(
     colors = listOf(
-        Color(0xFFF3DFD2), // 柔和米杏茶色
+//        Color(0xFFF3DFD2), // 柔和米杏茶色
         Color(0xFFE6C4AF), // 溫暖赤陶焦糖
-        Color(0xFFD9AB91)  // 醇厚茶褐銅色
+        MemberCopper  // 醇厚茶褐銅色
     )
 )
 
 val SilverBackgroundGradient: Brush = Brush.horizontalGradient(
     colors = listOf(
-        Color(0xFFF5F6F8), // 明亮銀白
+//        Color(0xFFF5F6F8), // 明亮銀白
         Color(0xFFE2E5EB), // 和紙拉絲銀
-        Color(0xFFCCD1D9)  // 沉穩金屬冷銀
+        MemberSilver  // 沉穩金屬冷銀
     )
 )
 
 val GoldBackgroundGradient: Brush = Brush.horizontalGradient(
     colors = listOf(
-        Color(0xFFFFF1D6), // 蜜香金箔暖白
+//        Color(0xFFFFF1D6), // 蜜香金箔暖白
         Color(0xFFF6D69B), // 暖琥珀茶金
-        Color(0xFFE7BA68)  // 奢華尊榮金
+        MemberGold  // 奢華尊榮金
     )
 )
+
+val BackgroundGradient: Brush
+    @Composable
+    get() = if (isSystemInDarkTheme()) {
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1A1412),
+                Color(0xFF1A1412),
+                Color(0xFF281E1A),
+                Color(0xFF281E1A),
+                Color(0xFF4A2E1B),
+            )
+        )
+    } else {
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFFF3DFD2),
+                Color(0xFFF3DFD2),
+                Color(0xFFE6C4AF),
+                Color(0xFFE6C4AF),
+                Color(0xFFD9966A),
+            )
+        )
+    }

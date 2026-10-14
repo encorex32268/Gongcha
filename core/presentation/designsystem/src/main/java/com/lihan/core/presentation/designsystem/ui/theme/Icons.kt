@@ -1,5 +1,6 @@
 package com.lihan.core.presentation.designsystem.ui.theme
 
+import android.media.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Check
@@ -76,4 +77,12 @@ object GongchaIcons {
     val LogOut: ImageVector
         @Composable
         get() = ImageVector.vectorResource(R.drawable.log_out)
+
+    val CircleStar: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.circle_star)
+
+    val QRCode: ImageVector
+        @Composable
+        get() = ImageVector.vectorResource(R.drawable.qr_code)
 }

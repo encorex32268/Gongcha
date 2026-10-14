@@ -31,6 +31,7 @@ googleServices = "4.5.0"
 navigation = "2.10.2"
 credentials = "1.6.0"
 googleid = "1.2.1"
+qrCodeCore = "3.5.4"
 
 #App Versions
 projectCompileSdk = "37"
@@ -97,6 +98,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # Coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+
+# QRCode
+qrcode-core = { module = "com.google.zxing:core" , version.ref = "qrCodeCore" }
 
 # Navigation
 androidx-navigation = { module = "androidx.navigation:navigation-compose" , version.ref = "navigation"}
