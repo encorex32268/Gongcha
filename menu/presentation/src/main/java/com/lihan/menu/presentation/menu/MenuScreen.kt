@@ -9,6 +9,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,15 +43,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.lihan.core.presentation.designsystem.PrimaryButton
+import com.lihan.core.presentation.designsystem.ui.theme.BackgroundGradient
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
@@ -129,7 +135,10 @@ fun MenuScreen(
         snackbarHost = { SnackbarHost(
             modifier = Modifier.navigationBarsPadding().padding(bottom = 56.dp),
             hostState = snackbarHostState) },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.background(
+            brush = BackgroundGradient
+        ),
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -195,8 +204,7 @@ fun MenuScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .padding(horizontal = 12.dp),
             contentPadding = PaddingValues(bottom = 72.dp)
         ) {
             item(key = "tea_store") {
@@ -221,22 +229,8 @@ fun MenuScreen(
                             )
                         }
                     }else{
-                        val isShowingWarning = snackbarHostState.currentSnackbarData != null
-                        val buttonScale by animateFloatAsState(
-                            targetValue = if (isShowingWarning) 1.5f else 1f,
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            ),
-                            label = "store_button_scale"
-                        )
                         PrimaryButton(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .graphicsLayer{
-                                    scaleX = buttonScale
-                                    scaleY = buttonScale
-                                },
+                            modifier = Modifier.align(Alignment.Center),
                             onClick = {
                                 onAction(MenuAction.OnSelectStore)
                             },
@@ -341,7 +335,7 @@ fun MenuScreen(
 
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun Preview() {
     GongchaTheme {

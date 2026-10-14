@@ -1,5 +1,6 @@
 package com.lihan.menu.presentation.menu.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +36,11 @@ fun StoreCard(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         shadowElevation = 2.dp,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     ) {
         Column(
             modifier = Modifier

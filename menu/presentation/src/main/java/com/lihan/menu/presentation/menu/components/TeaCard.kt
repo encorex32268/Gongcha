@@ -7,6 +7,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +44,13 @@ fun TeaCard(
             .padding(12.dp),
         shape = RoundedCornerShape(12.dp),
         shadowElevation = 4.dp,
-        onClick = onClick
+        onClick = onClick,
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.background.copy(
+                alpha = 0.5f
+            )
+        )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
