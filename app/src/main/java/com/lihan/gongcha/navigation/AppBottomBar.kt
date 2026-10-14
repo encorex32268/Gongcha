@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
@@ -51,13 +52,9 @@ fun AppBottomBar(
         // 橢圓形（Capsule / Pill）外觀
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.background,
             shadowElevation = 8.dp,
             tonalElevation = 3.dp,
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
-            )
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
@@ -121,7 +118,7 @@ fun AppBottomBar(
     }
 }
 
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 private fun AppBottomBarPreview() {
    GongchaTheme {
@@ -129,7 +126,9 @@ private fun AppBottomBarPreview() {
             cartItemsCount = 999,
             destinations = TopLevelDestination.entries,
             onNavigateToDestination = {},
-            currentDestination = null
+            currentDestination = NavDestination(
+                TopLevelDestination.MEMBER.name
+            )
         )
     }
 }

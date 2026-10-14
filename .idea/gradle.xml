@@ -23,14 +23,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/auth" />
-            <option value="$PROJECT_DIR$/auth/data" />
-            <option value="$PROJECT_DIR$/auth/domain" />
             <option value="$PROJECT_DIR$/auth/presentation" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/cart" />
-            <option value="$PROJECT_DIR$/cart/data" />
-            <option value="$PROJECT_DIR$/cart/domain" />
             <option value="$PROJECT_DIR$/cart/presentation" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/data" />
@@ -45,8 +41,6 @@
             <option value="$PROJECT_DIR$/history/domain" />
             <option value="$PROJECT_DIR$/history/presentation" />
             <option value="$PROJECT_DIR$/member" />
-            <option value="$PROJECT_DIR$/member/data" />
-            <option value="$PROJECT_DIR$/member/domain" />
             <option value="$PROJECT_DIR$/member/presentation" />
             <option value="$PROJECT_DIR$/menu" />
             <option value="$PROJECT_DIR$/menu/data" />
