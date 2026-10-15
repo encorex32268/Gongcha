@@ -3,6 +3,7 @@
 commits: 
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
+| `0169966` | docs: replace local demo video with YouTube Shorts and add firestore seed data documentation | 刪除本機大型展示檔 `demo/demo.mp4`，改用 YouTube Shorts 展示影片連結（包含高品質封面預覽）；新增 Firestore 門市與飲品種子資料檔（`firestore_data/stores.json` 與 `firestore_data/teas.json`），並於中/英/日三語系 README 之 Firebase 配置步驟中補充初始資料建立指南。 |
 | `6761da7` | feat(logging): plant Timber DebugTree and replace stdout prints with Timber logs | 於 `GongchaApp` 判斷 DEBUG 模式初始化 `Timber.DebugTree()`，並替 `app`、`auth:presentation`、`core:network` 模組導入 `timber` 依賴；將 `GoogleAuthManager` 與 `FirebaseRemoteDataSource` 內部之標準輸出（`println`）全面替換為結構化 `Timber.d` 偵錯日誌，清理非必要之除錯列印。 |
 | `245d0cb` | feat(history): update HistoryItemCard preview for all order statuses and add screenshots with demo video | 更新 `HistoryItemCard` Preview 巡覽顯示所有訂單狀態（`OrderStatus.entries`），方便快速檢驗卡片於待接單、製作中、已完成等各狀態下的視覺呈現；新增應用程式實機操作展示影片（`demo/demo.mp4`）與主要功能畫面截圖（登入、門市選取、菜單、客製化點餐、購物車、歷史訂單與狀態、會員中心與等級卡片）。 |
 | `afaa0ab` | feat: adopt AppBackgroundScaffold, enhance Google sign-in UI, prune phone auth, and sync selected store in cart | 新增共用元件 `AppBackgroundScaffold` 統一深淺色漸層背景並套用至各畫面（Login/Menu/TeaOrder/Cart/History）；`TeaOrderScreen` 支援預測性返回（`PredictiveBackHandler`）；移除過時的簡訊驗證碼與手機登入流程，改用向量繪製的 `GoogleSignInButton` 元件與自適應主題色；`CartRepository` 與 `OfflineFirstCartRepository` 新增 `selectedStore` 狀態流，於 `CartViewModel` 監聽同步門市名稱並縮短項目數量防抖延遲；清理導航圖中未使用的 `NavController` 參數與 `CodeVerifyRoute`；於 `.gitignore` 忽略 `.kotlin` 快取目錄。 |
