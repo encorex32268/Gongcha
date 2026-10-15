@@ -90,7 +90,6 @@ class MenuRepositoryImpl(
                 val remoteStoresResult = remoteDataSource.getStores()
                 remoteStoresResult
                     .onSuccess { stores ->
-                        println("Stores")
                         applicationScope.launch {
                             localDataSource.upsertStores(
                                 stores.map { it.toStoreEntity() }

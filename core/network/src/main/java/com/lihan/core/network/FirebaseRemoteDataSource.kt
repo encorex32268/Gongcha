@@ -21,6 +21,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 
@@ -32,12 +33,12 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         private const val DOC_TEAS = "teas"
         private const val DOC_STORES = "stores"
         private const val DOC_VERSIONS = "versions"
-        private const val DOC_ORDERS = "orders"
         private const val DOC_USERS = "users"
         private const val DOC_USERS_ORDERS = "orders"
     }
 
     override suspend fun getTeas(): Result<List<Tea>, DataError> {
+        Timber.d("Firebase: GetTeas")
         return safeFirebaseCall(
             action = {
                 val result = firebaseStore
@@ -51,6 +52,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     }
 
     override suspend fun getStores(): Result<List<Store>, DataError> {
+        Timber.d("Firebase: GetStores")
         return safeFirebaseCall(
             action = {
                 val result = firebaseStore
@@ -64,6 +66,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     }
 
     override suspend fun getVersionCode(versionKey: String): Result<Int, DataError> {
+        Timber.d("Firebase: VersionCode - $versionKey")
         return safeFirebaseCall(
             action = {
                 val result = firebaseStore
@@ -78,6 +81,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     }
 
     override suspend fun getHistories(userId: String): Result<List<History>, DataError>{
+        Timber.d("Firebase: Histories - $userId")
         return safeFirebaseCall(
             action = {
                 val result = firebaseStore
@@ -97,6 +101,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         userId: String,
         cartItems: List<CartItem>
     ): EmptyResult<DataError>{
+        Timber.d("Firebase: Checkout - $userId - $cartItems")
         return safeFirebaseCall {
             withTimeoutOrNull(8.seconds){
                 val docRef = firebaseStore
@@ -116,6 +121,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     }
 
     override suspend fun createUser(user: User): EmptyResult<DataError> {
+        Timber.d("Firebase: CreateUser - $user")
         return safeFirebaseCall(
             action = {
                 val docRef = firebaseStore
@@ -130,6 +136,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     }
 
     override suspend fun getUserById(id: String): Result<User?, DataError>{
+        Timber.d("Firebase: GetUserById - $id")
         return safeFirebaseCall(
             action = {
                 val docRef = firebaseStore
@@ -148,6 +155,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
         userId: String,
         orderId: String
     ): EmptyResult<DataError> {
+        Timber.d("Firebase: CancelOrder - userId:$userId , orderId:$orderId")
         return safeFirebaseCall(
             action = {
                 firebaseStore
@@ -167,6 +175,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
     ): Result<T, DataError> = try {
         Result.Success(action())
     } catch (e: CancellationException) {
+        Timber.d("Firebase: CancellationException: ${e.localizedMessage}")
         throw e
     } catch (e: FirebaseFirestoreException) {
         val error = when (e.code) {
@@ -178,10 +187,13 @@ class FirebaseRemoteDataSource: RemoteDataSource {
             FirebaseFirestoreException.Code.CANCELLED -> DataError.Network.CANCELED
             else -> DataError.Network.SERVER_ERROR
         }
+        Timber.d("Firebase: FirebaseFirestoreException: ${e.localizedMessage}")
         Result.Error(error)
     } catch (e: FirebaseNetworkException) {
+        Timber.d("Firebase: FirebaseNetworkException: ${e.localizedMessage}")
         Result.Error(DataError.Network.NO_INTERNET)
     } catch (e: Exception) {
+        Timber.d("Firebase: Exception: ${e.localizedMessage}")
         Result.Error(DataError.Network.UNKNOWN)
     }
 
@@ -203,6 +215,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
                 teas = teas
             )
         }catch (e: Exception){
+            Timber.d("Firebase: ToHistory Exception: ${e.localizedMessage}")
             e.printStackTrace()
             null
         }
@@ -237,6 +250,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
             )
 
         }catch (e: Exception){
+            Timber.d("Firebase: ToTea Exception: ${e.localizedMessage}")
             e.printStackTrace()
             null
         }
@@ -270,6 +284,7 @@ class FirebaseRemoteDataSource: RemoteDataSource {
                 businessHours = businessHours
             )
         } catch (e: Exception) {
+            Timber.d("Firebase: ToStore Exception: ${e.localizedMessage}")
             e.printStackTrace()
             null
         }

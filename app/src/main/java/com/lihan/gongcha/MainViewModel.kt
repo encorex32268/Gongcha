@@ -51,7 +51,7 @@ class MainViewModel(
         viewModelScope.launch {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val uid = currentUser?.uid?:""
-            println("Uid: ${uid}")
+
             val startDestination = if (uid.isBlank()){
                 AuthGraph
             }else{

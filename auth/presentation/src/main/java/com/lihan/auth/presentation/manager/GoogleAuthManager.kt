@@ -14,6 +14,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.lihan.core.domain.util.DataError
 import com.lihan.core.domain.util.Result
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import kotlin.coroutines.resume
 
 class GoogleAuthManager {
@@ -30,7 +31,7 @@ class GoogleAuthManager {
         activity: Activity,
         webClientId: String
     ): Result<FirebaseUser, DataError> {
-
+        Timber.d("FirebaseAuth SignIn")
         val credentialManager = CredentialManager.create(activity)
         // 1. 設定 Google ID 請求選項
         val googleIdOption = GetGoogleIdOption.Builder()
@@ -65,14 +66,18 @@ class GoogleAuthManager {
                 Result.Error(DataError.Firebase.NOT_SUPPORT_CREDENTIAL)
             }
         } catch (e: GetCredentialCancellationException) {
+            Timber.d("FirebaseAuth SignIn GetCredentialCancellationException: ${e.localizedMessage}")
+            Timber.d("FirebaseAuth User cancel signIn not exception")
             e.printStackTrace()
             // 使用者主動取消/滑掉 Bottom Sheet，不算系統錯誤
 //            Result.failure(Exception("使用者已取消登入"))
             Result.Error(DataError.Firebase.GET_SIGNING_CANCELLED)
         } catch (e: GetCredentialException) {
+            Timber.d("FirebaseAuth SignIn GetCredentialException: ${e.localizedMessage}")
             e.printStackTrace()
             Result.Error(DataError.Firebase.GET_CREDENTIAL_FAILED)
         } catch (e: Exception) {
+            Timber.d("FirebaseAuth SignIn Exception: ${e.localizedMessage}")
             e.printStackTrace()
             Result.Error(DataError.Firebase.UNKNOWN)
         }
@@ -80,6 +85,7 @@ class GoogleAuthManager {
 
 
     suspend fun signInAnonymously(): Result<FirebaseUser, DataError> = suspendCancellableCoroutine { continuation ->
+        Timber.d("FirebaseAuth SignInAnonymously")
         FirebaseAuth.getInstance()
             .signInAnonymously()
             .addOnCompleteListener{
@@ -90,10 +96,12 @@ class GoogleAuthManager {
                 }
             }
             .addOnFailureListener {
+                Timber.d("FirebaseAuth SignInAnonymously Failed ${it.localizedMessage}")
                 continuation.resume(Result.Error(DataError.Firebase.SIGNING_FAILED))
             }
 
         continuation.invokeOnCancellation {
+            Timber.d("FirebaseAuth SignInAnonymously Canceled ${it?.localizedMessage}")
             continuation.resume(Result.Error(DataError.Firebase.CANCELED))
         }
     }
@@ -107,17 +115,21 @@ class GoogleAuthManager {
         activity: Activity,
         idToken: String
     ): Result<FirebaseUser, DataError> = suspendCancellableCoroutine { continuation ->
+        Timber.d("FirebaseAuth SignInWithFirebase")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     if (user != null) {
+                        Timber.d("FirebaseAuth SignInWithFirebase Successful User: $user")
                         continuation.resume(Result.Success(user))
                     } else {
+                        Timber.d("FirebaseAuth SignInWithFirebase Successful User: UNKNOWN")
                         continuation.resume(Result.Error(DataError.Firebase.UNKNOWN_USER))
                     }
                 } else {
+                    Timber.d("FirebaseAuth SignInWithFirebase Failure Signing Failed")
                     continuation.resume(
                         Result.Error(DataError.Firebase.SIGNING_FAILED)
                     )

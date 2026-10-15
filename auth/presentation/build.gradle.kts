@@ -22,4 +22,5 @@ dependencies {
     implementation(libs.androidx.credentials)
     //noinspection LoginCredentials
     implementation(libs.google.id)
+    implementation(libs.timber)
 }

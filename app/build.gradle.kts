@@ -32,7 +32,7 @@ dependencies {
     implementation(libs.androidx.navigation)
 
     implementation(libs.kotlinx.serialization.json)
-
+    implementation(libs.timber)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
