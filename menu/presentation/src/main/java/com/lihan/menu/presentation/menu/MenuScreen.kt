@@ -55,6 +55,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.lihan.core.presentation.designsystem.AppBackgroundScaffold
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.BackgroundGradient
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
@@ -131,14 +132,12 @@ fun MenuScreen(
     sharedTransitionScope: SharedTransitionScope?=null,
     animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
-    Scaffold(
+    AppBackgroundScaffold(
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(
             modifier = Modifier.navigationBarsPadding().padding(bottom = 56.dp),
-            hostState = snackbarHostState) },
-        modifier = Modifier.background(
-            brush = BackgroundGradient
-        ),
-        containerColor = Color.Transparent,
+            hostState = snackbarHostState)
+        },
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -198,12 +197,12 @@ fun MenuScreen(
                 }
             )
         }
-    ) { padding ->
+    ){ paddingValues ->
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(paddingValues)
                 .padding(horizontal = 12.dp),
             contentPadding = PaddingValues(bottom = 72.dp)
         ) {
@@ -331,8 +330,6 @@ fun MenuScreen(
             )
         }
     }
-
-
 }
 
 @PreviewLightDark

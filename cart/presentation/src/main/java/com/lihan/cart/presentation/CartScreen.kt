@@ -2,6 +2,7 @@
 
 package com.lihan.cart.presentation
 
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +41,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,6 +53,7 @@ import com.lihan.core.domain.model.Ice
 import com.lihan.core.domain.model.Size
 import com.lihan.core.domain.model.Sugar
 import com.lihan.core.domain.model.Topping
+import com.lihan.core.presentation.designsystem.AppBackgroundScaffold
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
@@ -109,8 +113,8 @@ fun CartScreen(
         }
     }
 
-
-    Scaffold(
+    AppBackgroundScaffold(
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(
                 modifier = Modifier
@@ -123,17 +127,31 @@ fun CartScreen(
             TopAppBar(
                 title = {
                     Text(
-                        stringResource(R.string.cart_title)
+                        text = buildAnnotatedString {
+                            append(stringResource(R.string.cart_title))
+                            if (state.selectedStore != null){
+                                withStyle(
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        color = MaterialTheme.colorScheme.primary
+                                    ).toSpanStyle()
+                                ){
+                                    append(
+                                        " - " + state.selectedStore.name
+                                    )
+                                }
+                            }
+                        }
                     )
                 }
             )
         }
-    ) { padding ->
+    ) { paddingValues ->
+
         if (state.cartItems.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
+                    .padding(paddingValues)
                     .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -149,7 +167,7 @@ fun CartScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

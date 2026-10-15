@@ -16,3 +16,4 @@ local.properties
 .idea
 /.agent/*
 .idea/misc.xml
+.kotlin

@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.lihan.gongcha.navigation.AppBottomBar
 import com.lihan.gongcha.navigation.AppState
+import com.lihan.gongcha.navigation.AuthGraph
+import com.lihan.gongcha.navigation.MenuGraph
 import com.lihan.gongcha.navigation.TopLevelDestination
 import com.lihan.gongcha.navigation.graphs.authGraph
 import com.lihan.gongcha.navigation.graphs.historyGraph
@@ -25,7 +27,6 @@ import com.lihan.gongcha.navigation.graphs.memberGraph
 import com.lihan.gongcha.navigation.graphs.menuGraph
 import com.lihan.gongcha.navigation.graphs.shoppingCartGraph
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavRoot(
     state: MainState,
@@ -41,12 +42,14 @@ fun NavRoot(
                 startDestination = state.startDestination
             ) {
                 authGraph(
-                    navController = appState.navController,
                     navigateToMenu = {
-                        appState.navigateToTopLevelDestination(TopLevelDestination.MENU)
+                        appState.navController.navigate(MenuGraph) {
+                            popUpTo<AuthGraph> {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
-                // Menu Graph (Scoped SharedTransitionScope for tea image enlargement)
                 menuGraph(
                     navController = appState.navController,
                     navigateToMember = {
@@ -58,15 +61,9 @@ fun NavRoot(
                     signOut = signOut,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
-                shoppingCartGraph(
-                    navController = appState.navController
-                )
-                historyGraph(
-                    navController = appState.navController
-                )
-                memberGraph(
-                    navController = appState.navController
-                )
+                shoppingCartGraph()
+                historyGraph()
+                memberGraph()
             }
             AnimatedVisibility(
                 modifier = Modifier

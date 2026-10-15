@@ -135,6 +135,21 @@ val ArtisanalTeaBorderInactive = Color(0xFFD8CFC4)
 val ArtisanalMutedEarthGrey = Color(0xFF6E675F)
 val ArtisanalWarmStone = Color(0xFFA49D94)
 
+val GoogleSignIn: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()){
+        Color(0xFF1F1F1F)
+    }else{
+        Color(0xFFE3E3E3)
+    }
+
+val GoogleSignInText: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()){
+        Color(0xFFE3E3E3)
+    }else{
+        Color(0xFF1F1F1F)
+    }
 
 val MemberPointsColor = Color(0xFFAD6028)
 val MemberTextColor = Color(0xFF171310)

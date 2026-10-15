@@ -2,6 +2,8 @@
 
 package com.lihan.menu.presentation.tea_order
 
+import androidx.activity.BackEventCompat
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -40,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.lihan.core.presentation.designsystem.AppBackgroundScaffold
 import com.lihan.core.presentation.designsystem.PrimaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaIcons
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
@@ -52,7 +55,9 @@ import com.lihan.menu.presentation.tea_order.components.SectionCard
 import com.lihan.menu.presentation.tea_order.components.SizeSelection
 import com.lihan.menu.presentation.tea_order.components.SugarSelection
 import com.lihan.menu.presentation.tea_order.components.ToppingSelection
+import kotlinx.coroutines.flow.Flow
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
 fun TeaOrderRoot(
@@ -88,14 +93,24 @@ fun TeaOrderRoot(
 fun TeaOrderScreen(
     state: TeaOrderState,
     onAction: (TeaOrderAction) -> Unit,
-    modifier: Modifier = Modifier,
     sharedTransitionScope: SharedTransitionScope?=null,
     animatedVisibilityScope: AnimatedVisibilityScope?=null
 ) {
     val tea = state.tea
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+
+    // Handle back event
+    PredictiveBackHandler { progress: Flow<BackEventCompat> ->
+        try {
+            progress.collect { backEvent ->
+                onAction(TeaOrderAction.OnNavigateBack)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        }
+    }
+
+    AppBackgroundScaffold(
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
@@ -150,12 +165,12 @@ fun TeaOrderScreen(
                 contentPadding = PaddingValues(12.dp)
             )
         }
-    ) { innerPadding ->
+    ){ paddingValues ->
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(paddingValues),
             contentPadding = PaddingValues(horizontal = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
@@ -189,22 +204,22 @@ fun TeaOrderScreen(
                 }
             }
             item {
-               Box(
-                   modifier = Modifier.fillMaxWidth(),
-                   contentAlignment = Alignment.Center
-               ){
-                   Counter(
-                       iconButtonSize = 36.dp,
-                       textSize = 24.sp,
-                       count = state.count,
-                       onPlusClick = {
-                           onAction(TeaOrderAction.OnPlusClick)
-                       },
-                       onMinusClick = {
-                           onAction(TeaOrderAction.OnMinusClick)
-                       }
-                   )
-               }
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ){
+                    Counter(
+                        iconButtonSize = 36.dp,
+                        textSize = 24.sp,
+                        count = state.count,
+                        onPlusClick = {
+                            onAction(TeaOrderAction.OnPlusClick)
+                        },
+                        onMinusClick = {
+                            onAction(TeaOrderAction.OnMinusClick)
+                        }
+                    )
+                }
             }
             item(key = "size_section") {
                 SectionCard(
@@ -269,8 +284,6 @@ fun TeaOrderScreen(
                 Spacer(Modifier.height(36.dp))
             }
         }
-
-
     }
 }
 

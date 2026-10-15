@@ -43,4 +43,5 @@ class AppState(val navController: NavHostController) {
         }
         navController.navigate(topLevelDestination.startRoute, topLevelNavOptions)
     }
+
 }

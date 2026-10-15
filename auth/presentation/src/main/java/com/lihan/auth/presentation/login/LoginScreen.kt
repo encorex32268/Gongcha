@@ -34,13 +34,16 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.auth.presentation.R
+import com.lihan.auth.presentation.login.components.GoogleSignInButton
+import com.lihan.core.presentation.designsystem.AppBackgroundScaffold
+import com.lihan.core.presentation.designsystem.PrimaryButton
+import com.lihan.core.presentation.designsystem.SecondaryButton
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginRoot(
-    onNavigateToCodeVerify: () -> Unit,
     onNavigateToMenu: () -> Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
@@ -48,7 +51,6 @@ fun LoginRoot(
 
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
         when(uiEvent){
-            LoginEvent.OnNavigateToCodeVerify -> onNavigateToCodeVerify()
             LoginEvent.OnNavigateToMenu -> onNavigateToMenu()
         }
     }
@@ -65,7 +67,8 @@ fun LoginScreen(
     onAction: (LoginAction) -> Unit,
 ) {
     val activity = LocalActivity.current
-    Scaffold(
+
+    AppBackgroundScaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
 
@@ -84,22 +87,15 @@ fun LoginScreen(
                 contentDescription = null
             )
             Spacer(Modifier.height(8.dp))
-            IconButton(
-                modifier = Modifier.fillMaxWidth(fraction = 0.5f),
+            GoogleSignInButton(
                 onClick = {
                     if (activity != null){
                         onAction(LoginAction.OnGoogleSignIn(activity))
                     }
-                }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.google_sigin_button_pill),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-            }
-
-            Spacer(Modifier.height(4.dp))
+                },
+                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+            )
+            Spacer(Modifier.height(8.dp))
             TextButton(
                 modifier = Modifier.fillMaxWidth(fraction = 0.75f),
                 onClick = {
@@ -132,9 +128,7 @@ fun LoginScreen(
                 )
             }
         }
-
     }
-
 }
 
 @PreviewLightDark

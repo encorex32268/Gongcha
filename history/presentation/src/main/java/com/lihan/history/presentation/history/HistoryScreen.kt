@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.core.domain.model.History
 import com.lihan.core.domain.model.OrderStatus
+import com.lihan.core.presentation.designsystem.AppBackgroundScaffold
 import com.lihan.core.presentation.designsystem.ui.theme.GongchaTheme
 import com.lihan.core.presentation.ui.ObserveAsEvents
 import com.lihan.core.presentation.ui.components.NoticeCard
@@ -98,7 +99,7 @@ fun HistoryScreen(
     snackbarHostState: SnackbarHostState,
     onAction: (HistoryAction) -> Unit,
 ) {
-    Scaffold(
+    AppBackgroundScaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(
@@ -114,7 +115,7 @@ fun HistoryScreen(
                     Text(
                         text = stringResource(R.string.history_title)
                     )
-                },
+                }
             )
         }
     ) { paddingValues ->

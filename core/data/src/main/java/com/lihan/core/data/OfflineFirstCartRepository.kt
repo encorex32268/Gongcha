@@ -5,9 +5,11 @@ package com.lihan.core.data
 import com.lihan.core.database.LocalDataSource
 import com.lihan.core.database.mapper.toCartItem
 import com.lihan.core.database.mapper.toCartItemEntity
+import com.lihan.core.database.mapper.toStore
 import com.lihan.core.domain.AppDataStore
 import com.lihan.core.domain.cart.CartRepository
 import com.lihan.core.domain.model.CartItem
+import com.lihan.core.domain.model.Store
 import com.lihan.core.domain.util.DataError
 import com.lihan.core.domain.util.EmptyResult
 import com.lihan.core.domain.util.Result
@@ -22,6 +24,13 @@ class OfflineFirstCartRepository(
     private val remoteDataSource: RemoteDataSource,
     private val appDataStore: AppDataStore,
 ): CartRepository {
+
+    override val selectedStore: Flow<Store?>
+        get() = appDataStore
+            .storeId
+            .map { id ->
+                localDataSource.getStoreById(id)?.toStore()
+            }
 
     override fun getCarItems(): Flow<List<CartItem>> {
         return localDataSource

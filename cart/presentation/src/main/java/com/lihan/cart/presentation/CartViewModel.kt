@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -32,11 +33,11 @@ import kotlin.time.Duration.Companion.milliseconds
 class CartViewModel(
     private val repository: CartRepository,
     private val authRepository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
-    private var updateItemCountJob: Job?=null
+    private var updateItemCountJob: Job? = null
 
     private val _uiEvent = Channel<CartEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -47,6 +48,7 @@ class CartViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 observeCartItems()
+                observeSelectedStore()
                 hasLoadedInitialData = true
             }
         }
@@ -60,88 +62,89 @@ class CartViewModel(
         when (action) {
             is CartAction.OnMinusClick -> onMinusItem(action.id)
             is CartAction.OnPlusClick -> onPlusItem(action.id)
-            is CartAction.OnShowDeleteDialog -> showDeleteDialog(action.text,action.cartItemId)
+            is CartAction.OnShowDeleteDialog -> showDeleteDialog(action.text, action.cartItemId)
             CartAction.OnDismissDeleteDialog -> dismissDeleteDialog()
             CartAction.OnConfirmDeleteClick -> onDeleteCartItem()
             CartAction.OnCheckout -> checkout()
         }
     }
 
-    private fun checkout(){
-        if (_state.value.isCheckoutLoading){
+    private fun checkout() {
+        if (_state.value.isCheckoutLoading) {
             return
         }
 
         viewModelScope.launch {
             _state.update { it.copy(isCheckoutLoading = true) }
-            try {
-                repository
-                    .checkout()
-                    .onError { error ->
-                        _state.update {
-                            it.copy(isCheckoutLoading = false)
-                        }
-                        _uiEvent.send(CartEvent.OnCheckoutFail(errorMessage = error.toUiText()))
-                    }
-                    .onSuccess {
-                        val currentUser = authRepository.user.first()
-                        if (currentUser != null){
-                            repository.clearCartItemsByUserId(userId = currentUser.id)
-                        }
 
-                        _state.update { it.copy(
-                            isCheckoutLoading = false)
-                        }
-                        _uiEvent.send(CartEvent.OnCheckoutSuccess)
+            repository
+                .checkout()
+                .onError { error ->
+                    _state.update {
+                        it.copy(isCheckoutLoading = false)
                     }
-            } catch (e: Exception) {
-                ensureActive()
-                e.printStackTrace()
-                _state.update { it.copy(isCheckoutLoading = false) }
-            }
+                    _uiEvent.send(CartEvent.OnCheckoutFail(errorMessage = error.toUiText()))
+                }
+                .onSuccess {
+                    val currentUser = authRepository.user.first()
+                    if (currentUser != null) {
+                        repository.clearCartItemsByUserId(userId = currentUser.id)
+                    }
+
+                    _state.update {
+                        it.copy(
+                            isCheckoutLoading = false
+                        )
+                    }
+                    _uiEvent.send(CartEvent.OnCheckoutSuccess)
+                }
         }
     }
 
 
-
-
-    private fun showDeleteDialog(text: String, cartItemId: Int?){
-        if (cartItemId == null){
+    private fun showDeleteDialog(text: String, cartItemId: Int?) {
+        if (cartItemId == null) {
             return
         }
-        _state.update { it.copy(
-            deleteItemContent = text,
-            selectedCartItemId = cartItemId
-        ) }
+        _state.update {
+            it.copy(
+                deleteItemContent = text,
+                selectedCartItemId = cartItemId
+            )
+        }
     }
 
     private fun dismissDeleteDialog() {
-        _state.update { it.copy(
-            deleteItemContent = null,
-            selectedCartItemId = null
-        ) }
+        _state.update {
+            it.copy(
+                deleteItemContent = null,
+                selectedCartItemId = null
+            )
+        }
     }
 
-    private fun onDeleteCartItem(){
-        if (state.value.selectedCartItemId == null){
+    private fun onDeleteCartItem() {
+        if (state.value.selectedCartItemId == null) {
             return
         }
         viewModelScope.launch {
             repository.removeCartItem(state.value.selectedCartItemId!!)
-            _state.update { it.copy(
-                deleteItemContent = null,
-                selectedCartItemId = null
-            ) }
+            _state.update {
+                it.copy(
+                    deleteItemContent = null,
+                    selectedCartItemId = null
+                )
+            }
         }
     }
 
-    private fun onMinusItem(id: Int?){
-        if(id == null){
+    private fun onMinusItem(id: Int?) {
+        if (id == null) {
             return
         }
         updateItemCountJob?.cancel()
         updateItemCountJob = viewModelScope.launch {
-            delay(300L.milliseconds)
+            delay(200L.milliseconds)
             val currentState = state.value
             val currentCount = currentState.cartItems.find { it.id == id }?.count ?: return@launch
             if (currentCount == 1) return@launch
@@ -150,33 +153,46 @@ class CartViewModel(
     }
 
 
-    private fun onPlusItem(id: Int?){
-        if(id == null){
+    private fun onPlusItem(id: Int?) {
+        if (id == null) {
             return
         }
         updateItemCountJob?.cancel()
         updateItemCountJob = viewModelScope.launch {
-            delay(300L.milliseconds)
+            delay(200L.milliseconds)
             val currentState = state.value
             val currentCount = currentState.cartItems.find { it.id == id }?.count ?: return@launch
             repository.updateCartItemCount(id, currentCount + 1)
         }
     }
 
+    private fun observeSelectedStore(){
+        repository
+            .selectedStore
+            .distinctUntilChanged()
+            .onEach { store ->
+                _state.update { it.copy(
+                    selectedStore = store
+                ) }
 
-    private fun observeCartItems(){
+            }.launchIn(viewModelScope)
+    }
+
+    private fun observeCartItems() {
         authRepository.user
             .flatMapLatest { user ->
-                if (user == null){
+                if (user == null) {
                     emptyFlow()
-                }else{
+                } else {
                     repository.getCartItemsByUserId(user.id)
                 }
             }.onEach { cartItems ->
                 val storeItems = cartItems.sortedByDescending { it.id }
-                _state.update { it.copy(
-                    cartItems = storeItems
-                ) }
+                _state.update {
+                    it.copy(
+                        cartItems = storeItems
+                    )
+                }
             }.launchIn(viewModelScope)
     }
 
