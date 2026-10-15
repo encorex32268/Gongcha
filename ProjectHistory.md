@@ -3,6 +3,7 @@
 commits: 
 | SHA | Commit訊息 | 主要變更 |
 | :--- | :--- | :--- |
+| `245d0cb` | feat(history): update HistoryItemCard preview for all order statuses and add screenshots with demo video | 更新 `HistoryItemCard` Preview 巡覽顯示所有訂單狀態（`OrderStatus.entries`），方便快速檢驗卡片於待接單、製作中、已完成等各狀態下的視覺呈現；新增應用程式實機操作展示影片（`demo/demo.mp4`）與主要功能畫面截圖（登入、門市選取、菜單、客製化點餐、購物車、歷史訂單與狀態、會員中心與等級卡片）。 |
 | `afaa0ab` | feat: adopt AppBackgroundScaffold, enhance Google sign-in UI, prune phone auth, and sync selected store in cart | 新增共用元件 `AppBackgroundScaffold` 統一深淺色漸層背景並套用至各畫面（Login/Menu/TeaOrder/Cart/History）；`TeaOrderScreen` 支援預測性返回（`PredictiveBackHandler`）；移除過時的簡訊驗證碼與手機登入流程，改用向量繪製的 `GoogleSignInButton` 元件與自適應主題色；`CartRepository` 與 `OfflineFirstCartRepository` 新增 `selectedStore` 狀態流，於 `CartViewModel` 監聽同步門市名稱並縮短項目數量防抖延遲；清理導航圖中未使用的 `NavController` 參數與 `CodeVerifyRoute`；於 `.gitignore` 忽略 `.kotlin` 快取目錄。 |
 | `9efc582` | assets(app): update launcher icons, add monochrome adaptive icon, and clean up legacy assets | 更新應用程式啟動圖示資源（包含 Adaptive Icon 的 background、foreground 與 monochrome 單色圖示，及各解析度 WebP 圖檔）、刪除未使用的圓形圖示（`ic_launcher_round`）與會員暫存圖檔 `kocha_20261007.png`，並以 `play_store_512.png` 替換舊的 Play Store 圖示。 |
 -------
