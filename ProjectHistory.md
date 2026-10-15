@@ -1,4 +1,10 @@
 -------
+2026.10.15
+commits: 
+| SHA | Commit訊息 | 主要變更 |
+| :--- | :--- | :--- |
+| `9efc582` | assets(app): update launcher icons, add monochrome adaptive icon, and clean up legacy assets | 更新應用程式啟動圖示資源（包含 Adaptive Icon 的 background、foreground 與 monochrome 單色圖示，及各解析度 WebP 圖檔）、刪除未使用的圓形圖示（`ic_launcher_round`）與會員暫存圖檔 `kocha_20261007.png`，並以 `play_store_512.png` 替換舊的 Play Store 圖示。 |
+-------
 2026.10.14
 commits: 
 | SHA | Commit訊息 | 主要變更 |
