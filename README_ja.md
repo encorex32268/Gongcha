@@ -44,8 +44,10 @@
 ### 🎬 アプリ操作デモ動画 (Demo Video)
 
 <div align="center">
-  <video src="demo/demo.mp4" width="360" controls></video>
-  <p><sub>👉 ブラウザで再生できない場合は、<a href="demo/demo.mp4"><b>こちらからデモ動画をダウンロードまたは閲覧できます (demo/demo.mp4)</b></a></sub></p>
+  <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share" target="_blank">
+    <img src="https://img.youtube.com/vi/uP_M9odl3zg/maxresdefault.jpg" alt="Koalacha アプリ操作デモ動画" width="360" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  </a>
+  <p><sub>▶️ <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share"><b>YouTube でアプリデモ動画を視聴する (YouTube Shorts)</b></a></sub></p>
 </div>
 
 ### 📱 主要画面ギャラリー (Core Features)
@@ -224,10 +226,15 @@ flowchart TD
    cd Gongcha
    ```
 
-2. **Firebase の設定**
-   - Firebase Console から `google-services.json` をダウンロードし、`app/` ディレクトリに配置します。
+2. **Firebase の設定と初期データ**
+   - Firebase Console から `google-services.json` をダウンロードし、`app/` ディレクトリに配置します（`app/google-services.json`）。
    - Firebase Authentication で「Google サインイン」と「匿名認証」を有効化します。
-   - Cloud Firestore で以下のコレクションを作成します：`teas`, `stores`, `versions`, `users`。
+   - Cloud Firestore のコレクション作成と初期データ登録：
+     - 本プロジェクトには `firestore_data/` ディレクトリ配下に初期データ JSON が同梱されています：
+       - [`firestore_data/stores.json`](firestore_data/stores.json)：店舗情報、住所、電話番号、営業時間。
+       - [`firestore_data/teas.json`](firestore_data/teas.json)：ドリンクメニュー一覧、多言語（日・英・中）表記、分類、価格、商品画像 URL。
+     - 上記 JSON ファイルを利用して、Firestore の `stores` および `teas` コレクションに初期データを登録してください。
+     - 差分同期を制御する `versions` コレクション（整数値の `versionCode` 属性）および `users` コレクションも併せて作成します。
 
 3. **Web Client ID の設定**
    - `local.properties` に Google Web Client ID を設定します：

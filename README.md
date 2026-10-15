@@ -44,8 +44,10 @@
 ### 🎬 App Demo Video
 
 <div align="center">
-  <video src="demo/demo.mp4" width="360" controls></video>
-  <p><sub>👉 If video playback is unavailable in your browser, <a href="demo/demo.mp4"><b>click here to view or download the demo video (demo/demo.mp4)</b></a></sub></p>
+  <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share" target="_blank">
+    <img src="https://img.youtube.com/vi/uP_M9odl3zg/maxresdefault.jpg" alt="Koalacha App Demo Video" width="360" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  </a>
+  <p><sub>▶️ <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share"><b>Watch Full App Demo on YouTube (YouTube Shorts)</b></a></sub></p>
 </div>
 
 ### 📱 Core Feature Showcase
@@ -224,10 +226,15 @@ flowchart TD
    cd Gongcha
    ```
 
-2. **Configure Firebase**
-   - Download `google-services.json` from your Firebase Console and place it into the `app/` folder.
+2. **Configure Firebase & Initial Data**
+   - Download `google-services.json` from your Firebase Console and place it into the `app/` folder (`app/google-services.json`).
    - Enable Firebase Authentication (Google Sign-In and Anonymous Auth).
-   - Create Cloud Firestore collections: `teas`, `stores`, `versions`, `users`.
+   - Set up Cloud Firestore:
+     - Pre-configured seed data is provided in the `firestore_data/` directory:
+       - [`firestore_data/stores.json`](firestore_data/stores.json): Initial store listings, addresses, phone numbers, and business hours.
+       - [`firestore_data/teas.json`](firestore_data/teas.json): Complete beverage catalog, multilingual descriptions, categories, pricing, and image URLs.
+     - Import or initialize documents in the `stores` and `teas` collections in Cloud Firestore using these JSON files.
+     - Also create `versions` (containing an integer `versionCode` field to trigger cache sync) and `users` collections.
 
 3. **Set Web Client ID**
    - Specify your Google Web Client ID in `local.properties`:

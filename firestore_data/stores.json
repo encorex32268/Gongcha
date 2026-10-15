@@ -1,0 +1,272 @@
+[
+  {
+    "address": "高雄市苓雅區光華一路230號",
+    "phone": "07-223-0193",
+    "businessHours": [
+      {
+        "open": "09:00",
+        "day": 1,
+        "close": "19:00"
+      },
+      {
+        "open": "09:00",
+        "day": 2,
+        "close": "19:00"
+      },
+      {
+        "open": "09:00",
+        "day": 3,
+        "close": "19:00"
+      },
+      {
+        "open": "09:00",
+        "day": 4,
+        "close": "19:00"
+      },
+      {
+        "open": "09:00",
+        "day": 5,
+        "close": "19:00"
+      },
+      {
+        "open": "10:00",
+        "day": 6,
+        "close": "17:30"
+      },
+      {
+        "open": "10:00",
+        "day": 0,
+        "close": "17:30"
+      }
+    ],
+    "name": "中正民生店",
+    "displayHours": "平日 09:00-19:00、假日 10:00-17:30",
+    "region": "南區",
+    "_id": "6YasAANfj3F2eagWpAT4"
+  },
+  {
+    "address": "屏東縣屏東市復興路46號",
+    "phone": "08-766-2185",
+    "businessHours": [
+      {
+        "open": "10:00",
+        "day": 1,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 2,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 3,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 4,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 5,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 6,
+        "close": "24:00"
+      },
+      {
+        "open": "10:00",
+        "day": 0,
+        "close": "24:00"
+      }
+    ],
+    "name": "屏東復興店",
+    "displayHours": "週一至週日 10:00~24:00",
+    "region": "南區",
+    "_id": "8rJcEf9OuU6LezYQb1wb"
+  },
+  {
+    "address": "屏東縣潮州鎮長興路54-3號",
+    "phone": "08-789-9932",
+    "businessHours": [
+      {
+        "open": "10:00",
+        "day": 1,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 2,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 3,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 4,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 5,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 6,
+        "close": "23:00"
+      },
+      {
+        "open": "10:00",
+        "day": 0,
+        "close": "23:00"
+      }
+    ],
+    "name": "潮州長興店",
+    "displayHours": "每日 10:00~23:00",
+    "region": "南區",
+    "_id": "SUz3RJF3VeWlwD0onNMR"
+  },
+  {
+    "address": "106台北市大安區仁愛路四段300巷19弄2號",
+    "phone": "02-2703-5851",
+    "businessHours": [
+      {
+        "open": "10:30",
+        "day": 1,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 2,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 3,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 4,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 5,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 6,
+        "close": "20:00"
+      },
+      {
+        "open": "10:30",
+        "day": 0,
+        "close": "20:00"
+      }
+    ],
+    "name": "台北大安光信店",
+    "displayHours": "週一至週日 10:30~20:00",
+    "region": "北區",
+    "_id": "VXXvp5fYRbWETkjweTUZ"
+  },
+  {
+    "address": "苗栗縣後龍鎮中華路151號",
+    "phone": "037-725-662",
+    "businessHours": [
+      {
+        "open": "09:30",
+        "day": 1,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 2,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 3,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 4,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 5,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 6,
+        "close": "21:00"
+      },
+      {
+        "open": "09:30",
+        "day": 0,
+        "close": "21:00"
+      }
+    ],
+    "name": "苗栗後龍店",
+    "displayHours": "週一至週日 09:30~21:00",
+    "region": "中區",
+    "_id": "cteeSQ63YUbfxfaYpGZr"
+  },
+  {
+    "address": "台北市松山區慶城街1之2號 戶外空間",
+    "phone": "02-2545-0008",
+    "businessHours": [
+      {
+        "open": "11:00",
+        "day": 1,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 2,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 3,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 4,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 5,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 6,
+        "close": "21:00"
+      },
+      {
+        "open": "11:00",
+        "day": 0,
+        "close": "21:00"
+      }
+    ],
+    "name": "台北松山慶城店",
+    "displayHours": "週一至週日 11:00~21:00",
+    "region": "北區",
+    "_id": "d3zXol8zDVKHqQhXuyVW"
+  }
+]

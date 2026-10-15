@@ -44,8 +44,10 @@
 ### 🎬 操作展示影片 (Demo Video)
 
 <div align="center">
-  <video src="demo/demo.mp4" width="360" controls></video>
-  <p><sub>👉 若瀏覽器無法直接播放，請點擊 <a href="demo/demo.mp4"><b>下載或檢視完整操作展示影片 (demo/demo.mp4)</b></a></sub></p>
+  <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share" target="_blank">
+    <img src="https://img.youtube.com/vi/uP_M9odl3zg/maxresdefault.jpg" alt="Koalacha 操作展示影片" width="360" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  </a>
+  <p><sub>▶️ <a href="https://youtube.com/shorts/uP_M9odl3zg?feature=share"><b>在 YouTube 上觀看完整操作展示 (YouTube Shorts)</b></a></sub></p>
 </div>
 
 ### 📱 核心功能畫面 (Core Features)
@@ -225,10 +227,15 @@ flowchart TD
    cd Gongcha
    ```
 
-2. **配置 Firebase**
-   - 將在 Firebase Console 取得的 `google-services.json` 放置於 `app/` 目錄下。
-   - 啟用 Firebase Authentication（Google 登入與 Anonymous 匿名登入）。
-   - 啟用 Cloud Firestore，建立相關集合（`teas`, `stores`, `versions`, `users`）。
+2. **配置 Firebase 與初始資料**
+   - 將在 Firebase Console 取得的 `google-services.json` 放置於 `app/` 目錄下（`app/google-services.json`）。
+   - 於 Firebase 控制台啟用 Firebase Authentication（Google 登入與 Anonymous 匿名登入）。
+   - 建立 Cloud Firestore 集合並匯入初始資料：
+     - 本專案於 `firestore_data/` 目錄下提供完整的預設資料範本：
+       - [`firestore_data/stores.json`](firestore_data/stores.json)：門市列表、地址、電話與營業時間。
+       - [`firestore_data/teas.json`](firestore_data/teas.json)：完整飲品菜單、中英文品名、分類、冰熱/糖度選項、價格與圖片連結。
+     - 可利用上述 JSON 檔案批次匯入或建立 Firestore 的 `stores` 與 `teas` 集合資料。
+     - 另外建立 `versions`（包含整數 `versionCode` 欄位以驅動版本檢查快取同步）與 `users` 集合。
 
 3. **配置 Web Client ID**
    - 於 `local.properties` 設定你的 Google Web Client ID：
