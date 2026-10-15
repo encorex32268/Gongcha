@@ -1,15 +1,27 @@
-# 🧋 Koalacha (Gongcha オンライン注文＆デジタル会員システム)
-
 <p align="center">
-  <a href="README.md">繁體中文</a> | <a href="README_en.md">English</a> | <b>日本語</b>
+  <img src="app/src/main/ic_launcher-playstore.png" width="96" height="96" alt="Koalacha App Icon" />
 </p>
 
-[![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://www.android.com/)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-blue.svg)](https://kotlinlang.org)
-[![Gradle](https://img.shields.io/badge/AGP-9.4.1-brightgreen.svg)](https://developer.android.com/build)
-[![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose%20(Material3)-orange.svg)](https://developer.android.com/jetpack/compose)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVI%20%2B%20Offline--First-purple.svg)]()
-[![Firebase](https://img.shields.io/badge/Backend-Firebase%20(Auth%20%2F%20Firestore)-yellow.svg)](https://firebase.google.com/)
+<h1 align="center">🧋 Koalacha</h1>
+
+<p align="center">
+  <b>Gongcha オンライン注文＆デジタル会員システム</b>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <a href="README_zh.md">繁體中文</a> | <b>日本語</b>
+</p>
+
+<p align="center">
+  <a href="https://www.android.com/"><img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform" /></a>
+  <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-2.4.20-blue.svg" alt="Kotlin" /></a>
+  <a href="https://developer.android.com/build"><img src="https://img.shields.io/badge/AGP-9.4.1-brightgreen.svg" alt="Gradle" /></a>
+  <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/UI-Jetpack%20Compose%20(Material3)-orange.svg" alt="Jetpack Compose" /></a>
+  <img src="https://img.shields.io/badge/Architecture-Clean%20%2B%20MVI%20%2B%20Offline--First-purple.svg" alt="Architecture" />
+  <a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Backend-Firebase%20(Auth%20%2F%20Firestore)-yellow.svg" alt="Firebase" /></a>
+</p>
+
+---
 
 **Koalacha** は、最新の Android アーキテクチャ設計標準に基づいて開発されたティードリンクのオンライン注文およびデジタル会員アプリです。**マルチモジュール・クリーンアーキテクチャ**、**オフラインファースト（Offline-First）** 同期、**Jetpack Compose（MVI パターン）** を採用し、店舗選択、ドリンクカスタマイズ、カート管理、即時注文決済、リアルタイム注文履歴追跡、デジタル会員証サービスを提供します。
 
@@ -54,95 +66,63 @@
 
 ## 🏛 システムアーキテクチャ設計
 
-本プロジェクトは、Gradle の **Convention Plugins (`build-logic`)** による統一管理のもと、**マルチモジュール Clean Architecture (Presentation - Domain - Data)** を採用しています。ドメインの複雑さに応じて適切なモジュール分割を実施：コア機能（`menu` や `history` など）は完全な3層構造（presentation / domain / data）を備え、UI に特化した機能（`auth`、`cart`、`member`）は `:core` 共通モジュールを直接活用することで、高い凝集度、疎結合、そしてビルドの並列高速化を実現しています。
+本プロジェクトは、Gradle の **Convention Plugins (`build-logic`)** による統一管理のもと、**マルチモジュール Clean Architecture (Presentation - Domain - Data)** を採用しています。
+
+アーキテクチャの明瞭性と開発効率のバランスを図るため、業務の複雑度に応じたモジュール設計を実施しています：
+- **完全3層構造機能 (`:menu`, `:history`)**：業務ロジックが多岐にわたる機能は、独立した `presentation`、`domain`、`data` サブモジュールを維持。
+- **UI特化機能 (`:auth:presentation`, `:cart:presentation`, `:member:presentation`)**：画面表示とインタラクションに特化し、`:core` 共通層のリポジトリやドメイン契約を直接利用することでボイラープレートを排除。
 
 ```mermaid
-graph TD
-    subgraph Application Layer
-        APP[":app<br/>(MainActivity, NavRoot, AppBottomBar)"]
+flowchart TD
+    APP["📱 :app<br/>(エントリーポイント、全体ナビゲーション、下部バー)"]
+
+    subgraph Features ["🎯 業務機能モジュール (Feature Modules)"]
+        direction LR
+        MENU["🍵 :menu<br/>(presentation / domain / data)"]
+        HISTORY["📜 :history<br/>(presentation / domain / data)"]
+        AUTH["🔐 :auth:presentation"]
+        CART["🛒 :cart:presentation"]
+        MEMBER["💳 :member:presentation"]
     end
 
-    subgraph Feature Modules
-        subgraph Auth Feature
-            AUTH_PRES[":auth:presentation"]
+    subgraph Core ["🧱 コア共通基盤 (Core Shared Infrastructure)"]
+        direction TB
+        subgraph UI_DS ["UI・デザイン (UI & Design)"]
+            CORE_UI[":core:presentation:ui"]
+            CORE_DS[":core:presentation:designsystem<br/>(和紙テーマ、共通Scaffold)"]
         end
-
-        subgraph Menu Feature
-            MENU_PRES[":menu:presentation"]
-            MENU_DOM[":menu:domain"]
-            MENU_DATA[":menu:data"]
-        end
-
-        subgraph Cart Feature
-            CART_PRES[":cart:presentation"]
-        end
-
-        subgraph History Feature
-            HIST_PRES[":history:presentation"]
-            HIST_DOM[":history:domain"]
-            HIST_DATA[":history:data"]
-        end
-
-        subgraph Member Feature
-            MEM_PRES[":member:presentation"]
+        subgraph Logic_Data ["ドメイン・データ (Domain & Data)"]
+            CORE_DOMAIN[":core:domain<br/>(ドメインモデル、Repository規約)"]
+            CORE_DATA[":core:data<br/>(オフラインキャッシュ、リポジトリ実装)"]
+            CORE_STORAGE[":core:database (Room) & :core:network (Firebase)"]
         end
     end
 
-    subgraph Core Presentation
-        CORE_UI[":core:presentation:ui<br/>(UiText, Components, NoticeCard)"]
-        CORE_DS[":core:presentation:designsystem<br/>(Theme, Colors, AppBackgroundScaffold)"]
-    end
-
-    subgraph Core Business & Data
-        CORE_DOMAIN[":core:domain<br/>(Models, Result, Repository Contracts)"]
-        CORE_DATA[":core:data<br/>(OfflineFirstCartRepository, DataStore, AuthRepo)"]
-        CORE_DB[":core:database<br/>(Room, Entities, DAOs, Migrations 1 to 5)"]
-        CORE_NET[":core:network<br/>(FirebaseRemoteDataSource, DTOs)"]
-    end
-
-    subgraph Build Logic
-        BUILD_LOGIC["build-logic:convention<br/>(AndroidApplication, FeatureUI, Room, etc.)"]
-    end
-
-    APP --> AUTH_PRES & MENU_PRES & CART_PRES & HIST_PRES & MEM_PRES
-    APP --> CORE_DS & CORE_UI
-
-    MENU_PRES --> MENU_DOM
-    MENU_DATA --> MENU_DOM & CORE_DB & CORE_NET & CORE_DOMAIN
-    HIST_PRES --> HIST_DOM
-    HIST_DATA --> HIST_DOM & CORE_DB & CORE_NET & CORE_DOMAIN
-
-    AUTH_PRES --> CORE_DATA & CORE_NET & CORE_DOMAIN
-    AUTH_PRES & MENU_PRES & CART_PRES & HIST_PRES & MEM_PRES --> CORE_DOMAIN
-    AUTH_PRES & MENU_PRES & CART_PRES & HIST_PRES & MEM_PRES --> CORE_UI & CORE_DS
-
-    CORE_UI --> CORE_DS & CORE_DOMAIN
-    CORE_DATA --> CORE_DOMAIN & CORE_DB & CORE_NET
-    CORE_DB --> CORE_DOMAIN
-    CORE_NET --> CORE_DOMAIN
+    APP ==> Features
+    APP --> UI_DS
+    Features ==> Core
+    CORE_DATA --> CORE_DOMAIN
+    CORE_DATA --> CORE_STORAGE
+    CORE_STORAGE --> CORE_DOMAIN
 ```
 
 ### モジュール役割詳細
 
-| モジュール名 | 役割と責務 |
-| :--- | :--- |
-| **`:app`** | アプリケーションのエントリーポイント、スプラッシュ画面、全体ナビゲーショングラフ（`NavRoot`、Type-Safe Routes）、フローティング下部ナビゲーションバー（`AppBottomBar`）、グローバルカート数量監視。 |
-| **`:menu:presentation`** | メニュー・店舗選択画面、カテゴリスライドチップ、カスタマイズ注文画面（氷・甘さ・トッピング・サイズ）、共有要素トランジション（Shared Element）および Android 14+ 予測型「戻る」ジェスチャー（`PredictiveBackHandler`）。 |
-| **`:menu:domain`** | メニュードメイン層：`MenuRepository` インターフェース、店舗およびドリンクのドメインモデル。 |
-| **`:menu:data`** | メニューデータ層：`MenuRepositoryImpl` の実装、Room ローカルキャッシュと Firestore の増量同期。 |
-| **`:history:presentation`** | 注文履歴リスト画面、動的注文ステータスチップ（`StatusChip`）、注文キャンセル確認ダイアログ、MVI 状態管理。 |
-| **`:history:domain`** | 履歴ドメイン層：`HistoryRepository` インターフェースおよび注文状態ロジック。 |
-| **`:history:data`** | 履歴データ層：`HistoryRepositoryImpl` の実装、Room による注文キャッシュと Firestore 状態同期。 |
-| **`:cart:presentation`** | カートプレゼンテーション層：`userId` に紐づくユーザー別カート分離、アクティブ店舗ヘッダー同期、数量変更デバウンス（200ms）、商品削除ダイアログ、決済フロー。 |
-| **`:member:presentation`** | デジタル会員プレゼンテーション層：ZXing による会員 QR コードダイアログ、会員ランクカード（通常・ブロンズ・シルバー・ゴールド）、ランク特典案内、獲得ポイント表示、未ログイン誘導。 |
-| **`:auth:presentation`** | 認証プレゼンテーション層：Credential Manager による Google ワンタップログイン、明暗適応ベクター `GoogleSignInButton`、匿名ゲストログイン（Anonymous Auth）。 |
-| **`:core:domain`** | 純粋 Kotlin ドメイン層：コアドメインエンティティ（`User`, `Tea`, `Store`, `CartItem`, `History` など）、`Result<D, E>`、`DataError`、共通リポジトリ規約。 |
-| **`:core:data`** | コアデータ層実装：オフラインファースト `OfflineFirstCartRepository`、設定および店舗キャッシュ `DefaultAppDataStore`、`AuthRepositoryImpl`。 |
-| **`:core:database`** | Room データベースエンジン：`GongchaDatabase`、DAO、型コンバーター、自動マイグレーションスクリプト（Migrations 1 → 5）。 |
-| **`:core:network`** | リモートデータソース：`FirebaseRemoteDataSource`、Cloud Firestore の CRUD 操作、コルーチンセーフ例外マッピング（`safeFirebaseCall`）。 |
-| **`:core:presentation:designsystem`** | デザインシステム：和紙と茶を基調としたカラーパレット、共通グラデーション背景レイアウト `AppBackgroundScaffold`、`GongchaIcons` ベクターアイコン集。 |
-| **`:core:presentation:ui`** | 共通 UI ユーティリティ：UI モデル（`UiText`）、共通コンポーネント（`Counter`, `NoticeCard`）、単一イベント監視ツール（`ObserveAsEvents`）。 |
-| **`build-logic`** | Gradle Convention Plugins 複合ビルド（Composite Builds）：Application / Library / Compose / Room のビルド設定と依存関係バージョンを一元管理。 |
+| モジュール名 | 分類 | 役割と責務 |
+| :--- | :--- | :--- |
+| **`:app`** | Application | アプリケーションのエントリーポイント、スプラッシュ画面、全体ナビゲーショングラフ（`NavRoot`、Type-Safe Routes）、フローティング下部ナビゲーションバー（`AppBottomBar`）、グローバルカート数量監視。 |
+| **`:menu`** | Feature (完全3層) | 店舗選択、メニュー閲覧、カスタマイズ（氷・甘さ・トッピング・サイズ）、カート追加、Room/Firestore 差分同期を担う `presentation`, `domain`, `data` モジュール群。 |
+| **`:history`** | Feature (完全3層) | 過去の注文履歴表示、ステータスチップ、注文キャンセル、Firestore 状態同期を担う `presentation`, `domain`, `data` モジュール群。 |
+| **`:cart:presentation`** | Feature (UI) | カート画面：`userId` によるユーザー別カート分離、アクティブ店舗ヘッダー同期、200ms デバウンス付き数量変更、削除確認ダイアログ、決済処理。 |
+| **`:member:presentation`** | Feature (UI) | 会員画面：ZXing による会員 QR コードダイアログ生成、会員ランクカード（通常・ブロンズ・シルバー・ゴールド）、ランク特典案内、獲得ポイント表示。 |
+| **`:auth:presentation`** | Feature (UI) | 認証画面：Credential Manager による Google ワンタップログイン、明暗適応ベクター `GoogleSignInButton`、匿名ゲストログイン（Anonymous Auth）。 |
+| **`:core:domain`** | Core Domain | 純粋 Kotlin ドメイン層：コアドメインエンティティ（`User`, `Tea`, `Store`, `CartItem`, `History` など）、`Result<D, E>`、`DataError`、共通リポジトリ規約。 |
+| **`:core:data`** | Core Data | コアデータ層実装：オフラインファースト `OfflineFirstCartRepository`、設定および店舗キャッシュ `DefaultAppDataStore`、`AuthRepositoryImpl`。 |
+| **`:core:database`** | Core Database | Room データベースエンジン：`GongchaDatabase`、DAO、型コンバーター、自動マイグレーションスクリプト（Migrations 1 → 5）。 |
+| **`:core:network`** | Core Network | リモートデータソース：`FirebaseRemoteDataSource`、Cloud Firestore の CRUD 操作、コルーチンセーフ例外マッピング（`safeFirebaseCall`）。 |
+| **`:core:presentation:designsystem`** | Core Design | デザインシステム：和紙と茶を基調としたカラーパレット、共通グラデーション背景レイアウト `AppBackgroundScaffold`、`GongchaIcons` ベクターアイコン集。 |
+| **`:core:presentation:ui`** | Core UI | 共通 UI ユーティリティ：UI モデル（`UiText`）、共通コンポーネント（`Counter`, `NoticeCard`）、単一イベント監視ツール（`ObserveAsEvents`）。 |
+| **`build-logic`** | Build Logic | Gradle Convention Plugins 複合ビルド（Composite Builds）：Application / Library / Compose / Room のビルド設定と依存関係バージョンを一元管理。 |
 
 ---
 
@@ -189,9 +169,10 @@ graph TD
 - [x] **会員特典とランク進捗**：現在のランク特典、累積ポイント、次ランクまでの必要利用金額を可視化。
 - [x] **未ログイン状態の案内**：未ログイン時は `MemberNotLogin` 画面を表示し、ログインへ自然に誘導。
 
-### 7. 全体デザインシステム (Design System & Theming)
+### 7. 全体デザインシステム＆ロギング (Design System & Diagnostics)
 - [x] **統一グラデーション Scaffold**：共通コンポーネント `AppBackgroundScaffold` により、全画面で和紙とお茶を基調とした美しい背景を適用。
 - [x] **ダーク・ライトテーマ完全対応**：システムのカラーモードに合わせて自動で最適なコントラストと配色を調整。
+- [x] **Timber 構造化ロギング**：Debug ビルド時に `Timber.DebugTree()` を自動組み込み、通信・認証・初期化ログを一元化。
 
 ---
 
@@ -214,7 +195,7 @@ graph TD
 | **QR コード生成** | **ZXing Android** | `core:3.5.3`、会員バーコード・QR 生成 |
 | **シリアライズ** | **Kotlinx Serialization** | `1.11.0`、型安全ナビゲーションおよびデータモデル |
 | **ナビゲーション** | **Navigation Compose** | `2.10.2`、型安全ルートオブジェクトとサブグラフ |
-| **ロギング** | **Timber** | `5.0.1` |
+| **ロギング** | **Timber** | `5.0.1`、構造化 Debug ログ |
 
 ---
 
