@@ -138,17 +138,20 @@ private fun CartItemCardPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            HistoryItemCard(
-                history = History(
-                    id = "666555",
-                    createAt = 0L,
-                    status = OrderStatus.IN_ORDER,
-                    totalPrice = 100,
-                    teas = listOf(),
-                    orderCode = "12314"
-                ),
-                onOrderCancel = {}
-            )
+            OrderStatus.entries.forEach { status ->
+
+                HistoryItemCard(
+                    history = History(
+                        id = "666555",
+                        createAt = 0L,
+                        status = status,
+                        totalPrice = 100,
+                        teas = listOf(),
+                        orderCode = "12314"
+                    ),
+                    onOrderCancel = {}
+                )
+            }
         }
     }
 }
